@@ -1,0 +1,11 @@
+- IRC Protocol ?
+
+- Handle signals :
+	- Need to send a closing server message ?
+	- close all the client sockets
+	- close own socket
+	-> close all the connections in the server destructor
+
+- Be able to handle multiple client connections
+	- Not allowed to fork or thread -> non blocking calls -> ? while(1) on non blocking clients ?
+	- poll, select, epoll ?
