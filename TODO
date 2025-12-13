@@ -9,3 +9,6 @@
 - Be able to handle multiple client connections
 	- Not allowed to fork or thread -> non blocking calls -> ? while(1) on non blocking clients ?
 	- poll, select, epoll ?
+
+mmichele :
+- Default socket is 0, which cause a close(0) on error, closing stdin.

@@ -6,7 +6,7 @@
 #    By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/13 10:59:54 by mmichele          #+#    #+#              #
-#    Updated: 2025/12/13 11:12:17 by mmichele         ###   ########.fr        #
+#    Updated: 2025/12/13 17:28:27 by mmichele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ LIBS	=
 DEPS	= $(OBJS:.o=.d)
 
 # Fake targets
-.PHONY: clean fclean re san valgrind
+.PHONY: clean fclean re verbose debug san valgrind gdb
 
 all: $(NAME)
 
@@ -55,8 +55,18 @@ fclean: clean
 
 re: fclean all
 
-san: FLAGS += -g -fsanitize=address,leak,undefined
-san: all
+verbose: V = 1
+verbose: all
 
-valgrind:
-	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all ./$(NAME)
+debug: FLAGS += -g
+debug: all
+
+san: FLAGS += -fsanitize=address,leak,undefined
+san: debug all
+
+# You have to set PORT=<port> and PASS=<password> with this target.
+valgrind: debug
+	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all ./$(NAME) $(PORT) $(PASS)
+
+gdb: debug
+	gdb --tui --args "$(NAME)" "8080" "pass"

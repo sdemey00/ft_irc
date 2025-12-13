@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/13 14:11:06 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/13 17:29:19 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,72 +20,88 @@
 #include <arpa/inet.h>  // sockaddr_in, inet_addr
 #include <sys/socket.h> // socket, bind, listen, accept
 
-Server::Server(): init(0) {}
+static bool run_state = 1;
 
-Server::Server(char* raw_port, char* raw_pass): init(0) {
-	for (unsigned int i = 0; raw_port[i]; i++) {
-		if (!std::isdigit(raw_port[i]))
-			throw Errors::PortError();
-	}
-	port = std::atoi(raw_port);
-	pass = std::string(raw_pass);
-	init = 1;
+void Server::_sighandler(int sig) {
+	(void)sig;
+	run_state = 0;
 }
 
-Server::Server(const Server& other): init(other.init), port(other.port), pass(other.pass) {}
-
-void Server::operator=(const Server& other) {
-	if (this != &other)
-	{
-		init = other.init;
-		port = other.port;
-		pass = other.pass;
-	}
-}
-
-Server::~Server() {}
-
-void Server::run() {
-	if (!init)
-		throw std::exception();
-	// Creating the socket
-	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+// Creating the socket
+void Server::_socket() {
+	int server_sock = socket(AF_INET, SOCK_STREAM, 0);
 	int opt = 1;
-	setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt));
-	if (sockfd < 0)
+	setsockopt(server_sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt));
+	if (server_sock < 0)
 		throw Errors::SocketError();
-	// Bind the socket to an address
+}
+
+// Bind the socket to an address
+void Server::_bind() {
 	sockaddr_in addr;
 	std::memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
 	addr.sin_addr.s_addr = INADDR_ANY;
-	if (bind(sockfd, (sockaddr*)&addr, sizeof(addr)) < 0) {
+	if (bind(server_sock, (sockaddr*)&addr, sizeof(addr)) < 0)
 		throw Errors::BindError();
-		close(sockfd);
-	}
-	// Listening for connection
-	if (listen(sockfd, 5) < 0) {
+}
+
+// Listening for connection
+void Server::_listen() {
+	if (listen(server_sock, 5) < 0)
 		throw Errors::ListenError();
-		close(sockfd);
-	}
+}
+
+void Server::_accept() {
 	// Accept incoming connection
 	sockaddr_in clientAddr;
 	socklen_t clientLen = sizeof(clientAddr);
-	int clientSock = accept(sockfd, (sockaddr*)&clientAddr, &clientLen);
-	if (clientSock < 0) {
+	client_sock.push_back(accept(server_sock, (sockaddr*)&clientAddr, &clientLen));
+	if (client_sock[0] < 0)
 	   	throw Errors::AcceptError();
-	    close(sockfd);
-	}
+}
+
+void Server::_recv() {
 	// Receiving data
 	char buffer[1024];
-	int bytesRead = recv(clientSock, buffer, sizeof(buffer) - 1, 0);
+	int bytesRead = recv(client_sock[0], buffer, sizeof(buffer) - 1, 0);
 
 	if (bytesRead > 0) {
 	    buffer[bytesRead] = '\0';
 	    std::cout << "Received: " << buffer;
 	}
-	// Close connection
-	close(clientSock);
-	close(sockfd);
+}
+
+void Server::_send() {}
+
+Server::Server() {}
+
+Server::Server(char* raw_port, char* raw_pass) :
+	port(std::atoi(raw_port)),
+	pass(std::string(raw_pass)),
+	server_sock(0),
+	client_sock(0)
+{
+	// Check for port input validity
+	for (unsigned int i = 0; raw_port[i]; i++) {
+		if (!std::isdigit(raw_port[i]))
+			throw Errors::PortError();
+	}
+	signal(SIGINT, Server::_sighandler);
+}
+
+Server::~Server() {
+	close(server_sock);
+	for (unsigned int i = 0; i < client_sock.size(); i++) {
+		close(client_sock[i]);
+	}
+}
+
+void Server::run() {
+	_socket();
+	_bind();
+	while (run_state) {
+		
+	}
 }
