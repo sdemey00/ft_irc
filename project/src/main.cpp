@@ -6,11 +6,10 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:06:41 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/13 11:52:47 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/13 13:33:43 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
 #include "Server.hpp"
 
 int main(int argc, char** argv) {
@@ -19,9 +18,10 @@ int main(int argc, char** argv) {
 		std::cerr << "Usage : ./ft_irc <port> <password>" << std::endl;
 		return 1;
 	}
-	Server s;
-	try { s = Server(argv[0], argv[1]); }
-	catch (std::exception &e) { std::cerr << "Port is not number" << std::endl; return 1; }
-	s.run();
+	try {
+		Server s(argv[0], argv[1]);
+		s.run();
+	}
+	catch (std::exception &e) { std::cerr << e.what() << std::endl; return 1; }
 	return 0;
 }
