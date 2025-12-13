@@ -6,16 +6,20 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 13:10:50 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/13 13:37:16 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/13 20:21:56 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <exception>
+#pragma once
+
+#include <exception>	// exception
 
 struct Errors {
-	struct PortError 	: std::exception { virtual const char* what() const throw(); };
-	struct SocketError 	: std::exception { virtual const char* what() const throw(); };
-	struct BindError 	: std::exception { virtual const char* what() const throw(); };
-	struct ListenError 	: std::exception { virtual const char* what() const throw(); };
-	struct AcceptError 	: std::exception { virtual const char* what() const throw(); };
+	struct Port 		: std::exception { virtual const char* what() const throw(); };
+	struct Socket 		: std::exception { virtual const char* what() const throw(); };
+	struct Fcntl 		: std::exception { virtual const char* what() const throw(); };
+	struct SetSockOpt 	: std::exception { virtual const char* what() const throw(); };
+	struct Bind 		: std::exception { virtual const char* what() const throw(); };
+	struct Listen 		: std::exception { virtual const char* what() const throw(); };
+	struct Accept 		: std::exception { virtual const char* what() const throw(); };
 };

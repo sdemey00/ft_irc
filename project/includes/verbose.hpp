@@ -1,39 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
+/*   verbose.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/13 11:19:10 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/13 22:45:31 by mmichele         ###   ########.fr       */
+/*   Created: 2025/12/13 20:07:44 by mmichele          #+#    #+#             */
+/*   Updated: 2025/12/13 20:25:05 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <string>	// string
-#include <vector>	// vector
 
-class Server {
-	unsigned int		port;
-	std::string			pass;
-	bool				is_server_sock;
-	int					server_sock;
-	std::vector<int>	client_sock;
+#ifndef VERBOSE
+# define VERBOSE 0
+#endif
 
-	static void _sighandler(int sig);
-
-	void _socket();
-	void _bind();
-	void _listen();
-	void _poll();
-	void _accept();
-	void _recv();
-	void _send();
-
-	public:
-		Server(char* raw_port, char* raw_pwd);
-		~Server();
-		void run();
-};
+void verbose(const std::string& s);
