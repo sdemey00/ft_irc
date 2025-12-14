@@ -6,19 +6,16 @@
 #    By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/13 10:59:54 by mmichele          #+#    #+#              #
-#    Updated: 2025/12/13 19:58:18 by mmichele         ###   ########.fr        #
+#    Updated: 2025/12/14 14:24:03 by mmichele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Source program name
 NAME	= ircserv
 
-# Compile variables
-V		?= 0
-
 # Source program compiler settings
 CC		= c++
-FLAGS	= -Wall -Wextra -Werror -std=c++98 -D VERBOSE=$(V)
+FLAGS	= -Wall -Wextra -Werror -std=c++98
 
 # Directories
 BLDD	= build
@@ -34,7 +31,7 @@ LIBS	=
 DEPS	= $(OBJS:.o=.d)
 
 # Fake targets
-.PHONY: clean fclean re verbose debug san valgrind gdb
+.PHONY: clean fclean re debug verbose san valgrind gdb
 
 all: $(NAME)
 
@@ -55,18 +52,21 @@ fclean: clean
 
 re: fclean all
 
-verbose: V = 1
-verbose: all
-
 debug: FLAGS += -g
 debug: all
+
+verbose: FLAGS += -D VERBOSE
+verbose: debug all
 
 san: FLAGS += -fsanitize=address,leak,undefined
 san: debug all
 
-# You have to set PORT=<port> and PASS=<password> with this target.
+# Following targets allow makefile variables PORT and PASS to be set.
+PORT	?= 8080
+PASS	?= pass
+
 valgrind: debug
 	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all ./$(NAME) $(PORT) $(PASS)
 
 gdb: debug
-	gdb --tui --args "$(NAME)" "8080" "pass"
+	gdb --tui --args "$(NAME)" $(PORT) $(PASS)

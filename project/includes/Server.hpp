@@ -6,34 +6,40 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:19:10 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/13 22:45:31 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/14 13:57:04 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <string>	// string
-#include <vector>	// vector
+#include <string>		// string
+#include <vector>		// vector
+#include <poll.h>		// pollfd
+
+#include "Client.hpp"	// Client
 
 class Server {
 	unsigned int		port;
 	std::string			pass;
-	bool				is_server_sock;
+	bool				init;
 	int					server_sock;
-	std::vector<int>	client_sock;
+	pollfd				server_poll;
+	std::vector<pollfd>	polls;
+	std::vector<Client>	clients;
 
-	static void _sighandler(int sig);
+	static void		_sighandler(int sig);
 
-	void _socket();
-	void _bind();
-	void _listen();
-	void _poll();
-	void _accept();
-	void _recv();
-	void _send();
+	void			_socket();
+	void			_bind();
+	void			_listen();
+	void			_poll();
+	void			_accept();
+
+	Client*			fetch(const int& fd);
+	void			erase();
 
 	public:
-		Server(char* raw_port, char* raw_pwd);
-		~Server();
-		void run();
+	Server(char* raw_port, char* raw_pwd);
+	~Server();
+	void run();
 };

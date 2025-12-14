@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/13 22:47:35 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/14 14:33:17 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 
 #include <sys/socket.h>	// socket, bind, listen, accept
 #include <fcntl.h>		// fcntl
-#include <arpa/inet.h>	// sockaddr_in
 #include <cstring>		// memset
 #include <cstdlib>		// isdigit
 #include <unistd.h>		// close
 #include <csignal>		// signal
 #include <iostream>		// cout, endl
-#include <poll.h>		// poll
+#include <poll.h>		// poll, pollfd
 
 #include "Errors.hpp"	// Errors
 #include "verbose.hpp"	// verbose
@@ -39,12 +38,12 @@ void Server::_socket() {
 	server_sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (server_sock < 0)
 		throw Errors::Socket();
-	is_server_sock = 1;
+	init = 1;
 	int optval = 1;
 	if (setsockopt(server_sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &optval, sizeof(optval)) < 0)
 		throw Errors::SetSockOpt();
-	//if (fcntl(server_sock, F_SETFL, O_NONBLOCK) < 0)
-	//	throw Errors::Fcntl();
+	if (fcntl(server_sock, F_SETFL, O_NONBLOCK) < 0)
+		throw Errors::Fcntl();
 }
 
 // Bind the socket to an address
@@ -66,46 +65,62 @@ void Server::_listen() {
 		throw Errors::Listen();
 }
 
-// Check for events
+// Initialize poll events
 void Server::_poll() {
-	// TODO
+	server_poll.fd = server_sock;
+	server_poll.events = POLLIN;
+	server_poll.revents = 0;
+	polls.push_back(server_poll);
 }
 
 // Accept incoming connection
 void Server::_accept() {
 	verbose("Server::_accept()\n");
-	sockaddr_in client_addr;
-	socklen_t client_len = sizeof(client_addr);
-	int new_client = accept(server_sock, (sockaddr*)&client_addr, &client_len);
-	if (new_client < 0)
-	   	throw Errors::Accept();
-	//if (fcntl(new_client, F_SETFL, O_NONBLOCK) < 0)
-	//	throw Errors::Fcntl();
-	client_sock.push_back(new_client);
+	Client c;
+	c.client_sock = accept(server_sock, (sockaddr *)&c.sock_addr, &c.sock_len);
+	if (c.client_sock < 0)
+		throw Errors::Accept();
+	if (fcntl(c.client_sock, F_SETFL, O_NONBLOCK))
+		throw Errors::Fcntl();
+
+	init = 1;
+	clients.push_back(c);
+
+	pollfd pfd;
+	pfd.fd = c.client_sock;
+	pfd.events = POLLIN;
+	pfd.revents = 0;
+	polls.push_back(pfd);
 }
 
-// Receiving data
-void Server::_recv() {
-	verbose("Server::_recv()\n");
-	char buffer[1024];
-	int bytes_read = recv(client_sock[0], buffer, sizeof(buffer) - 1, 0);
-	if (bytes_read > 0) {
-		buffer[bytes_read] = '\0';
-		std::cout << "Received: " << buffer;
+// Remove disconnected clients
+void Server::erase() {
+	for (std::vector<pollfd>::iterator it = polls.begin(); it != polls.end();) {
+		if (it->fd == -1) { it = polls.erase(it); }
+		else { it++; }
+	}
+	for (std::vector<Client>::iterator it = clients.begin(); it != clients.end();) {
+		if (it->client_sock == -1) { it = clients.erase(it); }
+		else { it++; }
 	}
 }
 
-// Send data
-void Server::_send() {
-	verbose("Server::_send()\n");
+// Fetch client from poll event
+Client* Server::fetch(const int& fd) {
+	for (unsigned int i = 0; i < clients.size(); i++) {
+		if (clients[i].client_sock == fd)
+			return &clients[i];
+	}
+	return 0;
 }
 
 Server::Server(char* raw_port, char* raw_pass) :
 	port(std::atoi(raw_port)),
 	pass(std::string(raw_pass)),
-	is_server_sock(0),
+	init(0),
 	server_sock(0),
-	client_sock(0)
+	polls(0),
+	clients(0)
 {
 	// Check for port input validity
 	for (unsigned int i = 0; raw_port[i]; i++) {
@@ -114,14 +129,13 @@ Server::Server(char* raw_port, char* raw_pass) :
 	}
 	// Launch SIGINT handler
 	signal(SIGINT, Server::_sighandler);
-	// Setup poll variables
 }
 
 Server::~Server() {
-	if (is_server_sock)
+	if (init)
 		close(server_sock);
-	for (unsigned int i = 0; i < client_sock.size(); i++) {
-		close(client_sock[i]);
+	for (unsigned int i = 0; i < polls.size(); i++) {
+		close(polls[i].fd);
 	}
 }
 
@@ -129,7 +143,34 @@ void Server::run() {
 	_socket();
 	_bind();
 	_listen();
-	_accept();
-	_recv();
-	//while (run_state) {}
+	_poll();
+	verbose("Handling events ...\n");
+	while (run_state) {
+		int polled = poll(polls.data(), polls.size(), -1);
+		if (!polled) {
+			std::cerr << "poll() = 0" << std::endl;
+			continue ;
+		}
+		if (polled < 0)
+			std::cerr << "poll() < 0" << std::endl;
+		bool new_client = 0;
+		for (size_t i = 0; i < polls.size(); ++i) {
+			pollfd &curr_poll = polls[i];
+			if (curr_poll.revents & POLLIN) {
+				if (curr_poll.fd == server_sock) { new_client = 1; }
+				else {
+					Client* c = fetch(curr_poll.fd);
+					if (c) { c->_recv(); }
+				}
+			}
+			if (curr_poll.revents & POLLOUT) {
+				Client* c = fetch(curr_poll.fd);
+				if (c) { c->_send(); }
+			}
+			curr_poll.revents = 0;
+		}
+		if (new_client)
+			_accept();
+		erase();
+	}
 }
