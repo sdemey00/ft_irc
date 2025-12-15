@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/14 14:33:17 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/15 12:22:16 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,19 @@
 #include <poll.h>		// poll, pollfd
 
 #include "Errors.hpp"	// Errors
-#include "verbose.hpp"	// verbose
+#include "Verbose.hpp"	// Verbose
 
 static bool run_state = 1;
 
 void Server::_sighandler(int sig) {
-	verbose("Server::_sighandler()\n");
+	verbose << "Server::_sighandler()\n";
 	(void)sig;
 	run_state = 0;
 }
 
 // Creating the socket
 void Server::_socket() {
-	verbose("Server::_socket()\n");
+	verbose << "Server::_socket()\n";
 	server_sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (server_sock < 0)
 		throw Errors::Socket();
@@ -48,7 +48,7 @@ void Server::_socket() {
 
 // Bind the socket to an address
 void Server::_bind() {
-	verbose("Server::_bind()\n");
+	verbose << "Server::_bind()\n";
 	sockaddr_in addr;
 	std::memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
@@ -60,7 +60,7 @@ void Server::_bind() {
 
 // Listening for connection
 void Server::_listen() {
-	verbose("Server::_listen()\n");
+	verbose << "Server::_listen()\n";
 	if (listen(server_sock, SOMAXCONN) < 0)
 		throw Errors::Listen();
 }
@@ -75,7 +75,7 @@ void Server::_poll() {
 
 // Accept incoming connection
 void Server::_accept() {
-	verbose("Server::_accept()\n");
+	verbose << "Server::_accept()\n";
 	Client c;
 	c.client_sock = accept(server_sock, (sockaddr *)&c.sock_addr, &c.sock_len);
 	if (c.client_sock < 0)
@@ -144,15 +144,15 @@ void Server::run() {
 	_bind();
 	_listen();
 	_poll();
-	verbose("Handling events ...\n");
+	verbose << "Handling events ...\n";
 	while (run_state) {
 		int polled = poll(polls.data(), polls.size(), -1);
 		if (!polled) {
-			std::cerr << "poll() = 0" << std::endl;
+			std::cerr << "poll() = 0\n";
 			continue ;
 		}
 		if (polled < 0)
-			std::cerr << "poll() < 0" << std::endl;
+			std::cerr << "poll() < 0\n";
 		bool new_client = 0;
 		for (size_t i = 0; i < polls.size(); ++i) {
 			pollfd &curr_poll = polls[i];
