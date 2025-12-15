@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 23:04:22 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/15 11:47:54 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/15 19:49:43 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,34 @@
 #include <fcntl.h>		// fcntl
 #include <unistd.h>		// close
 #include <iostream>		// cout, endl
+#include <cstring>		// memcpy, isprint
+#include <iomanip>		// setw
 
 #include "Errors.hpp"	// Errors
-#include "Verbose.hpp"	// Verbose
+#include "Server.hpp"	// log
+
+static void log_buffer(const char buffer[BUFFER_SIZE], const unsigned int& length) {
+	for (unsigned int i = 0; i < length; i++) {
+		if (i < length - 1) { log << std::setw(3) << static_cast<int>(buffer[i]) << " "; }
+		else { log << std::setw(3) << static_cast<int>(buffer[i]) << " : "; }
+	}
+	log << "\"";
+	for (unsigned int i = 0; i < length; i++) {
+		if (std::isprint(buffer[i]))
+			log << buffer[i];
+		else
+			log << "🯄";
+	}
+	log << "\"" << "\n";
+}
+
+static unsigned int find_crlf(const char buffer[BUFFER_SIZE], const unsigned int& length) {
+	for (unsigned int i = 0; i < length - 1; i++) {
+		if (buffer[i] == '\r' && buffer[i + 1] == '\n')
+			return i + 1;
+	}
+	return 0;
+}
 
 Client::Client() :
 	sock_len(sizeof(sock_addr)),
@@ -29,23 +54,35 @@ Client::~Client() {
 }
 
 void Client::_recv() {
-	verbose << "Client::_recv()\n";
-	char buf[2048];
-	ssize_t n = recv(client_sock, buf, sizeof(buf), 0);
+	static char	stash[MAX_CLIENTS][BUFFER_SIZE];
+	char		buf[BUFFER_SIZE];
+
+	if (read_buffer == "") { read_buffer = stash[client_sock]; }
+	ssize_t n = recv(client_sock, buf, BUFFER_SIZE, 0);
 	if (n > 0) {
-		read_buffer.append(buf, n);
-		verbose << read_buffer;
+		buf[n] = 0;
+		log << "PARTIAL  (" << std::setw(2) << client_sock << ") : "; log_buffer(buf, n);
+		unsigned int crlf_idx = find_crlf(buf, n);
+		if (!crlf_idx) { read_buffer.append(buf, n); }
+		else {
+			read_buffer.append(buf, crlf_idx - 1);
+			log << "COMPLETE (" << std::setw(2) << client_sock << ") : "; log_buffer(read_buffer.c_str(), read_buffer.length());
+			std::memcpy(stash[client_sock], buf + crlf_idx + 1, n - (crlf_idx + 1));
+			// TODO Process message here
+			std::cout << read_buffer << std::endl;
+			read_buffer = "";
+		}
 	}
 	else if (n == 0) {
+		log << "Client " << client_sock << " disconnected.\n";
 		close(client_sock);
 		client_sock = -1;
 	}
 }
 
 void	Client::_send() {
-	verbose << "Client::_send()\n";
 	if (write_buffer.empty())
-		return;
+		return ;
 	ssize_t n = send(client_sock, write_buffer.data(), write_buffer.size(), 0);
 	if (n > 0) { write_buffer.erase(0, n); }
 }

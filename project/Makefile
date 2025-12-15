@@ -6,7 +6,7 @@
 #    By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/13 10:59:54 by mmichele          #+#    #+#              #
-#    Updated: 2025/12/14 14:24:03 by mmichele         ###   ########.fr        #
+#    Updated: 2025/12/15 15:13:02 by mmichele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ LIBS	=
 DEPS	= $(OBJS:.o=.d)
 
 # Fake targets
-.PHONY: clean fclean re debug verbose san valgrind gdb
+.PHONY: clean fclean re debug san valgrind gdb
 
 all: $(NAME)
 
@@ -54,9 +54,6 @@ re: fclean all
 
 debug: FLAGS += -g
 debug: all
-
-verbose: FLAGS += -D VERBOSE
-verbose: debug all
 
 san: FLAGS += -fsanitize=address,leak,undefined
 san: debug all
