@@ -1,11 +1,10 @@
-PROTOCOL IRC:
+PROTOCOL IRC - see RFC 1459:
 
 Text base message line:
 :[prefix] COMMAND [parameters] [message]
 
-
 COMMAND:
-Mandatory:
+Operator:
 	KICK - Eject a client from the channel
 	INVITE - Invite a client to a channel
 	TOPIC - Change or view the channel topic
@@ -22,6 +21,7 @@ Other:
 	JOIN #channel - Join a channel
 	PART #channel - Leave a channel
 	PRIVMSG #name :message - send a private text to a user or a channel
+	NOTICE - similar to PRIVMSG (auto replies?)
 	QUIT - Disconnect from the server
 (some command need a confirmation message like " :user!ident@host JOIN #channel "
 
