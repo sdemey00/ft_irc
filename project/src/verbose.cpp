@@ -1,30 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   verbose.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/13 11:06:41 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/13 20:30:39 by mmichele         ###   ########.fr       */
+/*   Created: 2025/12/13 20:09:06 by mmichele          #+#    #+#             */
+/*   Updated: 2025/12/13 20:25:36 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>		// cerr, endl
-#include <exception>	// exception
+#include "verbose.hpp"	// verbose
 
-#include "Server.hpp"	// Server
+#include <string>		// string
+#include <iostream>		// cout
 
-int main(int argc, char** argv) {
-	argc--; argv++;
-	if (argc != 2) {
-		std::cerr << "Usage : ./ft_irc <port> <password>" << std::endl;
-		return 1;
-	}
-	try {
-		Server s(argv[0], argv[1]);
-		s.run();
-	}
-	catch (std::exception &e) { std::cerr << e.what() << std::endl; return 1; }
-	return 0;
+void verbose(const std::string& s) {
+	if (VERBOSE)
+		std::cout << s;
 }

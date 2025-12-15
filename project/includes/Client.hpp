@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/13 11:06:41 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/13 20:30:39 by mmichele         ###   ########.fr       */
+/*   Created: 2025/12/13 23:03:20 by mmichele          #+#    #+#             */
+/*   Updated: 2025/12/14 14:04:24 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>		// cerr, endl
-#include <exception>	// exception
+#pragma once
 
-#include "Server.hpp"	// Server
+#include <arpa/inet.h>	// sockaddr_in, socklen_t
+#include <string>		// string
 
-int main(int argc, char** argv) {
-	argc--; argv++;
-	if (argc != 2) {
-		std::cerr << "Usage : ./ft_irc <port> <password>" << std::endl;
-		return 1;
-	}
-	try {
-		Server s(argv[0], argv[1]);
-		s.run();
-	}
-	catch (std::exception &e) { std::cerr << e.what() << std::endl; return 1; }
-	return 0;
-}
+class Client {
+	std::string		read_buffer;
+	std::string		write_buffer;
+
+	public:
+	sockaddr_in		sock_addr;
+	socklen_t		sock_len;
+	bool			init;
+	int				client_sock;
+	
+	Client();
+	~Client();
+
+	void	_recv();
+	void	_send();
+};
