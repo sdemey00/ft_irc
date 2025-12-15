@@ -1,17 +1,34 @@
 #pragma once
+#include <string>
 
-class User {			//Client
-	public:
-	int	fd;
-	// RFC identity
-	std::string	nickname;
-	std::string	username;
-	std::string	name;
+class User {
+public:
+    User();
 
-	//password
-	bool registered;
+    // Identity (RFC)
+    const std::string& getNick() const;
+    const std::string& getUser() const;
+    const std::string& getRealName() const;
 
-	std::string readBuff;
+    void setNick(const std::string& nick);
+    void setUser(const std::string& user);
+    void setRealName(const std::string& realname);
 
-	void	send(std::string &msg);
-}
+    // Registration
+    bool isRegistered() const;
+    bool canRegister() const;
+    void setRegistered(bool value);
+
+    // Operator
+    bool isOperator() const;
+    void setOperator(bool value);
+
+private:
+    std::string _nick;
+    std::string _user;
+    std::string _realname;
+
+    bool _registered;
+    bool _isOperator;
+};
+

@@ -1,20 +1,38 @@
 #pragma once
+#include <string>
+#include <set>
+
+class User;
 
 class Channel {
-	std::set<User*>	_members;
-	std::set<User*>	_operators;
-
 	public:
-		std::string	name; // Channels names are strings (beginning with a '&' or '#' character) of length up to 200 characters.  Apart from the the requirement that the first character being either '&' or '#'; the only restriction on a channel name is that it may not contain any spaces (' '), a control G (^G or ASCII 7), or a comma (',' which is used as a list item separator by the protocol).
+	Channel(const std::string& name);
 
-		Channel(void);
-		~Channel(void);
-		void	join(User *c);
-		void	part(User *c);
-		// void	broadcast(std::string &mes, User *dest = NULL);
+	const std::string& getName() const;
 
-		bool	isOperator(User *c) const;
+	// Membership
+	void addUser(User* user);
+	void removeUser(User* user);
+	bool hasUser(User* user) const;
+
+	// Operators
+	void addOperator(User* user);
+	void removeOperator(User* user);
+	bool isOperator(User* user) const;
+
+	// Topic
+	void setTopic(const std::string& topic);
+	const std::string& getTopic() const;
+
+	private:
+		std::string _name;
+		std::string _topic;
+
+		std::set<User*> _users;
+		std::set<User*> _operators;
 };
+
+
 
 
 // To create a new channel or become part of an existing channel, a user

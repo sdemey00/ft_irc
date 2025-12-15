@@ -1,0 +1,109 @@
+
+// NOTE
+
+==== ORDER ====
+NICK
+USER
+registration
+JOIN
+PART
+PRIVMSG
+QUIT
+MODE
+
+
+
+3 PHASE
+
+- Réseau (poll, recv, send)	Server.cpp, Client.cpp
+- État IRC (User, Channel, Core)	User, Channel, IRCCore
+- Protocole (COMMANDS, ERRORS, REPLIES)	CommandDispatcher, Nick, etc.
+
+=> merge Client && User (One way)
+
+poll()
+ └─ recv() -> Client.read_buffer
+     └─ extract line
+         └─ Parser
+             └─ Message
+                 └─ CommandDispatcher
+                     └─ cmdNick / cmdJoin / ...
+                         └─ user.send()
+                             └─ Client.send()
+                                 └─ write_buffer
+
+#pragma once
+#include <string>
+
+class IConnection;
+
+class User {
+public:
+    explicit User(IConnection* conn);
+
+    void setNick(const std::string&);
+    const std::string& getNick() const;
+
+    bool isRegistered() const;
+    void setRegistered(bool);
+
+    void send(const std::string& msg);
+
+private:
+    std::string _nick;
+    bool _registered;
+    IConnection* _conn;
+};
+User::User(IConnection* conn)
+    : _registered(false), _conn(conn) {}
+
+void User::send(const std::string& msg) {
+    if (_conn)
+        _conn->send(msg);
+}
+
+//////////////////////////
+#pragma once
+#include <string>
+
+class IConnection {
+public:
+    virtual ~IConnection() {}
+    virtual void send(const std::string&) = 0;
+};
+////////////////////////////////
+class Client : public IConnection {
+public:
+    void send(const std::string& msg) {
+        write_buffer += msg;
+    }
+};
+Client ---> User
+User ---> IConnection (interface)
+//////////////////////
+Client c;
+c.user = new User(&c);
+clients.push_back(c);
+////////////////////
+class Channel {
+public:
+    explicit Channel(const std::string& name);
+
+    void join(User* user);
+    void part(User* user);
+
+    bool empty() const;
+
+private:
+    std::string _name;
+    std::set<User*> _users;
+};
+if (cmd == "JOIN") {
+    channel.join(client.user);
+}
+else if (cmd == "PART") {
+    channel.part(client.user);
+}
+nc localhost 6667
+JOIN #test
+PART #test
