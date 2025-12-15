@@ -16,8 +16,4 @@ mmichele :
 			one complete message in it.
 			-> BUFFER_SIZE 1000
 			-> /connect in irssi
-		- The function doesn't see a complete message when it's split
-			between two different partial buffers
-			-> BUFFER_SIZE 2
-			-> /connect in irssi
 	- Make print memory function, to print the recv buffer.
