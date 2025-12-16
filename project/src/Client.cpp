@@ -88,6 +88,8 @@ void Client::_recv() {
 			log_buffer(read_buffer.c_str(), read_buffer.length());
 			std::cout << read_buffer << std::endl;
 			// TODO Process message here
+			// Message msg = Parser::parse(read_buffer);
+			// CommandDispatcher::dispatch(core, client, msg);
 			crlf_idx = find_crlf(stash, std::strlen(stash));
 			while (crlf_idx) {
 				read_buffer = std::string(stash).substr(0, crlf_idx - 1);
@@ -114,3 +116,7 @@ void	Client::_send() {
 	ssize_t n = send(client_sock, write_buffer.data(), write_buffer.size(), 0);
 	if (n > 0) { write_buffer.erase(0, n); }
 }
+
+// void Client::queue(const std::string& msg) {
+//     write_buffer += msg;
+// }

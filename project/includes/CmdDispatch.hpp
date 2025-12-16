@@ -4,12 +4,13 @@
 #include "Replies.hpp"
 #include "Errors.hpp"
 #include "Message.hpp"
+#include "IRCCore.hpp"
+#include "Channel.hpp"
 #include "User.hpp"
-
-class IRCCore;
 
 // cmd list prototype
 void cmdNick(IRCCore& core, User& user, const Message& msg);
+void cmdJoin(IRCCore& core, User& user, const Message& msg);
 
 class CommandDispatcher {
 public:

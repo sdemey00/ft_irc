@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
+#include <set>
 #include "Client.hpp"
+#include "Channel.hpp"
 
 class User {
 public:
@@ -27,11 +29,11 @@ public:
 	// Method
 	void send(const std::string &message);
 private:
-    std::string _nick;
-    std::string _user;
-    std::string _realname;
-    bool		_registered;
-    bool		_isOperator;
-	Client		*_client;
+    std::string         _nick;
+    std::string         _user;
+    std::string         _realname;
+    bool		        _registered;
+    bool		        _isOperator;
+    std::set<Channel*>  channels;
 };
 

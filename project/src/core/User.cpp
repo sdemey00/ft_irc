@@ -13,7 +13,7 @@
 #include "User.hpp"
 
 User::User()
-    : _registered(false), _isOperator(false), _client(NULL) {}
+    : _registered(false), _isOperator(false){}
 
 // Registration
 bool	User::isRegistered() const {
@@ -46,7 +46,7 @@ const std::string&	User::getRealName() const { return (_realname); }
 void	User::send(const std::string& message)
 {
 	(void)message;
-    if (!_client)
-        return;
+    // if (!_client)
+    //     return;
     //_client->send(message);
 }

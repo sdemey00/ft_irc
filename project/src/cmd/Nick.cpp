@@ -20,7 +20,7 @@ class IRCCore;
 void cmdNick(IRCCore& core, User& user, const Message& msg)
 {
     if (msg.params.empty()) {
-        user.send(ERR_NONICKNAMEGIVEN(user.getNick()));
+        user.send(ERR_NONICKNAMEGIVEN(user.getNick())); //client.queue()
         return;
     }
     std::string newNick = msg.params[0];
@@ -34,3 +34,13 @@ void cmdNick(IRCCore& core, User& user, const Message& msg)
         user.send(RPL_WELCOME(user.getNick()));
     }
 }
+
+// void cmdNick(IRCCore& core, Client& client, const Message& msg)
+// {
+//     User& user = client.user;
+
+//     if (msg.params.empty()) {
+//         client.queue(ERR_NONICKNAMEGIVEN("*"));
+//         return;
+//     }
+// }

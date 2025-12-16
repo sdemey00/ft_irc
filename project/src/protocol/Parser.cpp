@@ -10,9 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// Message msg = Parser::parse(raw_line);
+#include "Parser.hpp"
+#include <sstream>
 
+Message Parser::parse(const std::string& line)
+{
+    Message msg;
+    std::istringstream iss(line);
+    std::string token;
 
-// Message Parser::parse(std::string &raw_line) {
-//		fill msg.prefix, msg.command, msg.params;
-// }
+    if (!line.empty() && line[0] == ':') {
+        iss >> token;
+        msg.prefix = token.substr(1);
+    }
+    if (!(iss >> msg.command)) {
+        return (msg);           // empty or invalid
+    }
+    while (iss >> token) {
+        if (token[0] == ':') {
+            std::string trailing = token.substr(1);
+            std::string rest;
+            std::getline(iss, rest);
+            msg.params.push_back(trailing + rest);
+            break;
+        }
+        msg.params.push_back(token);
+    }
+    return (msg);
+}

@@ -24,3 +24,14 @@
 //     return ":" + server + " 433 " + currentNick + " " +
 //            requestedNick + " :Nickname is already in use\r\n";
 // }
+// complete implementation
+// inline std::string ERR_NICKNAMEINUSE(
+//     const std::string& currentNick,
+//     const std::string& newNick,
+//     const std::string& server)
+// {
+//     return ":" + server + " 433 " +
+//            (currentNick.empty() ? "*" : currentNick) +
+//            " " + newNick +
+//            " :Nickname is already in use\r\n";
+// }

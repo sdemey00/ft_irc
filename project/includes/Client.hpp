@@ -27,6 +27,9 @@ class Client {
 	socklen_t		sock_len;
 	bool			init;
 	int				client_sock;
+
+	// void queue(const std::string& msg);
+	// User			user;
 	
 	Client();
 	~Client();

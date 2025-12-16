@@ -13,8 +13,12 @@
 #include "IRCCore.hpp"
 
 bool	IRCCore::nickExists(const std::string& nick) const {
-	(void)nick;
-	return (true);
+    return _users.find(nick) != _users.end();
 }
 
-
+// Channel* IRCCore::getOrCreateChannel(const std::string& name)
+// {
+//     if (channels.count(name) == 0)
+//         channels[name] = new Channel(name);
+//     return channels[name];
+// }
