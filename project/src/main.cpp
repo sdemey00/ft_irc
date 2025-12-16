@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:06:41 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/15 11:58:48 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/16 08:46:40 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,6 @@ int main(int argc, char** argv) {
 		Server s(argv[0], argv[1]);
 		s.run();
 	}
-	catch (std::exception &e) { std::cerr << e.what(); return 1; }
+	catch (std::exception &e) { std::cerr << e.what() << "\n"; return 1; }
 	return 0;
 }

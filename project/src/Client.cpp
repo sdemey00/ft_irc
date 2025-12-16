@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 23:04:22 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/15 21:31:56 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/16 09:08:35 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,12 @@ static void log_buffer(const char buffer[BUFFER_SIZE], const unsigned int& lengt
 		else
 			log << "🯄";
 	}
-	log << "\"" << "\n";
+	log << "\"\n";
 }
 
 static unsigned int find_crlf(const char buffer[BUFFER_SIZE], const unsigned int& length) {
+	if (!length)
+		return 0;
 	for (unsigned int i = 0; i < length - 1; i++) {
 		if (buffer[i] == '\r' && buffer[i + 1] == '\n')
 			return i + 1;
@@ -45,6 +47,8 @@ static unsigned int find_crlf(const char buffer[BUFFER_SIZE], const unsigned int
 }
 
 Client::Client() :
+	read_buffer(""),
+	write_buffer(""),
 	sock_len(sizeof(sock_addr)),
 	init(0) {}
 
@@ -55,12 +59,10 @@ Client::~Client() {
 
 // TODO return a vector<IrcRequests>
 void Client::_recv() {
-	std::string	read_buffer;
-	static char	stash[MAX_CLIENTS][BUFFER_SIZE];
-	char		buf[BUFFER_SIZE];
-
-	if (read_buffer == "") { read_buffer = stash[client_sock]; }
-	ssize_t n = recv(client_sock, buf, BUFFER_SIZE, 0);
+	static char		stash[MAX_CLIENTS][BUFFER_SIZE];
+	char			buf[BUFFER_SIZE];
+	if (read_buffer.empty()) {  read_buffer = stash[client_sock]; }
+	ssize_t n = recv(client_sock, buf, BUFFER_SIZE - 1, 0);
 	if (n > 0) {
 		buf[n] = 0;
 		log << "PARTIAL  (" << std::setw(2) << client_sock << ") : "; log_buffer(buf, n);
@@ -78,15 +80,14 @@ void Client::_recv() {
 				log << "COMPLETE (" << std::setw(2) << client_sock << ") : "; log_buffer(read_buffer.c_str(), read_buffer.length());
 				std::cout << read_buffer << std::endl;
 				// TODO Process message here
-				//std::memmove(stash[client_sock], stash[client_sock + crlf_idx + 1], std::strlen(stash[client_sock] + crlf_idx + 1) + 1);
-				//crlf_idx = find_crlf(stash[client_sock], std::strlen(stash[client_sock]));
-				crlf_idx = 0;
+				std::memmove(stash[client_sock], stash[client_sock] + crlf_idx + 1, std::strlen(stash[client_sock] + crlf_idx + 1) + 1);
+				crlf_idx = find_crlf(stash[client_sock], std::strlen(stash[client_sock]));
 			}
-			read_buffer = "";
+			read_buffer.clear();
 		}
-	}
-	else if (n == 0) {
+	} else if (n == 0) {
 		log << "Client " << client_sock << " disconnected.\n";
+		std::cout << "Client " << client_sock << " disconnected.\n";
 		close(client_sock);
 		client_sock = -1;
 	}

@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/15 15:21:47 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/16 08:55:23 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,14 +129,18 @@ Server::Server(char* raw_port, char* raw_pass) :
 	}
 	// Launch SIGINT handler
 	signal(SIGINT, Server::_sighandler);
+	// Check that BUFFER_SIZE is in range :
+	if (BUFFER_SIZE < 2)
+		throw Errors::InvalidBufferSize();
+	if (MAX_CLIENTS < 4)
+		throw Errors::InvalidMaxClients();
 }
 
 Server::~Server() {
 	if (init)
 		close(server_sock);
-	for (unsigned int i = 0; i < polls.size(); i++) {
+	for (unsigned int i = 0; i < polls.size(); i++)
 		close(polls[i].fd);
-	}
 }
 
 void Server::run() {

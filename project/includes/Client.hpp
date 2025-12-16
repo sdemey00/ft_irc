@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 23:03:20 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/15 21:32:03 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/16 09:10:45 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 #include <arpa/inet.h>	// sockaddr_in, socklen_t
 #include <string>		// string
 
-#define BUFFER_SIZE 100
+#define BUFFER_SIZE 2
 #define MAX_CLIENTS 100
 
 class Client {
+	std::string		read_buffer;
 	std::string		write_buffer;
 
 	public:
