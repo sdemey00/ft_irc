@@ -23,7 +23,7 @@ Other:
 	PRIVMSG #name :message - send a private text to a user or a channel
 	NOTICE - similar to PRIVMSG (auto replies?)
 	QUIT - Disconnect from the server
-(some command need a confirmation message like " :user!ident@host JOIN #channel "
+(some command need a confirmation message like " :user!ident@host JOIN #channel ")
 
 ERROR HANDLING:
 Response and code state:

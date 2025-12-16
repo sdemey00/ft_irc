@@ -1,25 +1,10 @@
 
-// NOTE
-
-==== ORDER ====
-NICK
-USER
-registration
-JOIN
-PART
-PRIVMSG
-QUIT
-MODE
-
-
+// NOTES
 
 3 PHASE
-
-- Réseau (poll, recv, send)	Server.cpp, Client.cpp
+- Réseau (poll, recv, send)	        Server.cpp, Client.cpp
 - État IRC (User, Channel, Core)	User, Channel, IRCCore
 - Protocole (COMMANDS, ERRORS, REPLIES)	CommandDispatcher, Nick, etc.
-
-=> merge Client && User (One way)
 
 poll()
  └─ recv() -> Client.read_buffer
@@ -31,6 +16,33 @@ poll()
                          └─ user.send()
                              └─ Client.send()
                                  └─ write_buffer
+
+NICK	    User	        change identité
+USER	    User	        set infos
+JOIN	    Channel	        state
+PART	    Channel	        state
+PRIVMSG	    Channel/User	routing
+MODE	    Channel/User	flags
+QUIT	    Core	        cleanup
+
+":" <server> <code> <nick> <params> ":" <message> "\r\n"
+:irc.local 433 * newnick :Nickname is already in use
+CRLF
+
+
+RFC 1459 = reference
+IRC = protocol
+
+// V1 Objectives
+
+nc localhost 6667
+NICK a
+USER a 0 * :a
+JOIN #test
+PRIVMSG #test :hello
+
+
+// IDEAS
 
 #pragma once
 #include <string>
