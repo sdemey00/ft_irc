@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 13:13:25 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/16 08:52:09 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/16 09:18:00 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,3 @@ const char* Errors::Bind::what()				const throw() { return "Error on bind()"; }
 const char* Errors::Listen::what()				const throw() { return "Error on listen()"; }
 const char* Errors::Accept::what()				const throw() { return "Error on accept()"; }
 const char* Errors::InvalidBufferSize::what()	const throw() { return "BUFFER_SIZE is invalid."; }
-const char* Errors::InvalidMaxClients::what()	const throw() { return "MAX_CLIENTS is invalid."; }

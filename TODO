@@ -1,9 +1,7 @@
-- IRC Protocol ?
-
-- Handle signals :
-	- Need to send a closing server message ?
+sdemey:
+	- IRC Protocol ?
 
 mmichele :
 	- Make print memory function, to print the recv buffer.
-	- Does the servers sends a message to clients when it closes ?
-	- Make tests withs MAX_CLIENTS macro
+	- Investigate read_buffer and stash variables in Client class, 
+		one of them may be not necessary.

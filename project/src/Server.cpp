@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/16 08:55:23 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/16 09:17:48 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,6 @@ Server::Server(char* raw_port, char* raw_pass) :
 	// Check that BUFFER_SIZE is in range :
 	if (BUFFER_SIZE < 2)
 		throw Errors::InvalidBufferSize();
-	if (MAX_CLIENTS < 4)
-		throw Errors::InvalidMaxClients();
 }
 
 Server::~Server() {
