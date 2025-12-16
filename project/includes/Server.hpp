@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:19:10 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/14 13:57:04 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/15 15:14:31 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,11 @@
 #include <string>		// string
 #include <vector>		// vector
 #include <poll.h>		// pollfd
+#include <fstream>		// ofstream
 
 #include "Client.hpp"	// Client
+
+extern std::ofstream log;
 
 class Server {
 	unsigned int		port;
