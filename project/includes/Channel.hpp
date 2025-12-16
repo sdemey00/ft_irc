@@ -25,11 +25,10 @@ class Channel {
 	const std::string& getTopic() const;
 
 	private:
-		std::string _name;
-		std::string _topic;
-
-		std::set<User*> _users;
-		std::set<User*> _operators;
+		std::string		_name;
+		std::string		_topic;
+		std::set<User*>	_users;
+		std::set<User*>	_operators;
 };
 
 

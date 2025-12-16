@@ -1,10 +1,15 @@
 #pragma once
 #include <string>
 #include <map>
+#include "Replies.hpp"
+#include "Errors.hpp"
+#include "Message.hpp"
+#include "User.hpp"
 
 class IRCCore;
-class User;
-class Message;
+
+// cmd list prototype
+void cmdNick(IRCCore& core, User& user, const Message& msg);
 
 class CommandDispatcher {
 public:

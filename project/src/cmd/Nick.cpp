@@ -1,11 +1,21 @@
-class IRCCore;
-class User;
-class Message;
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Nick.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdemey <sdemey@student.42belgium.be>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/16 16:35:01 by sdemey            #+#    #+#             */
+/*   Updated: 2025/12/16 16:35:02 by sdemey           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "Nick.hpp"
+class IRCCore;
+
 #include "IRCCore.hpp"
 #include "Replies.hpp"
-#include "Errors.hpp"
+#include "User.hpp"
+#include "Message.hpp"
 
 void cmdNick(IRCCore& core, User& user, const Message& msg)
 {
@@ -15,31 +25,12 @@ void cmdNick(IRCCore& core, User& user, const Message& msg)
     }
     std::string newNick = msg.params[0];
     if (core.nickExists(newNick)) {
-        user.send(ERR_NICKNAMEINUSE(
-            user.getNick().empty() ? "*" : user.getNick(),
-            newNick,
-            core.getServerName()
-        ));
+        user.send(ERR_NICKNAMEINUSE(newNick));
         return;
     }
     user.setNick(newNick);
     if (user.canRegister() && !user.isRegistered()) {
         user.setRegistered(true);
-        user.send(RPL_WELCOME(user.getNick(), core.getServerName()));
+        user.send(RPL_WELCOME(user.getNick()));
     }
 }
-
-
-
-// :irc.example.com 433 currentNick foo :Nickname is already in use
-
-// Errors.hpp
-//
-// inline std::string ERR_NICKNAMEINUSE(const std::string& currentNick,
-//                                     const std::string& requestedNick,
-//                                     const std::string& server)
-// {
-//     return ":" + server + " 433 " + currentNick + " " +
-//            requestedNick + " :Nickname is already in use\r\n";
-// }
-

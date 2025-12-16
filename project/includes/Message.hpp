@@ -1,11 +1,14 @@
-#pargma once
+#pragma once
+
+#include <vector>
+#include <iostream>
 
 class Message {
 	public:
 	std::string					prefix;
 	std::string					command;
 	std::vector<std::string>	params;
-}
+};
 
 //	[:prefix] COMMAND param1 param2 :trailing
 // <message> ::= [':' <prefix> <SPACE> ] <command> <params> <crlf>

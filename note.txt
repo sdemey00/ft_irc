@@ -81,29 +81,3 @@ public:
 Client ---> User
 User ---> IConnection (interface)
 //////////////////////
-Client c;
-c.user = new User(&c);
-clients.push_back(c);
-////////////////////
-class Channel {
-public:
-    explicit Channel(const std::string& name);
-
-    void join(User* user);
-    void part(User* user);
-
-    bool empty() const;
-
-private:
-    std::string _name;
-    std::set<User*> _users;
-};
-if (cmd == "JOIN") {
-    channel.join(client.user);
-}
-else if (cmd == "PART") {
-    channel.part(client.user);
-}
-nc localhost 6667
-JOIN #test
-PART #test

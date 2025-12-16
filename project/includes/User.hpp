@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "Client.hpp"
 
 class User {
 public:
@@ -23,12 +24,14 @@ public:
     bool isOperator() const;
     void setOperator(bool value);
 
+	// Method
+	void send(const std::string &message);
 private:
     std::string _nick;
     std::string _user;
     std::string _realname;
-
-    bool _registered;
-    bool _isOperator;
+    bool		_registered;
+    bool		_isOperator;
+	Client		*_client;
 };
 

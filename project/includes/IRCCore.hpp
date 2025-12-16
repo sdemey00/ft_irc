@@ -18,4 +18,5 @@ public:
 private:
     std::map<std::string, User*> _users;        // nick -> User
     std::map<std::string, Channel> _channels;   // name -> Channel
+												// servername
 };
