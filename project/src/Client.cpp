@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 23:04:22 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/16 09:42:31 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/16 17:29:41 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,29 @@
 #include "Server.hpp"	// log
 
 static void log_buffer(const char buffer[BUFFER_SIZE], const unsigned int& length) {
-	for (unsigned int i = 0; i < length; i++) {
-		if (i < length - 1) { log << std::setw(3) << static_cast<int>(buffer[i]) << " "; }
-		else { log << std::setw(3) << static_cast<int>(buffer[i]) << " : "; }
+	const unsigned int	width = 15;
+	long int			left = length;
+
+	while (left > 0) {
+		for (unsigned int i = 0; i < width; i++) {
+			if (i + length - left < length) {
+				log << std::setw(3) << static_cast<int>(buffer[i + length - left]);
+			}
+			else { log << "   "; }
+			log << " ";
+		}
+		log << ": \"";
+		for (unsigned int i = 0; i < width; i++) {
+			if (i + length - left < length) {
+				if (std::isprint(buffer[i + length - left]))
+					log << buffer[i + length - left];
+				else
+					log << "🯄";
+			}
+		}
+		log << "\"" << std::endl;
+		left -= width;
 	}
-	log << "\"";
-	for (unsigned int i = 0; i < length; i++) {
-		if (std::isprint(buffer[i]))
-			log << buffer[i];
-		else
-			log << "🯄";
-	}
-	log << "\"\n";
 }
 
 static unsigned int find_crlf(const char buffer[BUFFER_SIZE], const unsigned int& length) {
@@ -60,7 +71,6 @@ Client::~Client() {
 		close(client_sock);
 }
 
-// TODO return a vector<IrcRequests>
 void Client::_recv() {
 	char buf[BUFFER_SIZE];
 	if (read_buffer.empty()) {  read_buffer = stash; }

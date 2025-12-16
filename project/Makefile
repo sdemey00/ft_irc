@@ -6,7 +6,7 @@
 #    By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/13 10:59:54 by mmichele          #+#    #+#              #
-#    Updated: 2025/12/16 08:22:47 by mmichele         ###   ########.fr        #
+#    Updated: 2025/12/16 16:58:17 by mmichele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,7 +59,7 @@ san: FLAGS += -fsanitize=address,leak,undefined
 san: debug all
 
 # Following targets allow makefile variables PORT and PASS to be set.
-PORT	?= 6667
+PORT	?= 8081
 PASS	?= pass
 
 valgrind: debug

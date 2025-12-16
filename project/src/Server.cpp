@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/16 09:17:48 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:09:38 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,8 +149,10 @@ void Server::run() {
 	log << "Handling events ...\n";
 	while (run_state) {
 		int polled = poll(polls.data(), polls.size(), -1);
-		if (polled <= 0)
+		if (polled == 0)
 			continue ;
+		else if (polled < 0)
+			break ;
 		bool new_client = 0;
 		for (size_t i = 0; i < polls.size(); ++i) {
 			pollfd &curr_poll = polls[i];
