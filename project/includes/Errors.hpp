@@ -23,3 +23,4 @@ struct Errors {
 	struct Listen 		: std::exception { virtual const char* what() const throw(); };
 	struct Accept 		: std::exception { virtual const char* what() const throw(); };
 };
+

@@ -4,11 +4,11 @@ User::User()
     : _registered(false), _isOperator(false) {}
 
 bool User::isRegistered() const {
-    return _registered;
+    return (_registered);
 }
 
 bool User::canRegister() const {
-    return !_nick.empty() && !_user.empty();
+    return (!_nick.empty() && !_user.empty());
 }
 
 void User::setRegistered(bool value) {
@@ -16,9 +16,16 @@ void User::setRegistered(bool value) {
 }
 
 bool User::isOperator() const {
-    return _isOperator;
+    return (_isOperator);
 }
 
 void User::setOperator(bool value) {
     _isOperator = value;
+}
+
+void User::send(const std::string& message)
+{
+    if (!_client)
+        return;
+    _client->send(message);
 }

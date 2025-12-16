@@ -1,4 +1,3 @@
-#pragma once
 class IRCCore;
 class User;
 class Message;
@@ -7,9 +6,6 @@ class Message;
 #include "IRCCore.hpp"
 #include "Replies.hpp"
 #include "Errors.hpp"
-
-void cmdNick(IRCCore& core, User& user, const Message& msg);
-
 
 void cmdNick(IRCCore& core, User& user, const Message& msg)
 {

@@ -14,7 +14,7 @@ void Channel::removeUser(User* user) {
 }
 
 bool Channel::hasUser(User* user) const {
-    return _users.find(user) != _users.end();
+    return (_users.find(user) != _users.end());
 }
 
 void Channel::addOperator(User* user) {
@@ -22,7 +22,7 @@ void Channel::addOperator(User* user) {
 }
 
 bool Channel::isOperator(User* user) const {
-    return _operators.find(user) != _operators.end();
+    return (_operators.find(user) != _operators.end());
 }
 
 // first user to join become operator
