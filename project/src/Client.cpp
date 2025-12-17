@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 23:04:22 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/16 17:29:41 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/17 11:36:55 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@
 #include "Server.hpp"	// log
 
 static void log_buffer(const char buffer[BUFFER_SIZE], const unsigned int& length) {
-	const unsigned int	width = 15;
+	const unsigned int	width = 14;
 	long int			left = length;
 
 	while (left > 0) {
 		for (unsigned int i = 0; i < width; i++) {
 			if (i + length - left < length) {
-				log << std::setw(3) << static_cast<int>(buffer[i + length - left]);
+				log << std::setw(4) << static_cast<int>(buffer[i + length - left]);
 			}
-			else { log << "   "; }
+			else { log << "    "; }
 			log << " ";
 		}
 		log << ": \"";
@@ -39,7 +39,7 @@ static void log_buffer(const char buffer[BUFFER_SIZE], const unsigned int& lengt
 				if (std::isprint(buffer[i + length - left]))
 					log << buffer[i + length - left];
 				else
-					log << "🯄";
+					log << "⍰";
 			}
 		}
 		log << "\"" << std::endl;
