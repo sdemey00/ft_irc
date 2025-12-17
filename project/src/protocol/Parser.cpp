@@ -15,9 +15,9 @@
 
 Message Parser::parse(const std::string& line)
 {
-    Message msg;
-    std::istringstream iss(line);
-    std::string token;
+    Message				msg;
+    std::istringstream	iss(line);
+    std::string			token;
 
     if (!line.empty() && line[0] == ':') {
         iss >> token;
@@ -36,5 +36,6 @@ Message Parser::parse(const std::string& line)
         }
         msg.params.push_back(token);
     }
+	msg.msgPrint();
     return (msg);
 }

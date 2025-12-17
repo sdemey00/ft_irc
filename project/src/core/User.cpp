@@ -12,8 +12,23 @@
 
 #include "User.hpp"
 
-User::User()
-    : _registered(false), _isOperator(false){}
+User::User() : _registered(false), _isOperator(false) {}
+User::User(std::string nick, std::string user, std::string realname)
+ : _nick(nick), _user(user), _realname(realname), _registered(false), _isOperator(false) {}
+User::User(const User& other) {
+    *this = other;
+}
+User& User::operator=(const User& other) {
+    if (this != &other) {
+        _nick = other._nick;
+        _user = other._user;
+        _realname = other._realname;
+        _registered = other._registered;
+        _isOperator = other._isOperator;
+    }
+    return (*this);
+}
+User::~User() {}
 
 // Registration
 bool	User::isRegistered() const {
@@ -48,5 +63,5 @@ void	User::send(const std::string& message)
 	(void)message;
     // if (!_client)
     //     return;
-    //_client->send(message);
+    //_client->queue(message);
 }

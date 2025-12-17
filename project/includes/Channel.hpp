@@ -6,7 +6,11 @@ class User;
 
 class Channel {
 	public:
+	Channel(void);
 	Channel(const std::string& name);
+	Channel(const Channel& other);
+	Channel& operator=(const Channel& other);
+	~Channel(void);
 
 	const std::string& getName() const;
 
@@ -30,9 +34,6 @@ class Channel {
 		std::set<User*>	_users;
 		std::set<User*>	_operators;
 };
-
-
-
 
 // To create a new channel or become part of an existing channel, a user
 //    is required to JOIN the channel.  If the channel doesn't exist prior

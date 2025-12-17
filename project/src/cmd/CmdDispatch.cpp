@@ -14,7 +14,7 @@
 
 typedef void (*CommandFn)(IRCCore&, User&, const Message&);
 
-static std::map<std::string, CommandFn> initCommands()
+static std::map<std::string, CommandFn> initCmds()
 {
     std::map<std::string, CommandFn> cmds;
     cmds["NICK"] = &cmdNick;
@@ -33,17 +33,16 @@ static std::map<std::string, CommandFn> initCommands()
     return (cmds);
 }
 
-static std::map<std::string, CommandFn> g_commands = initCommands();
-
-void CommandDispatcher::dispatch(IRCCore& core, User& user, const Message& msg)
+void CmdDispatch::dispatch(IRCCore& core, User& user, const Message& msg)
 {
+    std::map<std::string, CommandFn> cmds = initCmds();
     std::string cmd = msg.command;
     if (cmd.empty())
         return ;
-    for (size_t i = 0; i < cmd.size(); ++i)
+    for (size_t i = 0; i < cmd.size(); i++)
         cmd[i] = std::toupper(cmd[i]);
-    std::map<std::string, CommandFn>::iterator it = g_commands.find(cmd);
-    if (it == g_commands.end()) {
+    std::map<std::string, CommandFn>::iterator it = cmds.find(cmd);
+    if (it == cmds.end()) {
         user.send(ERR_UNKNOWNCOMMAND(user.getNick(), cmd));
         return ;
     }

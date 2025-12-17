@@ -4,5 +4,5 @@
 
 class Parser {
 public:
-    static Message parse(const std::string& line);
+    static Message  parse(const std::string& line);
 };

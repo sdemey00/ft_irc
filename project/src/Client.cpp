@@ -20,6 +20,9 @@
 
 #include "Errors.hpp"	// Errors
 #include "Server.hpp"	// log
+#include "CmdDispatch.hpp"
+#include "Message.hpp"
+#include "Parser.hpp"
 
 static void log_buffer(const char buffer[BUFFER_SIZE], const unsigned int& length) {
 	const unsigned int	width = 15;
@@ -89,7 +92,7 @@ void Client::_recv() {
 			std::cout << read_buffer << std::endl;
 			// TODO Process message here
 			// Message msg = Parser::parse(read_buffer);
-			// CommandDispatcher::dispatch(core, client, msg);
+			// CmdDispatch::dispatch(core, client, msg);
 			crlf_idx = find_crlf(stash, std::strlen(stash));
 			while (crlf_idx) {
 				read_buffer = std::string(stash).substr(0, crlf_idx - 1);
@@ -97,6 +100,8 @@ void Client::_recv() {
 				log_buffer(read_buffer.c_str(), read_buffer.length());
 				std::cout << read_buffer << std::endl;
 				// TODO Process message here
+				// Message msg = Parser::parse(read_buffer);
+				// CmdDispatch::dispatch(core, client, msg);
 				std::memmove(stash, stash + crlf_idx + 1, std::strlen(stash + crlf_idx + 1) + 1);
 				crlf_idx = find_crlf(stash, std::strlen(stash));
 			}
@@ -117,6 +122,6 @@ void	Client::_send() {
 	if (n > 0) { write_buffer.erase(0, n); }
 }
 
-// void Client::queue(const std::string& msg) {
-//     write_buffer += msg;
+// void Client::queue(const std::string& replies) {
+//     write_buffer += replies;
 // }

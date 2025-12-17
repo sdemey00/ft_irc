@@ -13,8 +13,18 @@
 #include "Channel.hpp"
 #include "User.hpp"
 
-Channel::Channel(const std::string& name)
-    : _name(name) {}
+Channel::Channel(void) : _name("") {}
+Channel::Channel(const std::string& name) : _name(name) {}
+Channel::Channel(const Channel& other) {
+	*this = other;
+}
+Channel& Channel::operator=(const Channel& other) {
+    if (this != &other) {
+        _name = other._name;
+    }
+    return (*this);
+}
+Channel::~Channel() {}
 
 // Membership
 void	Channel::addUser(User* user) {
@@ -28,7 +38,7 @@ bool	Channel::hasUser(User* user) const {
     return (_users.find(user) != _users.end());
 }
 
-// Operators
+// Operators users
 void	Channel::addOperator(User* user) {
     _operators.insert(user);
 }
@@ -43,4 +53,6 @@ bool	Channel::isOperator(User* user) const {
 void	Channel::setTopic(const std::string& topic) { _topic = topic; }
 const std::string&	Channel::getTopic() const { return (_topic); }
 
+// Getter
+const std::string&  Channel::getName() const { return (_name); }
 // first user to join become operator

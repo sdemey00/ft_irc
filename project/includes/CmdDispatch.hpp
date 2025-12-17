@@ -10,9 +10,10 @@
 
 // cmd list prototype
 void cmdNick(IRCCore& core, User& user, const Message& msg);
-void cmdJoin(IRCCore& core, User& user, const Message& msg);
+//void cmdUser(IRCCore& core, User& user, const Message& msg);
+//void cmdJoin(IRCCore& core, User& user, const Message& msg);
 
-class CommandDispatcher {
+class CmdDispatch {
 public:
     static void dispatch(IRCCore& core, User& user, const Message& msg);
 };

@@ -8,6 +8,7 @@ class Message {
 	std::string					prefix;
 	std::string					command;
 	std::vector<std::string>	params;
+	void	msgPrint();
 };
 
 //	[:prefix] COMMAND param1 param2 :trailing

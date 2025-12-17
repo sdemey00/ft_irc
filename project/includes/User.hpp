@@ -6,7 +6,11 @@
 
 class User {
 public:
-    User();
+    User(void);
+    User(std::string nick, std::string user, std::string realname);
+	User(const User& other);
+	User& operator=(const User& other);
+    ~User(void);
 
     // Identity (RFC)
     const std::string& getNick() const;
@@ -34,6 +38,5 @@ private:
     std::string         _realname;
     bool		        _registered;
     bool		        _isOperator;
-    std::set<Channel*>  channels;
 };
 
