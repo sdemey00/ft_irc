@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:19:10 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/15 15:14:31 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/17 23:25:21 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 #include "Client.hpp"	// Client
 
-extern std::ofstream log;
+extern std::ofstream g_log;
 
 class Server {
 	unsigned int		port;

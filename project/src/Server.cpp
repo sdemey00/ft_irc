@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/16 16:09:38 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/17 23:37:21 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,18 @@
 
 #include "Errors.hpp"	// Errors
 
-static bool		run_state = 1;
-std::ofstream	log("server.log");
+static bool		g_run_state = 1;
+std::ofstream	g_log("server.log");
 
 void Server::_sighandler(int sig) {
-	log << "Server::_sighandler()\n";
+	g_log << "Server::_sighandler()\n";
 	(void)sig;
-	run_state = 0;
+	g_run_state = 0;
 }
 
 // Creating the socket
 void Server::_socket() {
-	log << "Server::_socket()\n";
+	g_log << "Server::_socket()\n";
 	server_sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (server_sock < 0)
 		throw Errors::Socket();
@@ -48,7 +48,7 @@ void Server::_socket() {
 
 // Bind the socket to an address
 void Server::_bind() {
-	log << "Server::_bind()\n";
+	g_log << "Server::_bind()\n";
 	sockaddr_in addr;
 	std::memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
@@ -60,7 +60,7 @@ void Server::_bind() {
 
 // Listening for connection
 void Server::_listen() {
-	log << "Server::_listen()\n";
+	g_log << "Server::_listen()\n";
 	if (listen(server_sock, SOMAXCONN) < 0)
 		throw Errors::Listen();
 }
@@ -75,7 +75,7 @@ void Server::_poll() {
 
 // Accept incoming connection
 void Server::_accept() {
-	log << "Server::_accept()\n";
+	g_log << "Server::_accept()\n";
 	Client c;
 	c.client_sock = accept(server_sock, (sockaddr *)&c.sock_addr, &c.sock_len);
 	if (c.client_sock < 0)
@@ -146,8 +146,8 @@ void Server::run() {
 	_bind();
 	_listen();
 	_poll();
-	log << "Handling events ...\n";
-	while (run_state) {
+	g_log << "Handling events ...\n";
+	while (g_run_state) {
 		int polled = poll(polls.data(), polls.size(), -1);
 		if (polled == 0)
 			continue ;
