@@ -16,6 +16,8 @@
 #include <string>		// string
 #include <poll.h>		// pollfd
 
+#include "User.hpp"
+
 #define BUFFER_SIZE 131
 
 class Client {
@@ -29,7 +31,7 @@ public:
 	bool			init;
 	int				client_sock;
 
-	// User			user;
+	User			user;
 	
 	Client();
 	~Client();

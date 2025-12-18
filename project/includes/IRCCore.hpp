@@ -39,8 +39,8 @@ public:
 	Channel*    getOrCreateChannel(const std::string& name);
 
 	// Protocol
-	Message     parse(const std::string& line);
-	void        dispatch(User& user, const Message& msg);
+	static Message	parse(const std::string& line);
+	void			dispatch(User& user, const Message& msg);
 
 private:
 	std::map<std::string, User*>        _users;

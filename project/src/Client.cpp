@@ -90,8 +90,11 @@ void Client::_recv(pollfd& mypoll) {
 			log_buffer(read_buffer.c_str(), read_buffer.length());
 			std::cout << read_buffer << std::endl;
 			// TODO Process message here
-			// Message msg = Parser::parse(read_buffer);
-			// CmdDispatch::dispatch(core, client, msg);
+
+			IRCCore core;
+			Message msg = IRCCore::parse(read_buffer);
+			core.dispatch(user, msg);
+
 			crlf_idx = find_crlf(stash, std::strlen(stash));
 			while (crlf_idx) {
 				read_buffer = std::string(stash).substr(0, crlf_idx - 1);
@@ -99,11 +102,21 @@ void Client::_recv(pollfd& mypoll) {
 				log_buffer(read_buffer.c_str(), read_buffer.length());
 				std::cout << read_buffer << std::endl;
 				// TODO Process message here
-				// Message msg = Parser::parse(read_buffer);
-				// CmdDispatch::dispatch(core, client, msg);
+
+				Message msg = IRCCore::parse(read_buffer);
+				core.dispatch(user, msg);
+
 				std::memmove(stash, stash + crlf_idx + 1, std::strlen(stash + crlf_idx + 1) + 1);
 				crlf_idx = find_crlf(stash, std::strlen(stash));
 			}
+
+			std::queue<std::string> copy = user._queue;
+			while (!copy.empty())
+			{
+				std::cout << copy.front() << std::endl;
+				copy.pop();
+			}
+
 			read_buffer.clear();
 			mypoll.events ^= POLLOUT;
 		}

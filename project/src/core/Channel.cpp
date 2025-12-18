@@ -18,34 +18,34 @@ Channel::Channel(const Channel& other) {
 	*this = other;
 }
 Channel& Channel::operator=(const Channel& other) {
-    if (this != &other) {
-        _name = other._name;
-    }
-    return (*this);
+	if (this != &other) {
+		_name = other._name;
+	}
+	return (*this);
 }
 Channel::~Channel() {}
 
 // Membership
 void	Channel::addUser(User* user) {
-    _users.insert(user);
+	_users.insert(user);
 }
 void	Channel::removeUser(User* user) {
-    _users.erase(user);
-    _operators.erase(user);
+	_users.erase(user);
+	_operators.erase(user);
 }
 bool	Channel::hasUser(User* user) const {
-    return (_users.find(user) != _users.end());
+	return (_users.find(user) != _users.end());
 }
 
 // Operators users
 void	Channel::addOperator(User* user) {
-    _operators.insert(user);
+	_operators.insert(user);
 }
 void	Channel::removeOperator(User* user) {
 	_operators.erase(user);
 }
 bool	Channel::isOperator(User* user) const {
-    return (_operators.find(user) != _operators.end());
+	return (_operators.find(user) != _operators.end());
 }
 
 // Topic

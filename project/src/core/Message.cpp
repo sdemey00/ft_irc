@@ -17,8 +17,8 @@ void	Message::msgPrint() {
 	std::cout << "Prefix: " << prefix << std::endl;
 	std::cout << "Command: " << command << std::endl;
 	std::cout << "Params: ";
-    for (std::vector<std::string>::iterator it = params.begin(); it != params.end(); ++it) {
-        std::cout << " " << *it << " |";
-    }
+	for (std::vector<std::string>::iterator it = params.begin(); it != params.end(); ++it) {
+		std::cout << " " << *it << " |";
+	}
 	std::cout << std::endl;
 }

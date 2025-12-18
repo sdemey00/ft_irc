@@ -16,37 +16,37 @@ User::User() : _registered(false), _isOperator(false) {}
 User::User(std::string nick, std::string user, std::string realname)
  : _nick(nick), _user(user), _realname(realname), _registered(false), _isOperator(false) {}
 User::User(const User& other) {
-    *this = other;
+	*this = other;
 }
 User& User::operator=(const User& other) {
-    if (this != &other) {
-        _nick = other._nick;
-        _user = other._user;
-        _realname = other._realname;
-        _registered = other._registered;
-        _isOperator = other._isOperator;
-    }
-    return (*this);
+	if (this != &other) {
+		_nick = other._nick;
+		_user = other._user;
+		_realname = other._realname;
+		_registered = other._registered;
+		_isOperator = other._isOperator;
+	}
+	return (*this);
 }
 User::~User() {}
 
 // Registration
 bool	User::isRegistered() const {
-    return (_registered);
+	return (_registered);
 }
 bool	User::canRegister() const {
-    return (!_nick.empty() && !_user.empty());
+	return (!_nick.empty() && !_user.empty());
 }
 void	User::setRegistered(bool value) {
-    _registered = value;
+	_registered = value;
 }
 
 // Operator
 bool	User::isOperator() const {
-    return (_isOperator);
+	return (_isOperator);
 }
 void	User::setOperator(bool value) {
-    _isOperator = value;
+	_isOperator = value;
 }
 
 // Setter / Getter

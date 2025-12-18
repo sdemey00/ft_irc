@@ -17,32 +17,22 @@
 
 void cmdNick(IRCCore &core, User& user, const Message& msg)
 {
-    if (msg.params.empty()) {
-        user.send(ERR_NONICKNAMEGIVEN(user.getNick())); //client.queue()
-        return;
-    }
-    std::string newNick = msg.params[0];
-    if (core.nickExists(newNick)) {
-        user.send(ERR_NICKNAMEINUSE(newNick));
-        return;
-    }
-    user.setNick(newNick);
-    if (user.canRegister() && !user.isRegistered()) {
-        user.setRegistered(true);
-        user.send(RPL_WELCOME(user.getNick()));
-    }
+	if (msg.params.empty()) {
+		user.send(ERR_NONICKNAMEGIVEN(user.getNick())); //client.queue()
+		return;
+	}
+	std::string newNick = msg.params[0];
+	if (core.nickExists(newNick)) {
+		user.send(ERR_NICKNAMEINUSE(newNick));
+		return;
+	}
+	user.setNick(newNick);
+	// if (user.canRegister() && !user.isRegistered()) {
+	// 	user.setRegistered(true);
+	// 	user.send(RPL_WELCOME(user.getNick()));
+	// }
+	user.send(RPL_WELCOME(user.getNick()));
 }
-
-// void cmdNick(IRCCore& core, Client& client, const Message& msg)
-// {
-//     User& user = client.user;
-
-//     if (msg.params.empty()) {
-//         client.queue(ERR_NONICKNAMEGIVEN("*"));
-//         return;
-//     }
-// }
-
 
 // NICK message is used to give user a nickname or change the previous
 //    one.  The <hopcount> parameter is only used by servers to indicate
