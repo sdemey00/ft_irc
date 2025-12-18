@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   User.hpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdemey <sdemey@student.42belgium.be>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/18 12:35:23 by sdemey            #+#    #+#             */
+/*   Updated: 2025/12/18 12:35:24 by sdemey           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #pragma once
 #include <string>
 #include <set>
@@ -31,12 +43,15 @@ public:
     void setOperator(bool value);
 
 	// Method
-	void send(const std::string &message);
+	void send(const std::string &message);	
+	std::string& getFrontQueue() const;
+
 private:
     std::string         _nick;
     std::string         _user;
     std::string         _realname;
     bool		        _registered;
     bool		        _isOperator;
+	std::queue<std::string>	_queue;
 };
 

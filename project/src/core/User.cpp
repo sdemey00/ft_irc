@@ -60,8 +60,10 @@ const std::string&	User::getRealName() const { return (_realname); }
 // Method
 void	User::send(const std::string& message)
 {
-	(void)message;
-    // if (!_client)
-    //     return;
-    //_client->queue(message);
+	if (message.empty())
+		return ;
+	_queue.push(message);
 }
+std::string& getFrontQueue() const {
+	return (_queue.front());
+};
