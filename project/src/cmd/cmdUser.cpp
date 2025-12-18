@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "CmdDispatch.hpp"
+#include "IRCCore.hpp"
 
 // Command: USER
 //    Parameters: <username> <hostname> <servername> <realname>
 
-// void    cmdUser(IRCCore& core, User& user, const Message& msg) {}
+// void    IRCCore::cmdUser(User& user, const Message& msg) {}
 
 //    The USER message is used at the beginning of connection to specify
 //    the username, hostname, servername and realname of s new user.  It is

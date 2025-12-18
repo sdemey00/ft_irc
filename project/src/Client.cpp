@@ -21,9 +21,7 @@
 
 #include "Errors.hpp"	// Errors
 #include "Server.hpp"	// g_log
-#include "CmdDispatch.hpp"
-#include "Message.hpp"
-#include "Parser.hpp"
+#include "IRCCore.hpp"  // core
 
 static void log_buffer(const char buffer[BUFFER_SIZE], const unsigned int& length) {
 	const unsigned int	width = 13;

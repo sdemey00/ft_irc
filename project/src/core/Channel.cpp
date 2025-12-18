@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "Channel.hpp"
-#include "User.hpp"
 
 Channel::Channel(void) : _name("") {}
 Channel::Channel(const std::string& name) : _name(name) {}

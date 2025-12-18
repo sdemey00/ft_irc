@@ -64,6 +64,7 @@ void	User::send(const std::string& message)
 		return ;
 	_queue.push(message);
 }
-std::string& getFrontQueue() const {
+
+std::string&	User::getFrontQueue() {
 	return (_queue.front());
 };

@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "CmdDispatch.hpp"
+#include "IRCCore.hpp"
 
 //       Command: PART
 //    Parameters: <channel>{,<channel>}
 
-// void    cmdPart(IRCCore& core, User& user, const Message& msg) {}
+// void    IRCCore::cmdPart(User& user, const Message& msg) {}
 
 //    The PART message causes the client sending the message to be removed
 //    from the list of active users for all given channels listed in the

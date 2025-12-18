@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "CmdDispatch.hpp"
+#include "IRCCore.hpp"
 
 // Command: JOIN
 //    Parameters: <channel>{,<channel>} [<key>{,<key>}]
 
-// void cmdJoin(IRCCore& core, User& user, const Message& msg)
+// void cmdJoin(User& user, const Message& msg)
 // {
 //     if (!user.isRegistered()) {
 //         user.send(ERR_NOTREGISTERED());
