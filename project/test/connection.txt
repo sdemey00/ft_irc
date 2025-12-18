@@ -1,0 +1,3 @@
+CAP LS
+NICK TestScript
+USER TestScript TestScript 127.0.0.1 :TestScript
