@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/17 23:37:21 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/18 09:28:06 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void Server::_listen() {
 }
 
 // Initialize poll events
-void Server::_poll() {
+void Server::_poll_init() {
 	server_poll.fd = server_sock;
 	server_poll.events = POLLIN;
 	server_poll.revents = 0;
@@ -93,6 +93,15 @@ void Server::_accept() {
 	polls.push_back(pfd);
 }
 
+// Fetch client from poll event
+Client* Server::fetch(const int& fd) {
+	for (long unsigned int i = 0; i < clients.size(); i++) {
+		if (clients[i].client_sock == fd)
+			return &clients[i];
+	}
+	return 0;
+}
+
 // Remove disconnected clients
 void Server::erase() {
 	for (std::vector<pollfd>::iterator it = polls.begin(); it != polls.end();) {
@@ -103,15 +112,6 @@ void Server::erase() {
 		if (it->client_sock == -1) { it = clients.erase(it); }
 		else { it++; }
 	}
-}
-
-// Fetch client from poll event
-Client* Server::fetch(const int& fd) {
-	for (unsigned int i = 0; i < clients.size(); i++) {
-		if (clients[i].client_sock == fd)
-			return &clients[i];
-	}
-	return 0;
 }
 
 Server::Server(char* raw_port, char* raw_pass) :
@@ -132,6 +132,10 @@ Server::Server(char* raw_port, char* raw_pass) :
 	// Check that BUFFER_SIZE is in range :
 	if (BUFFER_SIZE < 2)
 		throw Errors::InvalidBufferSize();
+	_socket();
+	_bind();
+	_listen();
+	_poll_init();
 }
 
 Server::~Server() {
@@ -142,11 +146,7 @@ Server::~Server() {
 }
 
 void Server::run() {
-	_socket();
-	_bind();
-	_listen();
-	_poll();
-	g_log << "Handling events ...\n";
+	g_log << "Server running ...\n";
 	while (g_run_state) {
 		int polled = poll(polls.data(), polls.size(), -1);
 		if (polled == 0)
@@ -154,18 +154,25 @@ void Server::run() {
 		else if (polled < 0)
 			break ;
 		bool new_client = 0;
-		for (size_t i = 0; i < polls.size(); ++i) {
+		for (size_t i = 0; i < polls.size(); i++) {
 			pollfd &curr_poll = polls[i];
+			Client* c = fetch(curr_poll.fd);
 			if (curr_poll.revents & POLLIN) {
 				if (curr_poll.fd == server_sock) { new_client = 1; }
-				else {
-					Client* c = fetch(curr_poll.fd);
-					if (c) { c->_recv(); }
-				}
+				else if (c) { c->_recv(curr_poll); }
 			}
 			if (curr_poll.revents & POLLOUT) {
-				Client* c = fetch(curr_poll.fd);
-				if (c) { c->_send(); }
+				g_log << curr_poll.fd << " has POLLOUT" << std::endl;
+				if (c) { c->_send(curr_poll); }
+			}
+			if (curr_poll.revents & POLLERR) {
+				g_log << curr_poll.fd << " has POLLERR" << std::endl;
+			}
+			if (curr_poll.revents & POLLHUP) {
+				g_log << curr_poll.fd << " has POLLHUP" << std::endl;
+			}
+			if (curr_poll.revents & POLLNVAL) {
+				g_log << curr_poll.fd << " has POLLNVAL" << std::endl;
 			}
 			curr_poll.revents = 0;
 		}

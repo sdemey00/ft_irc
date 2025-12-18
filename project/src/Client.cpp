@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 23:04:22 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/17 23:41:49 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/18 09:35:53 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <iostream>		// cout, endl
 #include <cstring>		// memcpy, isprint
 #include <iomanip>		// setw
+#include <poll.h>		// pollfd
 
 #include "Errors.hpp"	// Errors
 #include "Server.hpp"	// g_log
@@ -71,7 +72,7 @@ Client::~Client() {
 		close(client_sock);
 }
 
-void Client::_recv() {
+void Client::_recv(pollfd& mypoll) {
 	char buf[BUFFER_SIZE];
 	if (read_buffer.empty()) {  read_buffer = stash; }
 	ssize_t n = recv(client_sock, buf, BUFFER_SIZE - 1, 0);
@@ -99,18 +100,27 @@ void Client::_recv() {
 				crlf_idx = find_crlf(stash, std::strlen(stash));
 			}
 			read_buffer.clear();
+			mypoll.events ^= POLLOUT;
 		}
 	} else if (n == 0) {
 		g_log << "Client " << client_sock << " disconnected.\n";
 		std::cout << "Client " << client_sock << " disconnected.\n";
+		close(mypoll.fd);
+		mypoll.fd = -1;
 		close(client_sock);
 		client_sock = -1;
 	}
 }
 
-void	Client::_send() {
-	if (write_buffer.empty())
+void	Client::_send(pollfd& mypoll) {
+	if (write_buffer.empty()) {
+		std::cout << client_sock << " empty buffer" << std::endl;
+		mypoll.events ^= POLLOUT;
 		return ;
+	}
+	std::cout << client_sock << " sent" << std::endl;
 	ssize_t n = send(client_sock, write_buffer.data(), write_buffer.size(), 0);
 	if (n > 0) { write_buffer.erase(0, n); }
+	// TODO check if there's request pending in the queue,
+	// If not unset POLLOUT event -> mypoll.events ^= POLLOUT;
 }

@@ -2,6 +2,5 @@ sdemey:
 	- IRC Protocol ?
 
 mmichele :
-	- Make print memory function, to print the recv buffer.
 	- Investigate read_buffer and stash variables in Client class, 
 		one of them may be not necessary.
