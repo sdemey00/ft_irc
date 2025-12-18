@@ -13,6 +13,7 @@
 #include "IRCCore.hpp"
 
 IRCCore::IRCCore() {
+	// _cmds["PASS"] = &cmdPass;
 	_cmds["NICK"] = &cmdNick;
 	// _cmds["USER"] = &cmdUser;
 	// _cmds["JOIN"] = &cmdJoin;
@@ -63,7 +64,7 @@ Channel*    IRCCore::getOrCreateChannel(const std::string& name) {
 void IRCCore::dispatch(User& user, const Message& msg)
 {
 	std::string cmd = msg.command;
-	if (cmd.empty())
+	if (cmd.empty() || cmd == "CAP")
 		return ;
 	for (size_t i = 0; i < cmd.size(); i++)
 		cmd[i] = std::toupper(cmd[i]);

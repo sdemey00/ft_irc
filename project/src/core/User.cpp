@@ -37,6 +37,7 @@ bool	User::isRegistered() const {
 bool	User::canRegister() const {
 	return (!_nick.empty() && !_user.empty());
 }
+// to get a user registered we need: PASS + NICK + USER
 void	User::setRegistered(bool value) {
 	_registered = value;
 }

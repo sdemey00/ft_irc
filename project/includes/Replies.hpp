@@ -15,15 +15,15 @@
 #define CRLF "\r\n"
 
 ///////// REPLIES ///////////////
-#define RPL_WELCOME(nickname) (": 001 " + nickname + " : Welcome to the IRC server!" + CRLF)
-#define RPL_TOPIC(channel, topic) (": 332 " + channel + " : " + topic + CRLF)
-#define RPL_INVITING(channel, nickname) (": 341 " + channel + " " + nickname + CRLF)
+#define RPL_WELCOME(nickname) (":ft_irc 001 " + nickname + " : Welcome to the IRC server!" + CRLF)
+#define RPL_TOPIC(channel, topic) (":ft_irc 332 " + channel + " : " + topic + CRLF)
+#define RPL_INVITING(channel, nickname) (":ft_irc 341 " + channel + " " + nickname + CRLF)
 
 ///////// ERRORS ////////////////
-#define ERR_NICKNAMEINUSE(nickname) (": 433 " + nickname + " :Nickname is already in use" + CRLF)
-#define ERR_NONICKNAMEGIVEN(nickname) (": 431 " + nickname + " :No nickname given")
-#define ERR_NEEDMOREPARAMS(cmd) (": 461 " + cmd + " :Not enough parameters" + CRLF)
-#define ERR_UNKNOWNCOMMAND(nickname, cmd) (": 421 " + nickname + " " + cmd + " :Unknown command" + CRLF)
+#define ERR_NICKNAMEINUSE(nickname) (":ft_irc 433 " + nickname + " :Nickname is already in use" + CRLF)
+#define ERR_NONICKNAMEGIVEN(nickname) (":ft_irc 431 " + nickname + " :No nickname given")
+#define ERR_NEEDMOREPARAMS(cmd) (":ft_irc 461 " + cmd + " :Not enough parameters" + CRLF)
+#define ERR_UNKNOWNCOMMAND(nickname, cmd) (":ft_irc 421 " + nickname + " " + cmd + " :Unknown command" + CRLF)
 
 
 
