@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/18 09:28:06 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/18 11:57:38 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,33 @@ void Server::_accept() {
 	polls.push_back(pfd);
 }
 
+void Server::_handle_events() {
+	bool new_client = 0;
+	for (size_t i = 0; i < polls.size(); i++) {
+		pollfd &curr_poll = polls[i];
+		if (curr_poll.fd < 0) { continue ; }
+		Client* c = fetch(curr_poll.fd);
+		if (curr_poll.revents & POLLIN) {
+			if (curr_poll.fd == server_sock) { new_client = 1; }
+			else if (c) { c->_recv(curr_poll); }
+		}
+		if (curr_poll.revents & POLLOUT) { if (c) { c->_send(curr_poll); } }
+		if (curr_poll.revents & POLLERR) {
+			g_log << curr_poll.fd << " has POLLERR" << std::endl;
+		}
+		if (curr_poll.revents & POLLHUP) {
+			g_log << curr_poll.fd << " has POLLHUP" << std::endl;
+		}
+		if (curr_poll.revents & POLLNVAL) {
+			g_log << curr_poll.fd << " has POLLNVAL" << std::endl;
+		}
+		curr_poll.revents = 0;
+	}
+	if (new_client)
+		_accept();
+	erase();
+}
+
 // Fetch client from poll event
 Client* Server::fetch(const int& fd) {
 	for (long unsigned int i = 0; i < clients.size(); i++) {
@@ -130,7 +157,7 @@ Server::Server(char* raw_port, char* raw_pass) :
 	// Launch SIGINT handler
 	signal(SIGINT, Server::_sighandler);
 	// Check that BUFFER_SIZE is in range :
-	if (BUFFER_SIZE < 2)
+	if (BUFFER_SIZE < 1)
 		throw Errors::InvalidBufferSize();
 	_socket();
 	_bind();
@@ -149,35 +176,8 @@ void Server::run() {
 	g_log << "Server running ...\n";
 	while (g_run_state) {
 		int polled = poll(polls.data(), polls.size(), -1);
-		if (polled == 0)
-			continue ;
-		else if (polled < 0)
-			break ;
-		bool new_client = 0;
-		for (size_t i = 0; i < polls.size(); i++) {
-			pollfd &curr_poll = polls[i];
-			Client* c = fetch(curr_poll.fd);
-			if (curr_poll.revents & POLLIN) {
-				if (curr_poll.fd == server_sock) { new_client = 1; }
-				else if (c) { c->_recv(curr_poll); }
-			}
-			if (curr_poll.revents & POLLOUT) {
-				g_log << curr_poll.fd << " has POLLOUT" << std::endl;
-				if (c) { c->_send(curr_poll); }
-			}
-			if (curr_poll.revents & POLLERR) {
-				g_log << curr_poll.fd << " has POLLERR" << std::endl;
-			}
-			if (curr_poll.revents & POLLHUP) {
-				g_log << curr_poll.fd << " has POLLHUP" << std::endl;
-			}
-			if (curr_poll.revents & POLLNVAL) {
-				g_log << curr_poll.fd << " has POLLNVAL" << std::endl;
-			}
-			curr_poll.revents = 0;
-		}
-		if (new_client)
-			_accept();
-		erase();
+		if (polled == 0) { continue ; }
+		else if (polled < 0) { break ; }
+		else { _handle_events(); }
 	}
 }
