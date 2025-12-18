@@ -6,35 +6,35 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/18 09:28:06 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:02:21 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"	// Server
+#include "Server.hpp"
 
-#include <sys/socket.h>	// socket, bind, listen, accept
-#include <fcntl.h>		// fcntl
-#include <cstring>		// memset
-#include <cstdlib>		// isdigit
-#include <unistd.h>		// close
-#include <csignal>		// signal
-#include <iostream>		// cout, endl
-#include <poll.h>		// poll, pollfd
+#include <sys/socket.h>		// socket, bind, listen, accept
+#include <fcntl.h>			// fcntl
+#include <cstring>			// memset
+#include <cstdlib>			// isdigit
+#include <unistd.h>			// close
+#include <csignal>			// signal
+#include <iostream>			// cout, endl
+#include <poll.h>			// poll, pollfd
 
-#include "Errors.hpp"	// Errors
+#include "Errors.hpp"		// Errors
+#include "Log.hpp"			// Log
 
 static bool		g_run_state = 1;
-std::ofstream	g_log("server.log");
 
 void Server::_sighandler(int sig) {
-	g_log << "Server::_sighandler()\n";
+	logger << "Server::_sighandler()\n";
 	(void)sig;
 	g_run_state = 0;
 }
 
 // Creating the socket
 void Server::_socket() {
-	g_log << "Server::_socket()\n";
+	logger << "Server::_socket()\n";
 	server_sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (server_sock < 0)
 		throw Errors::Socket();
@@ -48,7 +48,7 @@ void Server::_socket() {
 
 // Bind the socket to an address
 void Server::_bind() {
-	g_log << "Server::_bind()\n";
+	logger << "Server::_bind()\n";
 	sockaddr_in addr;
 	std::memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
@@ -60,7 +60,7 @@ void Server::_bind() {
 
 // Listening for connection
 void Server::_listen() {
-	g_log << "Server::_listen()\n";
+	logger << "Server::_listen()\n";
 	if (listen(server_sock, SOMAXCONN) < 0)
 		throw Errors::Listen();
 }
@@ -75,7 +75,7 @@ void Server::_poll_init() {
 
 // Accept incoming connection
 void Server::_accept() {
-	g_log << "Server::_accept()\n";
+	logger << "Server::_accept()\n";
 	Client c;
 	c.client_sock = accept(server_sock, (sockaddr *)&c.sock_addr, &c.sock_len);
 	if (c.client_sock < 0)
@@ -91,6 +91,33 @@ void Server::_accept() {
 	pfd.events = POLLIN;
 	pfd.revents = 0;
 	polls.push_back(pfd);
+}
+
+void Server::_handle_events() {
+	bool new_client = 0;
+	for (size_t i = 0; i < polls.size(); i++) {
+		pollfd &curr_poll = polls[i];
+		if (curr_poll.fd < 0) { continue ; }
+		Client* c = fetch(curr_poll.fd);
+		if (curr_poll.revents & POLLIN) {
+			if (curr_poll.fd == server_sock) { new_client = 1; }
+			else if (c) { c->_recv(curr_poll); }
+		}
+		if (curr_poll.revents & POLLOUT) { if (c) { c->_send(curr_poll); } }
+		if (curr_poll.revents & POLLERR) {
+			logger << curr_poll.fd << " has POLLERR" << std::endl;
+		}
+		if (curr_poll.revents & POLLHUP) {
+			logger << curr_poll.fd << " has POLLHUP" << std::endl;
+		}
+		if (curr_poll.revents & POLLNVAL) {
+			logger << curr_poll.fd << " has POLLNVAL" << std::endl;
+		}
+		curr_poll.revents = 0;
+	}
+	if (new_client)
+		_accept();
+	erase();
 }
 
 // Fetch client from poll event
@@ -130,7 +157,7 @@ Server::Server(char* raw_port, char* raw_pass) :
 	// Launch SIGINT handler
 	signal(SIGINT, Server::_sighandler);
 	// Check that BUFFER_SIZE is in range :
-	if (BUFFER_SIZE < 2)
+	if (BUFFER_SIZE < 1)
 		throw Errors::InvalidBufferSize();
 	_socket();
 	_bind();
@@ -146,38 +173,11 @@ Server::~Server() {
 }
 
 void Server::run() {
-	g_log << "Server running ...\n";
+	logger << "Server running ...\n";
 	while (g_run_state) {
 		int polled = poll(polls.data(), polls.size(), -1);
-		if (polled == 0)
-			continue ;
-		else if (polled < 0)
-			break ;
-		bool new_client = 0;
-		for (size_t i = 0; i < polls.size(); i++) {
-			pollfd &curr_poll = polls[i];
-			Client* c = fetch(curr_poll.fd);
-			if (curr_poll.revents & POLLIN) {
-				if (curr_poll.fd == server_sock) { new_client = 1; }
-				else if (c) { c->_recv(curr_poll); }
-			}
-			if (curr_poll.revents & POLLOUT) {
-				g_log << curr_poll.fd << " has POLLOUT" << std::endl;
-				if (c) { c->_send(curr_poll); }
-			}
-			if (curr_poll.revents & POLLERR) {
-				g_log << curr_poll.fd << " has POLLERR" << std::endl;
-			}
-			if (curr_poll.revents & POLLHUP) {
-				g_log << curr_poll.fd << " has POLLHUP" << std::endl;
-			}
-			if (curr_poll.revents & POLLNVAL) {
-				g_log << curr_poll.fd << " has POLLNVAL" << std::endl;
-			}
-			curr_poll.revents = 0;
-		}
-		if (new_client)
-			_accept();
-		erase();
+		if (polled == 0) { continue ; }
+		else if (polled < 0) { break ; }
+		else { _handle_events(); }
 	}
 }

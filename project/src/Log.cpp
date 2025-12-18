@@ -1,0 +1,83 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Log.cpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/18 14:29:06 by mmichele          #+#    #+#             */
+/*   Updated: 2025/12/18 16:05:24 by mmichele         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "Log.hpp"
+
+#include <string>	// string
+#include <sstream>	// stringstream
+#include <iomanip>	// setw
+#include <iostream>	// cout
+#include <ctime>	// time
+
+std::ofstream	logger("server.log");
+
+std::string Log::print_memory(const char* str, const unsigned int& length) {
+	const unsigned int	width = 12;
+	long int			left = length;
+	std::stringstream	res;
+
+	while (left > 0) {
+		for (unsigned int i = 0; i < width; i++) {
+			if (i + length - left < length) {
+				res << std::setw(4) << static_cast<int>(str[i + length - left]);
+			}
+			else { res << "    "; }
+			res << " ";
+		}
+		res << ": \"";
+		for (unsigned int i = 0; i < width; i++) {
+			if (i + length - left < length) {
+				if (std::isprint(str[i + length - left]))
+					res << str[i + length - left];
+				else
+					res << "⍰";
+			}
+		}
+		res << "\"\n";
+		left -= width;
+	}
+	return res.str();
+}
+
+std::string Log::time_label() {
+	std::stringstream res;
+	time_t ttime = time(0);
+	struct tm* ltime = localtime(&ttime);
+
+	res << "[";
+	res << std::setfill('0') << std::setw(2) << ltime->tm_hour << ":";
+	res << std::setfill('0') << std::setw(2) << ltime->tm_min << ":";
+	res << std::setfill('0') << std::setw(2) << ltime->tm_sec << "] ";
+	return res.str();
+}
+
+void Log::recv(bool complete, int fd, const char* str, const long unsigned int& len) {
+	
+	logger << Log::time_label() << "RECV ";
+	if (complete) {
+		logger << "complete (";
+		std::cout << Log::time_label() << "Received " << std::setw(3) << fd << " : " << str << std::endl;
+	}
+	else { logger << "partial  ("; }
+	logger << std::setw(3) << fd << ") :\n";
+	logger << Log::print_memory(str, len) << std::flush;
+}
+
+void Log::send(int fd, const char* str, const long unsigned int& len) {
+	std::cout << Log::time_label() << "Replied  " << std::setw(3) << fd << " : " << str << std::endl;
+	logger << Log::time_label() << "SEND          (" << std::setw(3) << fd << ") : \n" << Log::print_memory(str, len) << std::flush;
+}
+
+void Log::disconnected(int fd) {
+	logger << Log::time_label() << "Client " << fd << " disconnected." << std::endl;
+	std::cout << Log::time_label() << "Client " << fd << " disconnected." << std::endl;
+}
