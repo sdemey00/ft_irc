@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemey <sdemey@student.42belgium.be>       +#+  +:+       +#+        */
+/*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 12:35:20 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/18 12:35:21 by sdemey           ###   ########.fr       */
+/*   Updated: 2025/12/19 12:55:07 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@
 #define RPL_ENDOFNAMES(nick, channel) (":ft_irc 366 " + nick + " " + channel + " :End of /NAMES list" + CRLF)
 
 ///////// ERRORS ////////////////
-#define ERR_NOSUCHNICK(nickname) (":ft_irc 401 " + nickname + " :No such nick/channel")
-#define ERR_NOSUCHCHANNEL(channel) (":ft_irc 403 " + channel + " :No such channel")
-#define ERR_CANNOTSENDTOCHAN(channel) (":ft_irc 404 "+ channel + " :Cannot send to channel")
-#define ERR_NOTEXTTOSEND() (":ft_irc 412 :No text to send")
+#define ERR_NOSUCHNICK(nickname) (":ft_irc 401 " + nickname + " :No such nick/channel" + CRLF)
+#define ERR_NOSUCHCHANNEL(channel) (":ft_irc 403 " + channel + " :No such channel" + CRLF)
+#define ERR_CANNOTSENDTOCHAN(channel) (":ft_irc 404 " + channel + " :Cannot send to channel" + CRLF)
+#define ERR_NOTEXTTOSEND() (std::string(":ft_irc 412 :No text to send") + std::string(CRLF))
 #define ERR_UNKNOWNCOMMAND(nickname, cmd) (":ft_irc 421 " + nickname + " " + cmd + " :Unknown command" + CRLF)
 #define ERR_NONICKNAMEGIVEN(nickname) (":ft_irc 431 " + nickname + " :No nickname given")
-#define ERR_NICKNAMEINUSE(nickname) (":ft_irc 433 " + nickname + " :Nickname is already in use" + CRLF)
+#define ERR_NICKNAMEINUSE(oldnick, newnick) (":ft_irc 433 " + oldnick + " " + newnick + " :Nickname is already in use" + CRLF)
 #define ERR_NOTREGISTERED(nickname) (":ft_irc 451 " + nickname + " :You have not reregistered" + CRLF)
 #define ERR_NEEDMOREPARAMS(cmd) (":ft_irc 461 " + cmd + " :Not enough parameters" + CRLF)
 #define ERR_ALREADYREGISTRED(nickname) (":ft_irc 462 " + nickname + " :You may not reregister" + CRLF)

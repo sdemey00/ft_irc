@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmdNick.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemey <sdemey@student.42belgium.be>       +#+  +:+       +#+        */
+/*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:35:01 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/18 12:35:44 by sdemey           ###   ########.fr       */
+/*   Updated: 2025/12/19 12:47:58 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@ void cmdNick(IRCCore &core, User& user, const Message& msg)
 		user.send(ERR_NONICKNAMEGIVEN(user.getNick()));
 		return ;
 	}
-	const std::string& newNick = msg.params[0];
-	const std::string& oldNick = user.getNick();
+	const std::string&	newNick = msg.params[0];
+	std::string			oldNick = user.getNick();
 	if (core.nickExists(newNick) && newNick != oldNick) {
-		user.send(ERR_NICKNAMEINUSE(newNick));
+		if (oldNick.empty())
+			oldNick = "*";
+		user.send(ERR_NICKNAMEINUSE(oldNick, newNick));
 		return ;
 	}
 	if (!oldNick.empty()) {

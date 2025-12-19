@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCCore.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemey <sdemey@student.42belgium.be>       +#+  +:+       +#+        */
+/*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:35:13 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/16 16:35:15 by sdemey           ###   ########.fr       */
+/*   Updated: 2025/12/19 11:34:18 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ IRCCore::IRCCore() {
 	_cmds["PRIVMSG"] = &cmdPrivmsg;
 	// _cmds["NOTICE"] = &cmdNotice;
 	// _cmds["QUIT"] = &cmdQuit;
-	// _cmds["PING"] = &cmdPing;
+	_cmds["PING"] = &cmdPing;
 	// operators cmd (channel):
 	// _cmds["KICK"] = &cmdKick;
 	// _cmds["INVITE"] = &cmdInvite;

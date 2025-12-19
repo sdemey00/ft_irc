@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCCore.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemey <sdemey@student.42belgium.be>       +#+  +:+       +#+        */
+/*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 12:35:14 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/18 12:35:15 by sdemey           ###   ########.fr       */
+/*   Updated: 2025/12/19 11:34:54 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,3 +56,4 @@ void	cmdNick(IRCCore &core, User& user, const Message& msg);
 void	cmdUser(IRCCore &core, User& user, const Message& msg);
 void	cmdJoin(IRCCore &core, User& user, const Message& msg);
 void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg);
+void	cmdPing(IRCCore &core, User& user, const Message& msg);
