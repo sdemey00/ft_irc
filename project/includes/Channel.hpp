@@ -24,21 +24,23 @@ class Channel {
 	Channel& operator=(const Channel& other);
 	~Channel(void);
 
-	const std::string& getName() const;
-
 	// Membership
-	void addUser(User* user);
-	void removeUser(User* user);
-	bool hasUser(User* user) const;
+	void	addUser(User* user);
+	void	removeUser(User* user);
+	bool	hasUser(User* user) const;
 
 	// Operators
-	void addOperator(User* user);
-	void removeOperator(User* user);
-	bool isOperator(User* user) const;
+	void	addOperator(User* user);
+	void	removeOperator(User* user);
+	bool	isOperator(User* user) const;
 
-	// Topic
-	void setTopic(const std::string& topic);
-	const std::string& getTopic() const;
+	// Getter / Setter
+	const std::string&		getName() const;
+	const std::string&		getTopic() const;
+	const std::set<User*>	getUsers() const;
+	const std::set<User*>	getOps() const;
+
+	void	setTopic(const std::string& topic);
 
 	private:
 		std::string		_name;
