@@ -52,11 +52,13 @@ void	User::setOperator(bool value) {
 
 // Setter / Getter
 void	User::setNick(const std::string& nick) { _nick = nick; }
+void	User::setHost(const std::string& host) { _hostname = host; };
 void	User::setUser(const std::string& user) { _user = user; }
-void	User::setRealName(const std::string& realname) { _realname = realname; }
+void	User::setReal(const std::string& realname) { _realname = realname; }
 const std::string&	User::getNick() const { return (_nick); }
+const std::string&	User::getHost() const { return (_hostname); }
 const std::string&	User::getUser() const { return (_user); }
-const std::string&	User::getRealName() const { return (_realname); }
+const std::string&	User::getReal() const { return (_realname); }
 
 // Method
 void	User::send(const std::string& message)

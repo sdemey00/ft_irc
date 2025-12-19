@@ -33,6 +33,8 @@ public:
 	// Users
 	bool    nickExists(const std::string& nick) const;
 	User*   getUserByNick(const std::string& nick);
+	void    addUser(User* user);
+	void    removeUser(const std::string& nick);
 
 	// Channels
 	Channel*    getChannel(const std::string& name);
@@ -51,5 +53,6 @@ private:
 
 // Cmds
 void	cmdNick(IRCCore &core, User& user, const Message& msg);
-// void	cmdUser(User& user, const Message& msg);
-// void	cmdJoin(User& user, const Message& msg);
+void	cmdUser(IRCCore &core, User& user, const Message& msg);
+void	cmdJoin(IRCCore &core, User& user, const Message& msg);
+void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg);

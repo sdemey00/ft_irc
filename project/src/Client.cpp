@@ -46,6 +46,8 @@ Client::~Client() {
 		close(client_sock);
 }
 
+IRCCore core; //TODO fix this
+
 void Client::_recv(pollfd& mypoll) {
 	char buf[BUFFER_SIZE + 1];
 	if (read_buffer.empty()) {  read_buffer = stash; }
@@ -60,7 +62,6 @@ void Client::_recv(pollfd& mypoll) {
 			read_buffer = read_buffer.substr(0, crlf_idx - 1);
 			Log::recv(1, client_sock, read_buffer.c_str(), read_buffer.length());
 			// TODO Process message here
-			IRCCore core;
 			Message msg = IRCCore::parse(read_buffer);
 			core.dispatch(user, msg);
 			mypoll.events = POLLIN | POLLOUT;

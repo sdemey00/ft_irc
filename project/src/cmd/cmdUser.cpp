@@ -15,6 +15,26 @@
 // Command: USER
 //    Parameters: <username> <hostname> <servername> <realname>
 
+void	cmdUser(IRCCore &core, User& user, const Message& msg) {
+	(void)core;
+	if (msg.params.size() != 4) {
+		user.send(ERR_NEEDMOREPARAMS(msg.command));
+		return ;
+	}
+	if (user.isRegistered()) {
+		user.send(ERR_ALREADYREGISTRED(user.getNick()));
+		return ;
+	}
+	user.setUser(msg.params[0]);
+	user.setHost(msg.params[1]);
+	// ignore servername because direct connection client->server (for security reason)
+	user.setReal(msg.params[3]);
+	if (!user.getNick().empty()) {
+		user.setRegistered(true); // need PASS??
+		user.send(RPL_WELCOME(user.getNick()));
+	}
+}
+
 // void    IRCCore::cmdUser(User& user, const Message& msg) {}
 
 //    The USER message is used at the beginning of connection to specify

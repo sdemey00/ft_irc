@@ -15,10 +15,10 @@
 IRCCore::IRCCore() {
 	// _cmds["PASS"] = &cmdPass;
 	_cmds["NICK"] = &cmdNick;
-	// _cmds["USER"] = &cmdUser;
-	// _cmds["JOIN"] = &cmdJoin;
+	_cmds["USER"] = &cmdUser;
+	_cmds["JOIN"] = &cmdJoin;
 	// _cmds["PART"] = &cmdPart;
-	// _cmds["PRIVMSG"] = &cmdPrivmsg;
+	_cmds["PRIVMSG"] = &cmdPrivmsg;
 	// _cmds["NOTICE"] = &cmdNotice;
 	// _cmds["QUIT"] = &cmdQuit;
 	// _cmds["PING"] = &cmdPing;
@@ -33,34 +33,38 @@ IRCCore::~IRCCore() {
 		delete it->second;
 	}
 	_channels.clear();
-	// for (std::map<std::string, User*>::iterator it = _users.begin(); it != _users.end(); ++it) {
-	//     delete it->second;
-	// }
-	// _users.clear();
 }
 
+// USERS
 bool	IRCCore::nickExists(const std::string& nick) const {
 	return (_users.find(nick) != _users.end()); //find return map.end() if not found
 }
-
+void	IRCCore::addUser(User* user) {
+	if (!user->getNick().empty())
+		_users[user->getNick()] = user;
+}
+void	IRCCore::removeUser(const std::string& nick) {
+	_users.erase(nick);
+}
 User*   IRCCore::getUserByNick(const std::string& nick) {
 	if (!nickExists(nick))
 		return (NULL);
 	return (_users[nick]);
 }
 
+// CHANNEL
 Channel*    IRCCore::getChannel(const std::string& name) {
 	if (_channels.count(name) == 0)
 		return (NULL);
 	return (_channels[name]);
 }
-
 Channel*    IRCCore::getOrCreateChannel(const std::string& name) {
 	if (_channels.count(name) == 0)
 		_channels[name] = new Channel(name);
 	return (_channels[name]);
 }
 
+// PROTOCOL
 void IRCCore::dispatch(User& user, const Message& msg)
 {
 	std::string cmd = msg.command;
@@ -75,7 +79,6 @@ void IRCCore::dispatch(User& user, const Message& msg)
 	}
 	it->second(*this, user, msg);
 }
-
 Message IRCCore::parse(const std::string& line)
 {
 	Message				msg;

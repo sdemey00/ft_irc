@@ -27,12 +27,14 @@ public:
 
 	// Identity (RFC)
 	const std::string&	getNick() const;
+	const std::string&	getHost() const;
 	const std::string&	getUser() const;
-	const std::string&	getRealName() const;
+	const std::string&	getReal() const;
 
 	void	setNick(const std::string& nick);
 	void	setUser(const std::string& user);
-	void	setRealName(const std::string& realname);
+	void	setHost(const std::string& host);
+	void	setReal(const std::string& realname);
 
 	// Registration
 	bool	isRegistered() const;
@@ -49,12 +51,12 @@ public:
 
 	std::queue<std::string>	_queue;
 
-
 private:
-	std::string         	_nick;
-	std::string         	_user;
-	std::string         	_realname;
-	bool		        	_registered;
-	bool		        	_isOperator;
+	std::string	_nick;
+	std::string	_user;
+	std::string	_hostname;
+	std::string	_realname;
+	bool		_registered;
+	bool		_isOperator;
 };
 
