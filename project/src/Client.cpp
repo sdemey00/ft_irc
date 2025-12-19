@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 23:04:22 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/18 16:02:15 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/19 21:19:32 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ void Client::_recv(pollfd& mypoll) {
 			read_buffer.clear();
 		}
 	} else if (n == 0) {
-		Log::disconnected(client_sock);
+		Log::disconnected(client_sock, user.getNick());
+		core.removeUser(user.getNick());
 		close(mypoll.fd);
 		mypoll.fd = -1;
 		close(client_sock);

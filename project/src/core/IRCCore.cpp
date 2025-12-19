@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:35:13 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/19 11:34:18 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/19 19:17:54 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ IRCCore::IRCCore() {
 	// _cmds["PART"] = &cmdPart;
 	_cmds["PRIVMSG"] = &cmdPrivmsg;
 	// _cmds["NOTICE"] = &cmdNotice;
-	// _cmds["QUIT"] = &cmdQuit;
+	_cmds["QUIT"] = &cmdQuit;
 	_cmds["PING"] = &cmdPing;
 	// operators cmd (channel):
 	// _cmds["KICK"] = &cmdKick;

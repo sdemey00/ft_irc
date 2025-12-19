@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:29:06 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/18 16:05:24 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/19 21:30:58 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void Log::recv(bool complete, int fd, const char* str, const long unsigned int& 
 	logger << Log::time_label() << "RECV ";
 	if (complete) {
 		logger << "complete (";
-		std::cout << Log::time_label() << "Received " << std::setw(3) << fd << " : " << str << std::endl;
+		std::cout << Log::time_label() << "Received     " << std::setw(3) << fd << " : " << str << std::endl;
 	}
 	else { logger << "partial  ("; }
 	logger << std::setw(3) << fd << ") :\n";
@@ -73,11 +73,11 @@ void Log::recv(bool complete, int fd, const char* str, const long unsigned int& 
 }
 
 void Log::send(int fd, const char* str, const long unsigned int& len) {
-	std::cout << Log::time_label() << "Replied  " << std::setw(3) << fd << " : " << str << std::endl;
+	std::cout << Log::time_label() << "Replied      " << std::setw(3) << fd << " : " << str << std::endl;
 	logger << Log::time_label() << "SEND          (" << std::setw(3) << fd << ") : \n" << Log::print_memory(str, len) << std::flush;
 }
 
-void Log::disconnected(int fd) {
-	logger << Log::time_label() << "Client " << fd << " disconnected." << std::endl;
-	std::cout << Log::time_label() << "Client " << fd << " disconnected." << std::endl;
+void Log::disconnected(int fd, const std::string& nick) {
+	logger << Log::time_label() << "Disconnected " << std::setw(3) << fd << " : " << nick << std::endl;
+	std::cout << Log::time_label() << "Disconnected " << std::setw(3) << fd << " : " << nick << std::endl;
 }
