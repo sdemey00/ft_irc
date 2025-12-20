@@ -51,8 +51,8 @@ bool	Channel::isOperator(User* user) const {
 // Getter / Setter
 const std::string&		Channel::getTopic() const { return (_topic); }
 const std::string&  	Channel::getName() const { return (_name); }
-const std::set<User*>	Channel::getUsers() const { return (_users); }
-const std::set<User*>	Channel::getOps() const { return (_operators); };
+const std::set<User*>&	Channel::getUsers() const { return (_users); }
+const std::set<User*>&	Channel::getOps() const { return (_operators); };
 void	Channel::setTopic(const std::string& topic) { _topic = topic; }
 
 // first user to join become operator

@@ -37,8 +37,8 @@ class Channel {
 	// Getter / Setter
 	const std::string&		getName() const;
 	const std::string&		getTopic() const;
-	const std::set<User*>	getUsers() const;
-	const std::set<User*>	getOps() const;
+	const std::set<User*>&	getUsers() const;
+	const std::set<User*>&	getOps() const;
 
 	void	setTopic(const std::string& topic);
 

@@ -17,11 +17,12 @@
 ///////// REPLIES ///////////////
 #define RPL_WELCOME(nickname) (":ft_irc 001 " + nickname + " : Welcome to the FT_IRC server!" + CRLF)
 #define RPL_NICK(oldnick, newnick) (":" + oldnick + " NICK :" + newnick + CRLF)
-#define RPL_PRIVMSG(nickname, target, text) (":" + nickname + " PRIVMSG :" + target + " :" + text + CRLF)
+#define RPL_PRIVMSG(nick, user, host, target, text) (":" + nick + "!" + user + "@" + host + " PRIVMSG " + target + " :" + text + CRLF)
 #define RPL_TOPIC(channel, topic) (":ft_irc 332 " + channel + " : " + topic + CRLF)
 #define RPL_INVITING(channel, nickname) (":ft_irc 341 " + channel + " " + nickname + CRLF)
 #define RPL_NAMREPLY(nick, symbol, channel, names) (":ft_irc 353 " + nick + " " + symbol + " " + channel + " :" + names + CRLF)
 #define RPL_ENDOFNAMES(nick, channel) (":ft_irc 366 " + nick + " " + channel + " :End of /NAMES list" + CRLF)
+#define RPL_JOIN(nick, channel) (":ft_irc " + nick + " JOIN " + channel + CRLF)
 
 ///////// ERRORS ////////////////
 #define ERR_NOSUCHNICK(nickname) (":ft_irc 401 " + nickname + " :No such nick/channel" + CRLF)
