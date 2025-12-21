@@ -1,6 +1,8 @@
 ircserv
 build
 
+ircbot
+
 *.o
 *.d
 *.log

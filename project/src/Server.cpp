@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/21 02:46:21 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/21 07:16:26 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 #include <sys/socket.h>		// socket, bind, listen, accept
 #include <fcntl.h>			// fcntl
 #include <cstring>			// memset
-#include <cstdlib>			// isdigit
+#include <cstdlib>			// isdigit, atoi
 #include <unistd.h>			// close
-#include <csignal>			// signal
+#include <csignal>			// signal, SIGINT
 #include <iostream>			// cout, endl
 #include <poll.h>			// poll, pollfd
+#include <arpa/inet.h>		// htons
 
 #include "Errors.hpp"		// Errors
 #include "Log.hpp"			// Log
