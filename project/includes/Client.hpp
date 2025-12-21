@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 23:03:20 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/19 11:45:03 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/21 02:55:04 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,22 @@
 
 #include <arpa/inet.h>	// sockaddr_in, socklen_t
 #include <string>		// string
-#include <poll.h>		// pollfd
-#include <queue>		// queue
 
 #include "User.hpp"
 
 #define BUFFER_SIZE 120
 
 class Client {
-	std::string					read_buffer;
-	char						stash[BUFFER_SIZE];
-
 public:
+	std::string		read_buffer;
+	char			stash[BUFFER_SIZE + 1];
 	sockaddr_in		sock_addr;
 	socklen_t		sock_len;
 	bool			init;
-	int				client_sock;
+	int				fd;
 
 	User			user;
-	
+
 	Client();
 	~Client();
-
-	void	_recv(pollfd& mypoll);
-	void	_send(pollfd& mypoll);
 };

@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/18 16:02:21 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/21 02:46:21 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ void Server::_sighandler(int sig) {
 // Creating the socket
 void Server::_socket() {
 	logger << "Server::_socket()\n";
-	server_sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (server_sock < 0)
+	fd = socket(AF_INET, SOCK_STREAM, 0);
+	if (fd < 0)
 		throw Errors::Socket();
 	init = 1;
 	int optval = 1;
-	if (setsockopt(server_sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &optval, sizeof(optval)) < 0)
+	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &optval, sizeof(optval)) < 0)
 		throw Errors::SetSockOpt();
-	if (fcntl(server_sock, F_SETFL, O_NONBLOCK) < 0)
+	if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
 		throw Errors::Fcntl();
 }
 
@@ -54,20 +54,20 @@ void Server::_bind() {
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
 	addr.sin_addr.s_addr = INADDR_ANY;
-	if (bind(server_sock, (sockaddr*)&addr, sizeof(addr)) < 0)
+	if (bind(fd, (sockaddr*)&addr, sizeof(addr)) < 0)
 		throw Errors::Bind();
 }
 
 // Listening for connection
 void Server::_listen() {
 	logger << "Server::_listen()\n";
-	if (listen(server_sock, SOMAXCONN) < 0)
+	if (listen(fd, SOMAXCONN) < 0)
 		throw Errors::Listen();
 }
 
 // Initialize poll events
 void Server::_poll_init() {
-	server_poll.fd = server_sock;
+	server_poll.fd = fd;
 	server_poll.events = POLLIN;
 	server_poll.revents = 0;
 	polls.push_back(server_poll);
@@ -77,17 +77,17 @@ void Server::_poll_init() {
 void Server::_accept() {
 	logger << "Server::_accept()\n";
 	Client c;
-	c.client_sock = accept(server_sock, (sockaddr *)&c.sock_addr, &c.sock_len);
-	if (c.client_sock < 0)
+	c.fd = accept(fd, (sockaddr *)&c.sock_addr, &c.sock_len);
+	if (c.fd < 0)
 		throw Errors::Accept();
-	if (fcntl(c.client_sock, F_SETFL, O_NONBLOCK))
+	if (fcntl(c.fd, F_SETFL, O_NONBLOCK) < 0)
 		throw Errors::Fcntl();
 
 	init = 1;
 	clients.push_back(c);
 
 	pollfd pfd;
-	pfd.fd = c.client_sock;
+	pfd.fd = c.fd;
 	pfd.events = POLLIN;
 	pfd.revents = 0;
 	polls.push_back(pfd);
@@ -100,10 +100,10 @@ void Server::_handle_events() {
 		if (curr_poll.fd < 0) { continue ; }
 		Client* c = fetch(curr_poll.fd);
 		if (curr_poll.revents & POLLIN) {
-			if (curr_poll.fd == server_sock) { new_client = 1; }
-			else if (c) { c->_recv(curr_poll); }
+			if (curr_poll.fd == fd) { new_client = 1; }
+			else if (c) { _recv(*c, curr_poll); }
 		}
-		if (curr_poll.revents & POLLOUT) { if (c) { c->_send(curr_poll); } }
+		if (curr_poll.revents & POLLOUT) { if (c) { _send(*c, curr_poll); } }
 		if (curr_poll.revents & POLLERR) {
 			logger << curr_poll.fd << " has POLLERR" << std::endl;
 		}
@@ -123,7 +123,7 @@ void Server::_handle_events() {
 // Fetch client from poll event
 Client* Server::fetch(const int& fd) {
 	for (long unsigned int i = 0; i < clients.size(); i++) {
-		if (clients[i].client_sock == fd)
+		if (clients[i].fd == fd)
 			return &clients[i];
 	}
 	return 0;
@@ -136,7 +136,7 @@ void Server::erase() {
 		else { it++; }
 	}
 	for (std::vector<Client>::iterator it = clients.begin(); it != clients.end();) {
-		if (it->client_sock == -1) { it = clients.erase(it); }
+		if (it->fd == -1) { it = clients.erase(it); }
 		else { it++; }
 	}
 }
@@ -145,7 +145,7 @@ Server::Server(char* raw_port, char* raw_pass) :
 	port(std::atoi(raw_port)),
 	pass(std::string(raw_pass)),
 	init(0),
-	server_sock(0),
+	fd(0),
 	polls(0),
 	clients(0)
 {
@@ -167,7 +167,7 @@ Server::Server(char* raw_port, char* raw_pass) :
 
 Server::~Server() {
 	if (init)
-		close(server_sock);
+		close(fd);
 	for (unsigned int i = 0; i < polls.size(); i++)
 		close(polls[i].fd);
 }
@@ -180,4 +180,66 @@ void Server::run() {
 		else if (polled < 0) { break ; }
 		else { _handle_events(); }
 	}
+}
+
+static unsigned int find_crlf(const char* str, const unsigned int& length) {
+	if (!length)
+		return 0;
+	for (unsigned int i = 0; i < length - 1; i++) {
+		if (str[i] == '\r' && str[i + 1] == '\n')
+			return i + 1;
+	}
+	return 0;
+}
+
+void Server::_recv(Client& c, pollfd& mypoll) {
+	char buf[BUFFER_SIZE + 1];
+	if (c.read_buffer.empty()) {  c.read_buffer = c.stash; }
+	ssize_t n = recv(c.fd, buf, BUFFER_SIZE, 0);
+	if (n > 0) {
+		buf[n] = 0;
+		Log::recv(0, c.fd, buf, n);
+		c.read_buffer.append(buf, n);
+		unsigned int crlf_idx = find_crlf(c.read_buffer.c_str(), c.read_buffer.length());
+		if (crlf_idx > 0) {
+			std::memcpy(c.stash, c.read_buffer.c_str() + crlf_idx + 1, n - find_crlf(buf, n));
+			c.read_buffer = c.read_buffer.substr(0, crlf_idx - 1);
+			Log::recv(1, c.fd, c.read_buffer.c_str(), c.read_buffer.length());
+			// TODO Process message here
+			Message msg = IRCCore::parse(c.read_buffer);
+			core.dispatch(c.user, msg);
+			mypoll.events = POLLIN | POLLOUT;
+			// END Process message
+			crlf_idx = find_crlf(c.stash, std::strlen(c.stash));
+			while (crlf_idx) {
+				c.read_buffer = std::string(c.stash).substr(0, crlf_idx - 1);
+				Log::recv(1, c.fd, c.read_buffer.c_str(), c.read_buffer.length());
+				// TODO Process message here
+				Message msg = IRCCore::parse(c.read_buffer);
+				core.dispatch(c.user, msg);
+				mypoll.events = POLLIN | POLLOUT;
+				// END Process message
+				std::memmove(c.stash, c.stash + crlf_idx + 1, std::strlen(c.stash + crlf_idx + 1) + 1);
+				crlf_idx = find_crlf(c.stash, std::strlen(c.stash));
+			}
+			c.read_buffer.clear();
+		}
+	} else if (n == 0) {
+		Log::disconnected(c.fd, c.user.getNick());
+		core.removeUser(c.user.getNick());
+		close(mypoll.fd);
+		mypoll.fd = -1;
+		close(c.fd);
+		c.fd = -1;
+	}
+}
+
+void	Server::_send(Client& c, pollfd& mypoll) {
+	if (c.user._queue.empty()) { mypoll.events = POLLIN; return ; }
+	ssize_t n = send(c.fd, c.user._queue.front().c_str(), c.user._queue.front().size(), 0);
+	if (n < 0) { return ; }
+	Log::send(c.fd, c.user._queue.front().substr(0, n - 2).c_str(), c.user._queue.front().substr(0, n - 2).length());
+	if (static_cast<size_t>(n) == c.user._queue.front().size()) { c.user._queue.pop(); }
+	else if (n > 0) { c.user._queue.front().erase(0, n); }
+	if (!c.user._queue.size()) { mypoll.events = POLLIN; }
 }

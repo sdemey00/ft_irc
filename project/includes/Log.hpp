@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:25:42 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/19 21:21:18 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/21 03:09:27 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 
 #include <fstream>	// ofstream
 #include <string>	// string
+
+#define CLR_RESET		"\e[0m"
+#define CLR_GRAY		"\e[30m"
+#define CLR_RED			"\e[31m"
+#define CLR_GREEN		"\e[32m"
+#define CLR_ORANGE		"\e[33m"
+#define CLR_BLUE		"\e[34m"
+#define CLR_PURPLE		"\e[35m"
+#define CLR_CYAN		"\e[36m"
+#define CLR_WHITE		"\e[37m"
+#define CLR_DEFAULT		"\e[38m"
 
 extern std::ofstream logger;
 

@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:19:10 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/18 14:32:16 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/21 02:15:40 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@ class Server {
 	unsigned int		port;
 	std::string			pass;
 	bool				init;
-	int					server_sock;
+	int					fd;
 	pollfd				server_poll;
 	std::vector<pollfd>	polls;
 	std::vector<Client>	clients;
+	IRCCore				core;
 
 	static void		_sighandler(int sig);
 
@@ -39,6 +40,10 @@ class Server {
 	
 	Client*			fetch(const int& fd);
 	void			erase();
+	
+	void			_send(Client& c, pollfd& mypoll);
+	void			_recv(Client& c, pollfd& mypoll);
+
 
 public:
 	Server(char* raw_port, char* raw_pwd);
