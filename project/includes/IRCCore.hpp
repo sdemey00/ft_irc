@@ -43,15 +43,18 @@ public:
 	// Protocol
 	static Message	parse(const std::string& line);
 	void			dispatch(User& user, const Message& msg);
+	std::string&	getPassword();
 
 private:
 	std::map<std::string, User*>        _users;
 	std::map<std::string, Channel*>     _channels;
 	std::map<std::string, CommandFn>    _cmds;
 													// servername??
+	std::string							_password;
 };
 
 // Cmds
+void	cmdPass(IRCCore &core, User& user, const Message& msg);
 void	cmdNick(IRCCore &core, User& user, const Message& msg);
 void	cmdUser(IRCCore &core, User& user, const Message& msg);
 void	cmdJoin(IRCCore &core, User& user, const Message& msg);

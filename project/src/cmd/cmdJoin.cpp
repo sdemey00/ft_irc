@@ -14,8 +14,6 @@
 
 // Command: JOIN
 //    Parameters: <channel>{,<channel>} [<key>{,<key>}]
-//
-// CHECK INVITE ONLY
 
 void cmdJoin(IRCCore& core, User& user, const Message& msg)
 {

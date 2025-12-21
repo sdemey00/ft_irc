@@ -13,7 +13,7 @@
 #include "IRCCore.hpp"
 
 IRCCore::IRCCore() {
-	// _cmds["PASS"] = &cmdPass;
+	_cmds["PASS"] = &cmdPass;
 	_cmds["NICK"] = &cmdNick;
 	_cmds["USER"] = &cmdUser;
 	_cmds["JOIN"] = &cmdJoin;
@@ -27,6 +27,7 @@ IRCCore::IRCCore() {
 	// _cmds["INVITE"] = &cmdInvite;
 	// _cmds["TOPIC"] = &cmdTopic;
 	// _cmds["MODE"] = &cmdMode;
+	_password = "test";
 }
 IRCCore::~IRCCore() {
 	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it) {
@@ -106,3 +107,5 @@ Message IRCCore::parse(const std::string& line)
 	//msg.msgPrint();
 	return (msg);
 }
+
+std::string& IRCCore::getPassword() { return (_password); }

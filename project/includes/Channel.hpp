@@ -24,6 +24,8 @@ class Channel {
 	Channel& operator=(const Channel& other);
 	~Channel(void);
 
+	void	broadcast(User& user, std::string& msg);
+
 	// Membership
 	void	addUser(User* user);
 	void	removeUser(User* user);

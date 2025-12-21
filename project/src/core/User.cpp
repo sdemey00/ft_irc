@@ -12,9 +12,9 @@
 
 #include "User.hpp"
 
-User::User() : _registered(false), _isOperator(false) {}
+User::User() : _registered(false), _isOperator(false), _passwordAccepted(false) {}
 User::User(std::string nick, std::string user, std::string realname)
- : _nick(nick), _user(user), _realname(realname), _registered(false), _isOperator(false) {}
+ : _nick(nick), _user(user), _realname(realname), _registered(false), _isOperator(false), _passwordAccepted(false) {}
 User::User(const User& other) {
 	*this = other;
 }
@@ -25,6 +25,7 @@ User& User::operator=(const User& other) {
 		_realname = other._realname;
 		_registered = other._registered;
 		_isOperator = other._isOperator;
+		_passwordAccepted = other._passwordAccepted;
 	}
 	return (*this);
 }
@@ -55,10 +56,12 @@ void	User::setNick(const std::string& nick) { _nick = nick; }
 void	User::setHost(const std::string& host) { _hostname = host; };
 void	User::setUser(const std::string& user) { _user = user; }
 void	User::setReal(const std::string& realname) { _realname = realname; }
+void	User::setPasswordAccepted(const bool value) { _passwordAccepted = value; }
 const std::string&	User::getNick() const { return (_nick); }
 const std::string&	User::getHost() const { return (_hostname); }
 const std::string&	User::getUser() const { return (_user); }
 const std::string&	User::getReal() const { return (_realname); }
+bool				User::getPasswordAccepted() const { return (_passwordAccepted); }
 
 // Method
 void	User::send(const std::string& message)
@@ -70,4 +73,5 @@ void	User::send(const std::string& message)
 
 std::string&	User::getFrontQueue() {
 	return (_queue.front());
-};
+}
+

@@ -21,6 +21,10 @@ void cmdNick(IRCCore &core, User& user, const Message& msg)
 		user.send(ERR_NONICKNAMEGIVEN(user.getNick()));
 		return ;
 	}
+	if (!user.getPasswordAccepted()) {
+		user.send("error\r\n"); // wich reply??
+		return ;
+	}
 	const std::string&	newNick = msg.params[0];
 	std::string			oldNick = user.getNick();
 	if (core.nickExists(newNick) && newNick != oldNick) {
@@ -34,7 +38,6 @@ void cmdNick(IRCCore &core, User& user, const Message& msg)
 	}
 	user.setNick(newNick);
 	core.addUser(&user);
-	// Registration could be completed later by USER/PASS !!
 	if (user.isRegistered()) {
 		user.send(RPL_NICK(oldNick, newNick));
 	}

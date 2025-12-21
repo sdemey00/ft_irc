@@ -37,7 +37,7 @@
 #define ERR_NOTREGISTERED(nickname) (":ft_irc 451 " + nickname + " :You have not reregistered" + CRLF)
 #define ERR_NEEDMOREPARAMS(cmd) (":ft_irc 461 " + cmd + " :Not enough parameters" + CRLF)
 #define ERR_ALREADYREGISTRED(nickname) (":ft_irc 462 " + nickname + " :You may not reregister" + CRLF)
-
+#define	ERR_PASSWDMISMATCH(nickname) (":ft_irc 464 " + nickname + " :Password incorrect" + CRLF)
 // :irc.example.com 433 currentNick foo :Nickname is already in use
 
 // NAMREPLY symbols

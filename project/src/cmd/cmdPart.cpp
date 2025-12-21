@@ -12,7 +12,7 @@
 
 #include "IRCCore.hpp"
 
-//       Command: PART
+//	Command: PART
 //    Parameters: <channel>{,<channel>}
 
 void	cmdPart(IRCCore&core, User& user, const Message& msg) {

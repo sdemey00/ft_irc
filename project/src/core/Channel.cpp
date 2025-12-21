@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Channel.hpp"
+#include "User.hpp"
 
 Channel::Channel(void) : _name("") {}
 Channel::Channel(const std::string& name) : _name(name) {}
@@ -24,6 +25,14 @@ Channel& Channel::operator=(const Channel& other) {
 	return (*this);
 }
 Channel::~Channel() {}
+
+void	Channel::broadcast(User& user, std::string& msg) {
+    for (std::set<User*>::const_iterator it = _users.begin(); it != _users.end(); ++it) {
+        if (*it != &user) {
+            (*it)->send(msg);
+        }
+    }
+}
 
 // Membership
 void	Channel::addUser(User* user) {

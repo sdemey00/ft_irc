@@ -30,11 +30,13 @@ public:
 	const std::string&	getHost() const;
 	const std::string&	getUser() const;
 	const std::string&	getReal() const;
+	bool				getPasswordAccepted() const;
 
 	void	setNick(const std::string& nick);
 	void	setUser(const std::string& user);
 	void	setHost(const std::string& host);
 	void	setReal(const std::string& realname);
+	void	setPasswordAccepted(bool value);
 
 	// Registration
 	bool	isRegistered() const;
@@ -58,5 +60,6 @@ private:
 	std::string	_realname;
 	bool		_registered;
 	bool		_isOperator;
+	bool		_passwordAccepted;
 };
 
