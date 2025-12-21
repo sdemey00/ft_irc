@@ -17,7 +17,7 @@ IRCCore::IRCCore() {
 	_cmds["NICK"] = &cmdNick;
 	_cmds["USER"] = &cmdUser;
 	_cmds["JOIN"] = &cmdJoin;
-	// _cmds["PART"] = &cmdPart;
+	_cmds["PART"] = &cmdPart;
 	_cmds["PRIVMSG"] = &cmdPrivmsg;
 	// _cmds["NOTICE"] = &cmdNotice;
 	_cmds["QUIT"] = &cmdQuit;
@@ -79,6 +79,7 @@ void IRCCore::dispatch(User& user, const Message& msg)
 	}
 	it->second(*this, user, msg);
 }
+
 Message IRCCore::parse(const std::string& line)
 {
 	Message				msg;

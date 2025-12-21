@@ -28,7 +28,7 @@ void	cmdUser(IRCCore &core, User& user, const Message& msg) {
 	user.setUser(msg.params[0]);
 	user.setHost(msg.params[1]);
 	// ignore servername because direct connection client->server (for security reason)
-	user.setReal(msg.params[3]);
+	user.setReal(msg.trailing);
 	if (!user.getNick().empty()) {
 		user.setRegistered(true); // need PASS??
 		user.send(RPL_WELCOME(user.getNick()));
