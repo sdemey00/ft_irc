@@ -6,12 +6,12 @@
 #    By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/13 10:59:54 by mmichele          #+#    #+#              #
-#    Updated: 2025/12/21 06:10:03 by mmichele         ###   ########.fr        #
+#    Updated: 2025/12/21 03:53:16 by mmichele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Source program name
-NAME	= ircserv
+NAME	= ircbot
 
 # Source program compiler settings
 CC		= c++
@@ -21,7 +21,6 @@ FLAGS	= -Wall -Wextra -Werror -std=c++98
 BLDD	= build
 SRCD	= src
 INCD	= includes
-BOTD	= bot
 
 # Source compile variables
 SRCS	= $(shell find $(SRCD) -type f -name "*.cpp")
@@ -32,7 +31,7 @@ LIBS	=
 DEPS	= $(OBJS:.o=.d)
 
 # Fake targets
-.PHONY: clean fclean re debug san valgrind gdb bonus
+.PHONY: clean fclean re debug san valgrind gdb
 
 all: $(NAME)
 
@@ -47,11 +46,9 @@ $(BLDD)/%.o: %.cpp
 
 clean:
 	rm -rf $(BLDD)
-	$(MAKE) -C $(BOTD) $@
 
 fclean: clean
 	rm -rf $(NAME)
-	$(MAKE) -C $(BOTD) $@
 
 re: fclean all
 
@@ -70,7 +67,3 @@ valgrind: debug
 
 gdb: debug
 	gdb --tui --args "$(NAME)" $(PORT) $(PASS)
-
-
-bonus: all
-	$(MAKE) -C bot --no-print-directory
