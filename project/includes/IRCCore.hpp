@@ -55,6 +55,7 @@ private:
 void	cmdNick(IRCCore &core, User& user, const Message& msg);
 void	cmdUser(IRCCore &core, User& user, const Message& msg);
 void	cmdJoin(IRCCore &core, User& user, const Message& msg);
+void	cmdPart(IRCCore&core, User& user, const Message& msg);
 void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg);
 void	cmdQuit(IRCCore &core, User& user, const Message& msg);
 void	cmdPing(IRCCore &core, User& user, const Message& msg);

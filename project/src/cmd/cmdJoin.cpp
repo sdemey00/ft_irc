@@ -14,6 +14,8 @@
 
 // Command: JOIN
 //    Parameters: <channel>{,<channel>} [<key>{,<key>}]
+//
+// CHECK INVITE ONLY
 
 void cmdJoin(IRCCore& core, User& user, const Message& msg)
 {
@@ -35,7 +37,7 @@ void cmdJoin(IRCCore& core, User& user, const Message& msg)
         return ;
     channel->addUser(&user);
     //user.joinChannel(channel);
-    user.send(":" + user.getNick() + " JOIN " + chanName);
+    user.send(RPL_JOIN(user.getNick(), chanName));
     std::string names;
     const std::set<User*>& users = channel->getUsers();
     for (std::set<User*>::const_iterator it = users.begin(); it != users.end(); ++it) {

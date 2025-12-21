@@ -15,7 +15,25 @@
 //       Command: PART
 //    Parameters: <channel>{,<channel>}
 
-// void    IRCCore::cmdPart(User& user, const Message& msg) {}
+void	cmdPart(IRCCore&core, User& user, const Message& msg) {
+	if (msg.params.empty()) {
+		user.send(ERR_NEEDMOREPARAMS(msg.command));
+		return ;
+	}
+	const std::string& chanName = msg.params[0];
+	Channel* channel = core.getChannel(chanName);
+	if (chanName[0] != '#' || !channel) {
+		user.send(ERR_NOSUCHCHANNEL(chanName));
+		return ;
+	}
+	if (!channel->hasUser(&user)) {
+		user.send(ERR_NOTONCHANNEL(chanName));
+		return ;
+	}
+	channel->removeUser(&user);
+	user.send(RPL_PART(user.getNick(), user.getUser(), user.getHost(), chanName));
+	// channel->broadcast(partMsg); ->> queue a tous les users
+}
 
 //    The PART message causes the client sending the message to be removed
 //    from the list of active users for all given channels listed in the
@@ -29,3 +47,14 @@
 //    PART #twilight_zone             ; leave channel "#twilight_zone"
 //    PART #oz-ops,&group5            ; leave both channels "&group5" and
 //                                    "#oz-ops".
+
+
+
+
+
+    // Vérifications classiques
+    // - channel existe ?
+    // - user est dans le channel ?
+              // << " :" << reason << std::endl;
+
+    // Retirer l'utilisateur du channel

@@ -29,7 +29,7 @@ void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg) {
         const std::set<User*>& users = channel->getUsers();
         for (std::set<User*>::const_iterator it = users.begin(); it != users.end(); ++it) {
             if (*it != &user) {
-                (*it)->send(RPL_PRIVMSG(user.getNick(), target, text));
+                (*it)->send(RPL_PRIVMSG(user.getNick(), user.getUser(), user.getHost(), target, text));
             }
         }
     }
@@ -37,8 +37,11 @@ void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg) {
         User* targetUser = core.getUserByNick(target);
         if (!targetUser) {
             user.send(ERR_NOSUCHNICK(target));
-            return;
+            return ;
         }
-        targetUser->send(RPL_PRIVMSG(user.getNick(), target, text));
+    	targetUser->send(":" + user.getNick() + " PRIVMSG " + target + " :" + text + CRLF);;
+		// targetUser->send(RPL_PRIVMSG(user.getNick(), user.getUser(), user.getHost(), target, text));
+    	// user.send(":" + user.getNick() + " PRIVMSG " + target + " :" + text + CRLF);;
     }
 }
+
