@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 04:26:20 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/22 11:58:00 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/22 15:24:38 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,13 @@
 #include <iostream>			// cerr, endl
 #include <csignal>			// SIGINT
 #include <sstream>			// stringstream
+#include <cstring>			// memset, strlen
 
 #include "Errors.hpp"		// Port, Socket
+#include "sighandler.hpp"	// sighandler
+#include "utils.hpp"		// isdigit
 
 bool g_run_state = 1;
-
-void Client::_sighandler(int sig) {
-	(void)sig;
-	g_run_state = 0;
-}
 
 Client::Client(char* address, char* raw_port, char* password, char* name):
 	init(0),
@@ -35,14 +33,12 @@ Client::Client(char* address, char* raw_port, char* password, char* name):
 	addr(address),
 	pwd(password),
 	name(name) {
-	// Check for port input validity
-	for (unsigned int i = 0; raw_port[i]; i++) {
-		if (!std::isdigit(raw_port[i]))
-			throw Errors::Port();
-	}
-	// Launch SIGINT handler
-	signal(SIGINT, Client::_sighandler);
-
+	// Check for port input validity :
+	if (!isdigit(raw_port, std::strlen(raw_port)))
+		throw Errors::Port();
+	// Launch SIGINT handler :
+	signal(SIGINT, sighandler);
+	// Initialize network :
 	_socket();
 	_connect();
 }
@@ -71,8 +67,10 @@ void	Client::run() {
 	std::stringstream	msg;
 	char				buf[100];
 
+	std::memset(buf, 0, 100);
 	msg << "PASS " << pwd << "\r\nNICK " << name << "\r\n";
 	send(fd, msg.str().c_str(), msg.str().length(), 0);
+	msg.clear();
 	read(fd, buf, 100);
 	std::cout << buf;
 	while (g_run_state) {

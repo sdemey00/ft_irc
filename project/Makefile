@@ -6,7 +6,7 @@
 #    By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/13 10:59:54 by mmichele          #+#    #+#              #
-#    Updated: 2025/12/22 11:53:02 by mmichele         ###   ########.fr        #
+#    Updated: 2025/12/22 15:27:54 by mmichele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,11 +45,14 @@ san: FLAGS += -fsanitize=address,leak,undefined
 san: debug all
 
 # Following targets allow makefile variables PORT and PASS to be set.
+NAME	?= $(S_NAME)
 PORT	?= 6667
 PASS	?= pass
+ADDR	?=
+BOTN	?=
 
 valgrind: debug
-	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all ./$(S_NAME) $(PORT) $(PASS)
+	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all ./$(NAME) $(ADDR) $(PORT) $(PASS) $(BOTN)
 
 gdb: debug
 	gdb --tui --args "$(S_NAME)" $(PORT) $(PASS)

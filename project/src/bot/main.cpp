@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 04:23:54 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/22 11:55:23 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/22 12:35:03 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 int main(int argc, char** argv) {
 	argc--; argv++;
 	if (argc != 4) {
-		std::cerr << "Usage : <address> <port> <password> <nicknames>" << std::endl;
+		std::cerr << "Usage : <address> <port> <password> <nickname>" << std::endl;
 		return 1;
 	}
 	try {
