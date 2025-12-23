@@ -3,22 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   Message.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemey <sdemey@student.42belgium.be>       +#+  +:+       +#+        */
+/*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:34:40 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/18 12:36:13 by sdemey           ###   ########.fr       */
+/*   Updated: 2025/12/23 14:39:23 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Message.hpp"
 
-void	Message::msgPrint() {
-	std::cout << "MESSAGE PRINT:" << std::endl;
-	std::cout << "Prefix: " << prefix << std::endl;
-	std::cout << "Command: " << command << std::endl;
-	std::cout << "Params: ";
-	for (std::vector<std::string>::iterator it = params.begin(); it != params.end(); ++it) {
-		std::cout << " " << *it << " |";
+#include <iostream>		// ostream
+
+std::ostream& operator<<(std::ostream& os, const Message& msg) {
+	os << "MESSAGE PRINT:" << std::endl;
+	os << "Prefix: " << msg.prefix << std::endl;
+	os << "Command: " << msg.command << std::endl;
+	os << "Params: ";
+	for (std::vector<std::string>::const_iterator it = msg.params.begin(); it != msg.params.end(); ++it) {
+		os << " " << *it << " |";
 	}
-	std::cout << std::endl;
+	os << std::endl;
+	return os;
 }
