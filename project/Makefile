@@ -6,7 +6,7 @@
 #    By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/13 10:59:54 by mmichele          #+#    #+#              #
-#    Updated: 2025/12/22 15:27:54 by mmichele         ###   ########.fr        #
+#    Updated: 2025/12/27 16:25:18 by mmichele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,7 @@ ADDR	?=
 BOTN	?=
 
 valgrind: debug
-	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all ./$(NAME) $(ADDR) $(PORT) $(PASS) $(BOTN)
+	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all --log-file=valgrind.log ./$(NAME) $(ADDR) $(PORT) $(PASS) $(BOTN)
 
 gdb: debug
 	gdb --tui --args "$(S_NAME)" $(PORT) $(PASS)
