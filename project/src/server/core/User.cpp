@@ -17,6 +17,7 @@ User::User() :
 	_registered(false),
 	_isOperator(false),
 	_passwordAccepted(false) {}
+
 User::User(std::string nick, std::string user, std::string realname) :
 	_readyToSend(0),
 	_nick(nick),

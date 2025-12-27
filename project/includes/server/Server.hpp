@@ -21,7 +21,6 @@
 
 class Server {
 	unsigned int		port;
-	std::string			pass;
 	pollfd				pfd;
 	std::vector<pollfd>	polls;
 	std::vector<Client>	clients;

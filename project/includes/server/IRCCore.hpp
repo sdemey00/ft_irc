@@ -27,7 +27,7 @@ typedef void (*CommandFn)(IRCCore&, User&, const Message&);
 
 class IRCCore {
 public:
-	IRCCore(void);
+	IRCCore(const std::string pass);
 	~IRCCore(void);
 	
 	// Users

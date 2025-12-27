@@ -131,9 +131,9 @@ void Server::erase() {
 
 Server::Server(char* raw_port, char* raw_pass) :
 	port(std::atoi(raw_port)),
-	pass(std::string(raw_pass)),
 	polls(0),
-	clients(0)
+	clients(0),
+	core(std::string(raw_pass))
 {
 	// Check for port input validity :
 	if (!isdigit(raw_port, std::strlen(raw_port)))

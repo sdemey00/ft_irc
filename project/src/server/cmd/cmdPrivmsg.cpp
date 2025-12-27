@@ -23,7 +23,7 @@ void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg) {
         return ;
     }
     const std::string& target = msg.params[0];
-    const std::string& text = msg.params[1];
+    const std::string& text = msg.params[1]; //trailing
     if (text.empty()) {
         user.send(ERR_NOTEXTTOSEND());
         return ;
@@ -53,8 +53,8 @@ void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg) {
             return ;
         }
     	//targetUser->send(":" + user.getNick() + " PRIVMSG " + target + " :" + text + CRLF);;
-		targetUser->send(RPL_PRIVMSG(user.getNick(), user.getUser(), user.getHost(), target, text));
-    	//user.send(":" + user.getNick() + " PRIVMSG " + target + " :" + text + CRLF);
+		targetUser->send(RPL_PRIVMSG(user.getNick(), user.getUser(), user.getHost(), target, text));  
+		//user.send(":" + user.getNick() + " PRIVMSG " + target + " :" + text + CRLF);
     }
 }
 

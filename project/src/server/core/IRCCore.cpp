@@ -12,7 +12,7 @@
 
 #include "IRCCore.hpp"
 
-IRCCore::IRCCore() {
+IRCCore::IRCCore(const std::string pass) : _password(pass) {
 	_cmds["PASS"] = &cmdPass;
 	_cmds["NICK"] = &cmdNick;
 	_cmds["USER"] = &cmdUser;
@@ -27,7 +27,6 @@ IRCCore::IRCCore() {
 	// _cmds["INVITE"] = &cmdInvite;
 	// _cmds["TOPIC"] = &cmdTopic;
 	// _cmds["MODE"] = &cmdMode;
-	_password = "test";
 }
 
 IRCCore::~IRCCore() {
