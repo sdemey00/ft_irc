@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:35:13 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/19 19:17:54 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/23 15:04:44 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ IRCCore::IRCCore() {
 	// _cmds["MODE"] = &cmdMode;
 	_password = "test";
 }
+
 IRCCore::~IRCCore() {
 	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it) {
 		delete it->second;
@@ -40,13 +41,16 @@ IRCCore::~IRCCore() {
 bool	IRCCore::nickExists(const std::string& nick) const {
 	return (_users.find(nick) != _users.end()); //find return map.end() if not found
 }
+
 void	IRCCore::addUser(User* user) {
 	if (!user->getNick().empty())
 		_users[user->getNick()] = user;
 }
+
 void	IRCCore::removeUser(const std::string& nick) {
 	_users.erase(nick);
 }
+
 User*   IRCCore::getUserByNick(const std::string& nick) {
 	if (!nickExists(nick))
 		return (NULL);
@@ -59,6 +63,7 @@ Channel*    IRCCore::getChannel(const std::string& name) {
 		return (NULL);
 	return (_channels[name]);
 }
+
 Channel*    IRCCore::getOrCreateChannel(const std::string& name) {
 	if (_channels.count(name) == 0)
 		_channels[name] = new Channel(name);
@@ -104,7 +109,6 @@ Message IRCCore::parse(const std::string& line)
 		}
 		msg.params.push_back(token);
 	}
-	//msg.msgPrint();
 	return (msg);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 13:10:50 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/16 09:17:57 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/22 11:57:56 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,5 @@ struct Errors {
 	struct Listen 				: std::exception { virtual const char* what() const throw(); };
 	struct Accept 				: std::exception { virtual const char* what() const throw(); };
 	struct InvalidBufferSize 	: std::exception { virtual const char* what() const throw(); };
+	struct Connect			 	: std::exception { virtual const char* what() const throw(); };
 };

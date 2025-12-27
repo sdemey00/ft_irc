@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemey <sdemey@student.42belgium.be>       +#+  +:+       +#+        */
+/*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 12:35:23 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/18 12:35:24 by sdemey           ###   ########.fr       */
+/*   Updated: 2025/12/23 13:06:43 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ public:
 	std::string&	getFrontQueue();
 
 	std::queue<std::string>	_queue;
+	unsigned int			_readyToSend;
 
 private:
 	std::string	_nick;

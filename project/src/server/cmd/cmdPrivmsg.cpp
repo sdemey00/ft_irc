@@ -52,9 +52,9 @@ void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg) {
             user.send(ERR_NOSUCHNICK(target));
             return ;
         }
-    	targetUser->send(":" + user.getNick() + " PRIVMSG " + target + " :" + text + CRLF);;
-		// targetUser->send(RPL_PRIVMSG(user.getNick(), user.getUser(), user.getHost(), target, text));
-    	// user.send(":" + user.getNick() + " PRIVMSG " + target + " :" + text + CRLF);;
+    	//targetUser->send(":" + user.getNick() + " PRIVMSG " + target + " :" + text + CRLF);;
+		targetUser->send(RPL_PRIVMSG(user.getNick(), user.getUser(), user.getHost(), target, text));
+    	//user.send(":" + user.getNick() + " PRIVMSG " + target + " :" + text + CRLF);
     }
 }
 

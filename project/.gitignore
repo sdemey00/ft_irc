@@ -1,5 +1,7 @@
-ircserv
 build
+
+ircserv
+ircbot
 
 *.o
 *.d

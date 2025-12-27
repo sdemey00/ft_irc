@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Message.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemey <sdemey@student.42belgium.be>       +#+  +:+       +#+        */
+/*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 12:35:17 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/18 12:35:18 by sdemey           ###   ########.fr       */
+/*   Updated: 2025/12/23 14:37:56 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <vector>
-#include <iostream>
+#include <vector>		// vector
+#include <iostream>		// ostream
 
 class Message {
 	public:
@@ -21,8 +21,9 @@ class Message {
 	std::string					command;
 	std::vector<std::string>	params;
 	std::string					trailing;
-	void	msgPrint();
 };
+
+std::ostream& operator<<(std::ostream& os, const Message& msg);
 
 //	[:prefix] COMMAND param1 param2 :trailing
 // <message> ::= [':' <prefix> <SPACE> ] <command> <params> <crlf>

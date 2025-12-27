@@ -1,30 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/13 11:06:41 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/18 14:28:33 by mmichele         ###   ########.fr       */
+/*   Created: 2025/12/13 23:04:22 by mmichele          #+#    #+#             */
+/*   Updated: 2025/12/23 14:46:21 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>		// cerr, endl
-#include <exception>	// exception
+#include "../server/Client.hpp"
 
-#include "Server.hpp"	// Server
+#include <unistd.h>			// close
+#include <poll.h>			// POLLIN
 
-int main(int argc, char** argv) {
-	argc--; argv++;
-	if (argc != 2) {
-		std::cerr << "Usage : ./ft_irc <port> <password>\n";
-		return 1;
-	}
-	try {
-		Server s(argv[0], argv[1]);
-		s.run();
-	}
-	catch (std::exception &e) { std::cerr << e.what() << "\n"; return 1; }
-	return 0;
+Client::Client() : read_buffer("") {
+	stash[0] = 0;
+	stash[BUFFER_SIZE] = 0;
+	pfd.fd = -1;
 }
