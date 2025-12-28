@@ -6,14 +6,14 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:19:10 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/23 14:43:21 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/28 15:41:22 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <string>		// string
-#include <vector>		// vector
+#include <list>			// list
 #include <poll.h>		// pollfd
 #include <fstream>		// ofstream
 
@@ -23,7 +23,7 @@ class Server {
 	unsigned int		port;
 	pollfd				pfd;
 	std::vector<pollfd>	polls;
-	std::vector<Client>	clients;
+	std::list<Client>	clients;
 	IRCCore				core;
 
 	void		_socket();

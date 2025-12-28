@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/23 16:49:20 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/28 17:01:56 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,21 +111,18 @@ void Server::_handle_events() {
 
 // Fetch client from poll event
 Client* Server::fetch(const int& fd) {
-	for (long unsigned int i = 0; i < clients.size(); i++) {
-		if (clients[i].pfd.fd == fd)
-			return &clients[i];
+	for (std::list<Client>::iterator it = clients.begin(); it != clients.end(); it++) {
+		if (it->pfd.fd == fd)
+			return &(*it);
 	}
 	return 0;
 }
 
 // Remove disconnected clients
 void Server::erase() {
-	std::vector<unsigned int> deletes;
-	for (unsigned int i = 0; i < clients.size(); i++) {
-		if (clients[i].pfd.fd == -1) { deletes.push_back(i); }
-	}
-	for (unsigned int i = 0; i < deletes.size(); i++) {
-		clients.erase(clients.begin() + i);
+	for (std::list<Client>::iterator it = clients.begin(); it != clients.end();) {
+		if (it->pfd.fd == -1) { it = clients.erase(it); }
+		else { it++; }
 	}
 }
 
@@ -152,21 +149,21 @@ Server::Server(char* raw_port, char* raw_pass) :
 Server::~Server() {
 	if (pfd.fd >= 0)
 		close(pfd.fd);
-	for (unsigned int i = 0; i < clients.size(); i++) {
-		if (clients[i].pfd.fd >= 0)
-			close(clients[i].pfd.fd);
+	for (std::list<Client>::iterator it = clients.begin(); it != clients.end(); it++) {
+		if (it->pfd.fd >= 0)
+			close(it->pfd.fd);
 	}
 }
 
 void Server::update_polls() {
 	polls.clear();
 	polls.push_back(pfd);
-	for (unsigned int i = 0; i < clients.size(); i++) {
-		if (clients[i].user._readyToSend > 0)
-			clients[i].pfd.events = POLLIN | POLLOUT;
+	for (std::list<Client>::iterator it = clients.begin(); it != clients.end(); it++) {
+		if (it->user._readyToSend > 0)
+			it->pfd.events = POLLIN | POLLOUT;
 		else
-			clients[i].pfd.events = POLLIN;
-		polls.push_back(clients[i].pfd);
+			it->pfd.events = POLLIN;
+		polls.push_back(it->pfd);
 	}
 }
 
