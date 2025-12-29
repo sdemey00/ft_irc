@@ -59,6 +59,17 @@ bool	Channel::isOperator(User* user) const {
 	return (_operators.find(user) != _operators.end());
 }
 
+// Invitations
+void	Channel::addInvitation(User *user) {
+	_invitations.insert(user);
+}
+void	Channel::removeInvitation(User* user) {
+	_invitations.erase(user);
+}
+bool	Channel::hasInvitation(User* user) const {
+	return (_invitations.find(user) != _invitations.end());
+}
+
 // Getter :
 const std::string&		Channel::getTopic() const { return (_topic); }
 const std::string&  	Channel::getName() const { return (_name); }
@@ -67,7 +78,7 @@ const std::set<User*>&	Channel::getOps() const { return (_operators); };
 // Setter :
 void					Channel::setTopic(const std::string& topic) { _topic = topic; }
 
-// Broadcast to all users in the channel except one (can be null)
+// Broadcast to all users in the channel except one (except can be null)
 void	Channel::broadcast(const std::string& msg, User* except) const {
 	for (std::set<User*>::const_iterator it = _users.begin(); it != _users.end(); ++it) {
 		if (*it != except) {

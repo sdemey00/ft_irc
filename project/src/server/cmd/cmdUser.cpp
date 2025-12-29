@@ -16,7 +16,6 @@
 //    Parameters: <username> <hostname> <servername> <realname>
 
 void	cmdUser(IRCCore &core, User& user, const Message& msg) {
-	(void)core;
 	if (msg.params.size() != 4) {
 		user.send(ERR_NEEDMOREPARAMS(msg.command));
 		return ;
@@ -25,13 +24,13 @@ void	cmdUser(IRCCore &core, User& user, const Message& msg) {
 		user.send(ERR_ALREADYREGISTRED(user.getNick()));
 		return ;
 	}
-	if (!user.getPasswordAccepted()) {
-		user.send("error\r\n");
+	if (!user.getPasswordAccepted() && !core.getPassword().empty()) {
+		user.send(ERR_NOTREGISTERED(user.getNick()));
 		return ;
 	}
 	user.setUser(msg.params[0]);
 	user.setHost(msg.params[1]);
-	user.setReal(msg.trailing);
+	user.setReal(msg.params[3]);
 	if (!user.getNick().empty()) {
 		user.setRegistered(true);
 		user.send(RPL_WELCOME(user.getNick()));

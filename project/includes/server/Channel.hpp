@@ -36,6 +36,10 @@ class Channel {
 	void	removeOperator(User* user);
 	bool	isOperator(User* user) const;
 
+	void	addInvitation(User *user);
+	void	removeInvitation(User* user);
+	bool	hasInvitation(User* user) const;
+
 	// Getter / Setter
 	const std::string&		getName() const;
 	const std::string&		getTopic() const;
@@ -46,11 +50,19 @@ class Channel {
 
 	void	broadcast(const std::string& msg, User* except) const;
 
+	// Mode
+	bool	i;	// set/remove invite-only
+	bool	t;	// set/remove restriction on TOPIC cmd
+	bool	k;	// set/remove channel key (password)
+	bool	o;	// give/take channel operator privilege
+	bool	l;	// set/remove the user limit to channel
+
 	private:
 		std::string		_name;
 		std::string		_topic;
 		std::set<User*>	_users;
 		std::set<User*>	_operators;
+		std::set<User*>	_invitations;
 };
 
 // To create a new channel or become part of an existing channel, a user
@@ -63,7 +75,7 @@ class Channel {
 //    may be a part of several channels at once, but a limit of ten (10)
 //    channels is recommended as being ample for both experienced and
 //    novice users.
-//
+
 // Operators
 // The channel operator (also referred to as a "chop" or "chanop") on a
 //    given channel is considered to 'own' that channel.  In recognition of
@@ -74,14 +86,14 @@ class Channel {
 //    antisocial or otherwise abusive, it might be reasonable to ask an IRC
 //    operator to intervene, or for the usersjust leave and go elsewhere
 //    and form their own channel.
-//
+
 //    The commands which may only be used by channel operators are:
-//
+
 //         KICK    - Eject a client from the channel
 //         MODE    - Change the channel's mode
 //         INVITE  - Invite a client to an invite-only channel (mode +i)
 //         TOPIC   - Change the channel topic in a mode +t channel
-//
-//	   A channel operator is identified by the '@' symbol next to their
-//	   nickname whenever it is associated with a channel (ie replies to the
+
+// 	   A channel operator is identified by the '@' symbol next to their
+// 	   nickname whenever it is associated with a channel (ie replies to the
 //     NAMES, WHO and WHOIS commands).

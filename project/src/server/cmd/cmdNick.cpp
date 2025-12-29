@@ -21,17 +21,16 @@ void cmdNick(IRCCore &core, User& user, const Message& msg)
 		user.send(ERR_NONICKNAMEGIVEN(user.getNick()));
 		return ;
 	}
-	if (!user.getPasswordAccepted()) {
-		user.send("error\r\n"); // wich reply??
+	if (!user.getPasswordAccepted() && !core.getPassword().empty()) {
 		return ;
 	}
-	const std::string&	newNick = msg.params[0];
-	std::string			oldNick = user.getNick();
+	std::string	newNick = msg.params[0];
+	std::string	oldNick = user.getNick();
 	if (core.nickExists(newNick) && newNick != oldNick) {
 		if (oldNick.empty())
 			oldNick = "*";
 		user.send(ERR_NICKNAMEINUSE(oldNick, newNick));
-		return ;
+		newNick = "*";
 	}
 	if (!oldNick.empty()) {
 		core.removeUser(oldNick);

@@ -30,8 +30,8 @@ void	cmdPart(IRCCore&core, User& user, const Message& msg) {
 		user.send(ERR_NOTONCHANNEL(chanName));
 		return ;
 	}
-	channel->removeUser(&user);
 	channel->broadcast(RPL_PART(user.getNick(), user.getUser(), user.getHost(), chanName), NULL);
+	channel->removeUser(&user);
 }
 
 //    The PART message causes the client sending the message to be removed
