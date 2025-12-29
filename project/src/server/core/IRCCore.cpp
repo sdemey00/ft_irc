@@ -19,14 +19,13 @@ IRCCore::IRCCore(const std::string pass) : _password(pass) {
 	_cmds["JOIN"] = &cmdJoin;
 	_cmds["PART"] = &cmdPart;
 	_cmds["PRIVMSG"] = &cmdPrivmsg;
-	// _cmds["NOTICE"] = &cmdNotice;		// necessary ? == cmdPrivmsg without an automatic reply
 	_cmds["QUIT"] = &cmdQuit;
 	_cmds["PING"] = &cmdPing;
-	// operators cmd (channel):
+	// operators cmd (on channel):
 	_cmds["KICK"] = &cmdKick;
 	_cmds["INVITE"] = &cmdInvite;
 	_cmds["TOPIC"] = &cmdTopic;
-	// _cmds["MODE"] = &cmdMode;
+	_cmds["MODE"] = &cmdMode;
 }
 
 IRCCore::~IRCCore() {

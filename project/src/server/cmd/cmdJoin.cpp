@@ -31,8 +31,15 @@ void cmdJoin(IRCCore& core, User& user, const Message& msg)
         return ;
     }
     Channel* channel = core.getOrCreateChannel(chanName);
-    if (channel->hasUser(&user))
+    if (channel->hasUser(&user)) {
         return ;
+	}
+	if (channel->isInviteOnly() && !channel->hasInvitation(&user)) {
+		return ;
+	}
+	if (channel->getUsers().empty()) {
+    	channel->addOperator(&user);
+	}
     channel->addUser(&user);
     user.send(RPL_JOIN(user.getNick(), chanName));
     std::string names;

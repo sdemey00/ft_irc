@@ -13,30 +13,22 @@
 #include "Channel.hpp"
 #include "User.hpp"
 
-Channel::Channel(void) : _name(""), _i(false), _t(false), _k(false), _l(false) {}
-Channel::Channel(const std::string& name) : _name(name), _i(false), _t(false), _k(false), _l(false) {}
+Channel::Channel(void) : _name(""), _key(""), _userLimit(0), _i(false), _t(false), _l(false) {}
+Channel::Channel(const std::string& name) : _name(name), _key(""), _userLimit(0), _i(false), _t(false), _l(false) {}
 Channel::Channel(const Channel& other) {
 	*this = other;
 }
 Channel& Channel::operator=(const Channel& other) {
 	if (this != &other) {
 		_name = other._name;
+		_key = other._key;
 		_i = other._i;
 		_t = other._t;
-		_k = other._k;
 		_l = other._l;
 	}
 	return (*this);
 }
 Channel::~Channel() {}
-
-void	Channel::broadcast(User& user, std::string& msg) {
-    for (std::set<User*>::const_iterator it = _users.begin(); it != _users.end(); ++it) {
-        if (*it != &user) {
-            (*it)->send(msg);
-        }
-    }
-}
 
 // Membership
 void	Channel::addUser(User* user) {
@@ -96,7 +88,7 @@ bool	Channel::getUserLimit() const { return (_l);}
 // Mode Setter :
 void	Channel::setInviteOnly(bool value) { _i = value;}
 void	Channel::setTopicRestrict(bool value) { _t = value;}
-void	Channel::setKeyPass(bool value) { _k = value;}
-void	Channel::setUserLimit(bool value) { _l = value;}
-
-// first user to join become operator
+void	Channel::setKeyPass(std::string key) { _key = key; _k = true; }
+void	Channel::removeKeyPass() { _key = ""; _k = false; }
+void	Channel::setUserLimit(unsigned int	value) { _userLimit = value;}
+void	Channel::removeUserLimit() { _userLimit = 0; }

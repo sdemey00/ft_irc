@@ -24,8 +24,6 @@ class Channel {
 	Channel& operator=(const Channel& other);
 	~Channel(void);
 
-	void	broadcast(User& user, std::string& msg);
-
 	// Membership
 	void	addUser(User* user);
 	void	removeUser(User* user);
@@ -55,19 +53,19 @@ class Channel {
 	// Mode Setter
 	void	setInviteOnly(bool value);
 	void	setTopicRestrict(bool value);
-	void	setKeyPass(bool value);
-	void	setUserLimit(bool value);
+	void	setKeyPass(std::string key);
+	void	removeKeyPass();
+	void	setUserLimit(unsigned int value);
+	void	removeUserLimit();
 
-
-
+	// Send to all users expect one (can be null)
 	void	broadcast(const std::string& msg, User* except) const;
-
-
 
 	private:
 		std::string		_name;
 		std::string		_topic;
-		std::string		_key;
+		std::string		_key; // mode +k (password)
+		unsigned int	_userLimit;
 		std::set<User*>	_users;
 		std::set<User*>	_operators;
 		std::set<User*>	_invitations;

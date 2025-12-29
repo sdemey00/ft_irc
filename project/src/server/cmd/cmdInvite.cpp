@@ -31,7 +31,7 @@ void	cmdInvite(IRCCore &core, User& user, const Message& msg) {
 		user.send(ERR_NOTONCHANNEL(chanName));
 		return ;
 	}
-	if (!channel->isOperator(&user)) { //seulemt si channel->isInviteOnly()
+	if (channel->isInviteOnly() && !channel->isOperator(&user)) {
 		user.send(ERR_CHANOPRIVSNEEDED(chanName));
 		return ;
 	}
