@@ -23,7 +23,7 @@ void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg) {
         return ;
     }
     const std::string& target = msg.params[0];
-    const std::string& text = msg.params[1]; //trailing
+    const std::string& text = msg.params[1]; //trailing ?
     if (text.empty()) {
         user.send(ERR_NOTEXTTOSEND());
         return ;
@@ -38,7 +38,7 @@ void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg) {
             user.send(ERR_CANNOTSENDTOCHAN(target));
             return ;
         }
-		channel->broadcast(RPL_PRIVMSG(user.getNick(), user.getUser(), user.getHost(), target, text), &user); //->> queue a tous les users
+		channel->broadcast(RPL_PRIVMSG(user.getNick(), user.getUser(), user.getHost(), target, text), &user);
     }
     else {
         User* targetUser = core.getUserByNick(target);

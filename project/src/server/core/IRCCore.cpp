@@ -19,7 +19,7 @@ IRCCore::IRCCore(const std::string pass) : _password(pass) {
 	_cmds["JOIN"] = &cmdJoin;
 	_cmds["PART"] = &cmdPart;
 	_cmds["PRIVMSG"] = &cmdPrivmsg;
-	// _cmds["NOTICE"] = &cmdNotice;
+	// _cmds["NOTICE"] = &cmdNotice;		// necessary ? == cmdPrivmsg without an automatic reply
 	_cmds["QUIT"] = &cmdQuit;
 	_cmds["PING"] = &cmdPing;
 	// operators cmd (channel):
@@ -36,9 +36,9 @@ IRCCore::~IRCCore() {
 	_channels.clear();
 }
 
-// USERS
+// Users
 bool	IRCCore::nickExists(const std::string& nick) const {
-	return (_users.find(nick) != _users.end()); //find return map.end() if not found
+	return (_users.find(nick) != _users.end());
 }
 
 void	IRCCore::addUser(User* user) {
@@ -56,7 +56,7 @@ User*   IRCCore::getUserByNick(const std::string& nick) {
 	return (_users[nick]);
 }
 
-// CHANNEL
+// Channels
 Channel*    IRCCore::getChannel(const std::string& name) {
 	if (_channels.count(name) == 0)
 		return (NULL);
@@ -69,7 +69,7 @@ Channel*    IRCCore::getOrCreateChannel(const std::string& name) {
 	return (_channels[name]);
 }
 
-// PROTOCOL
+// Protocol
 void IRCCore::dispatch(User& user, const Message& msg)
 {
 	std::string cmd = msg.command;

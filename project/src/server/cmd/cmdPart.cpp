@@ -46,14 +46,3 @@ void	cmdPart(IRCCore&core, User& user, const Message& msg) {
 //    PART #twilight_zone             ; leave channel "#twilight_zone"
 //    PART #oz-ops,&group5            ; leave both channels "&group5" and
 //                                    "#oz-ops".
-
-
-
-
-
-    // Vérifications classiques
-    // - channel existe ?
-    // - user est dans le channel ?
-              // << " :" << reason << std::endl;
-
-    // Retirer l'utilisateur du channel

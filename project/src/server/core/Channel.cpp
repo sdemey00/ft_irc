@@ -46,7 +46,9 @@ bool	Channel::hasUser(User* user) const {
 	return (_users.find(user) != _users.end());
 }
 
-// Operators users
+// first user to join become operator
+
+// Operators
 void	Channel::addOperator(User* user) {
 	_operators.insert(user);
 }
@@ -57,13 +59,15 @@ bool	Channel::isOperator(User* user) const {
 	return (_operators.find(user) != _operators.end());
 }
 
-// Getter / Setter
+// Getter :
 const std::string&		Channel::getTopic() const { return (_topic); }
 const std::string&  	Channel::getName() const { return (_name); }
 const std::set<User*>&	Channel::getUsers() const { return (_users); }
 const std::set<User*>&	Channel::getOps() const { return (_operators); };
-void	Channel::setTopic(const std::string& topic) { _topic = topic; }
+// Setter :
+void					Channel::setTopic(const std::string& topic) { _topic = topic; }
 
+// Broadcast to all users in the channel except one (can be null)
 void	Channel::broadcast(const std::string& msg, User* except) const {
 	for (std::set<User*>::const_iterator it = _users.begin(); it != _users.end(); ++it) {
 		if (*it != except) {
@@ -71,5 +75,3 @@ void	Channel::broadcast(const std::string& msg, User* except) const {
 		}
 	}
 }
-
-// first user to join become operator

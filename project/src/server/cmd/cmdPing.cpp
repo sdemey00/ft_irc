@@ -12,7 +12,6 @@
 
 #include "IRCCore.hpp"
 
-
 void cmdPing(IRCCore &core, User& user, const Message& msg)
 {
 	(void)core;

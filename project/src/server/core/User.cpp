@@ -49,7 +49,6 @@ User::~User() {}
 // Registration
 bool	User::isRegistered() const { return (_registered); }
 bool	User::canRegister() const { return (!_nick.empty() && !_user.empty()); }
-
 // to get a user registered we need: PASS + NICK + USER
 void	User::setRegistered(bool value) { _registered = value; }
 
@@ -70,8 +69,9 @@ const std::string&	User::getHost() const { return (_hostname); }
 const std::string&	User::getUser() const { return (_user); }
 const std::string&	User::getReal() const { return (_realname); }
 bool				User::getPasswordAccepted() const { return (_passwordAccepted); }
+std::string&		User::getFrontQueue() { return _queue.front(); };
 
-// Method
+// Send
 void	User::send(const std::string& message)
 {
 	if (message.empty())
@@ -80,4 +80,3 @@ void	User::send(const std::string& message)
 	_queue.push(message);
 }
 
-std::string&	User::getFrontQueue() { return _queue.front(); };
