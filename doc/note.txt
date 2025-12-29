@@ -18,7 +18,7 @@ poll()
                              └─ Client.send()
                                  └─ write_buffer
 
-NICK	    User	        change identité
+NICK	    User	        change identity
 USER	    User	        set infos
 JOIN	    Channel	        state
 PART	    Channel	        state
@@ -44,63 +44,10 @@ CRLF
 RFC 1459 = reference
 IRC = protocol
 
-// V1 Objectives
+// netcat minor tests
 
 nc localhost 6667
 NICK a
 USER a 0 * :a
 JOIN #test
 PRIVMSG #test :hello
-
-
-// IDEAS
-
-#pragma once
-#include <string>
-
-class IConnection;
-
-class User {
-public:
-    explicit User(IConnection* conn);
-
-    void setNick(const std::string&);
-    const std::string& getNick() const;
-
-    bool isRegistered() const;
-    void setRegistered(bool);
-
-    void send(const std::string& msg);
-
-private:
-    std::string _nick;
-    bool _registered;
-    IConnection* _conn;
-};
-User::User(IConnection* conn)
-    : _registered(false), _conn(conn) {}
-
-void User::send(const std::string& msg) {
-    if (_conn)
-        _conn->send(msg);
-}
-
-//////////////////////////
-#pragma once
-#include <string>
-
-class IConnection {
-public:
-    virtual ~IConnection() {}
-    virtual void send(const std::string&) = 0;
-};
-////////////////////////////////
-class Client : public IConnection {
-public:
-    void send(const std::string& msg) {
-        write_buffer += msg;
-    }
-};
-Client ---> User
-User ---> IConnection (interface)
-//////////////////////

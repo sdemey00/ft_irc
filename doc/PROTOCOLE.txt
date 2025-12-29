@@ -1,7 +1,7 @@
-PROTOCOL IRC - see RFC 1459:
+PROTOCOL IRC - reference : RFC 1459:
 
 Text base message line:
-:[prefix] COMMAND [parameters] [message]
+:[prefix] COMMAND [parameters] [message/trailing]
 
 COMMAND:
 Operator:
@@ -16,6 +16,7 @@ Operator:
 		* l: Set/remove the user limit to channel
 		(example: MODE #canal +i || MODE user +o) -> channel mode AND user mode
 Other:
+	PASS - password
 	NICK new_pseudo - Change user's pseudonyme
 	USER ident mode full_name - Send user ident informations to server
 	JOIN #channel - Join a channel
@@ -25,27 +26,26 @@ Other:
 	QUIT - Disconnect from the server
 (some command need a confirmation message like " :user!ident@host JOIN #channel ")
 
-ERROR HANDLING:
+ERRORS/REPLIES:
 Response and code state:
+	replies :
 	RPL_WELCOME (001): welcome message when connexion success
 	RPL_TOPIC (332): channel subject
+	errors :
 	ERR_NICKNAMEINUSE (433): pseudo already in use (NICK answer)
 	ERR_NEEDMOREPARAMS (461): Error when a command need more params
 	ERR_UNKNOWNCOMMAND (421): Error when uknown command
+	...
 Example:
 	:server_name 433 * new_pseudo : Nickname is already in use
 
 
 MOTD = Message of the Day: at connexion to an IRC server, MOTD is sent (right after RPL_WELCOME)
 PING PONG = protocol to maintain sustanable connectivity betwen server/client
-
-Server send a message to test connectivity
-PING :server_name
-Client or Server respond to conform
-PONG :server_name
-
+	Server send a message to test connectivity
+	PING :server_name
+	Client or Server respond to conform
+	PONG :server_name
 
 SECURE CONNEXION:
 SSL/TLS - modern IRC clients expect server to handle SSL/TLS for secure communication
-
-UTF-8
