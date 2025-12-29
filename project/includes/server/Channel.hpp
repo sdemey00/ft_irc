@@ -40,29 +40,42 @@ class Channel {
 	void	removeInvitation(User* user);
 	bool	hasInvitation(User* user) const;
 
-	// Getter / Setter
+	// Getter
 	const std::string&		getName() const;
 	const std::string&		getTopic() const;
 	const std::set<User*>&	getUsers() const;
 	const std::set<User*>&	getOps() const;
-
+	// Setter
 	void	setTopic(const std::string& topic);
+	// Mode Getter
+	bool	isInviteOnly() const;
+	bool	isTopicRestrict() const;
+	bool	hasKeyPass() const;
+	bool	getUserLimit() const;
+	// Mode Setter
+	void	setInviteOnly(bool value);
+	void	setTopicRestrict(bool value);
+	void	setKeyPass(bool value);
+	void	setUserLimit(bool value);
+
+
 
 	void	broadcast(const std::string& msg, User* except) const;
 
-	// Mode
-	bool	i;	// set/remove invite-only
-	bool	t;	// set/remove restriction on TOPIC cmd
-	bool	k;	// set/remove channel key (password)
-	bool	o;	// give/take channel operator privilege
-	bool	l;	// set/remove the user limit to channel
+
 
 	private:
 		std::string		_name;
 		std::string		_topic;
+		std::string		_key;
 		std::set<User*>	_users;
 		std::set<User*>	_operators;
 		std::set<User*>	_invitations;
+		// Mode
+		bool			_i;	// set/remove invite-only
+		bool			_t;	// set/remove restriction on TOPIC cmd
+		bool			_k;	// set/remove channel key (password)
+		bool			_l;	// set/remove the user limit to channel
 };
 
 // To create a new channel or become part of an existing channel, a user

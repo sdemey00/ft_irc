@@ -13,14 +13,18 @@
 #include "Channel.hpp"
 #include "User.hpp"
 
-Channel::Channel(void) : _name("") {}
-Channel::Channel(const std::string& name) : _name(name) {}
+Channel::Channel(void) : _name(""), _i(false), _t(false), _k(false), _l(false) {}
+Channel::Channel(const std::string& name) : _name(name), _i(false), _t(false), _k(false), _l(false) {}
 Channel::Channel(const Channel& other) {
 	*this = other;
 }
 Channel& Channel::operator=(const Channel& other) {
 	if (this != &other) {
 		_name = other._name;
+		_i = other._i;
+		_t = other._t;
+		_k = other._k;
+		_l = other._l;
 	}
 	return (*this);
 }
@@ -46,8 +50,6 @@ bool	Channel::hasUser(User* user) const {
 	return (_users.find(user) != _users.end());
 }
 
-// first user to join become operator
-
 // Operators
 void	Channel::addOperator(User* user) {
 	_operators.insert(user);
@@ -70,14 +72,6 @@ bool	Channel::hasInvitation(User* user) const {
 	return (_invitations.find(user) != _invitations.end());
 }
 
-// Getter :
-const std::string&		Channel::getTopic() const { return (_topic); }
-const std::string&  	Channel::getName() const { return (_name); }
-const std::set<User*>&	Channel::getUsers() const { return (_users); }
-const std::set<User*>&	Channel::getOps() const { return (_operators); };
-// Setter :
-void					Channel::setTopic(const std::string& topic) { _topic = topic; }
-
 // Broadcast to all users in the channel except one (except can be null)
 void	Channel::broadcast(const std::string& msg, User* except) const {
 	for (std::set<User*>::const_iterator it = _users.begin(); it != _users.end(); ++it) {
@@ -86,3 +80,23 @@ void	Channel::broadcast(const std::string& msg, User* except) const {
 		}
 	}
 }
+
+// Getter :
+const std::string&		Channel::getTopic() const { return (_topic); }
+const std::string&  	Channel::getName() const { return (_name); }
+const std::set<User*>&	Channel::getUsers() const { return (_users); }
+const std::set<User*>&	Channel::getOps() const { return (_operators); };
+// Setter :
+void					Channel::setTopic(const std::string& topic) { _topic = topic; }
+// Mode Getter :
+bool	Channel::isInviteOnly() const { return (_i);}
+bool	Channel::isTopicRestrict() const { return (_t);}
+bool	Channel::hasKeyPass() const { return (_k);}
+bool	Channel::getUserLimit() const { return (_l);}
+// Mode Setter :
+void	Channel::setInviteOnly(bool value) { _i = value;}
+void	Channel::setTopicRestrict(bool value) { _t = value;}
+void	Channel::setKeyPass(bool value) { _k = value;}
+void	Channel::setUserLimit(bool value) { _l = value;}
+
+// first user to join become operator
