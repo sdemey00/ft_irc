@@ -6,7 +6,9 @@
 	Therefore messages are not shown in the client but seem the be sent ...
 
 sdemey:
-	- IRC Protocol
+	- cmdMode + Operators
+	- Investigate while true when already used nickname
+	- What happen with cmdNick and cmdUser when bad cmdPass ?
 
 mmichele :
 	- Investigate read_buffer and stash variables in Client class, 
