@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/28 17:01:56 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/29 12:14:16 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,6 +235,4 @@ void	Server::_send(Client& c) {
 		c.user._readyToSend--;
 	}
 	else if (n > 0) { c.user._queue.front().erase(0, n); }
-	// Should not be necessary
-	//if (c.user._queue.size() == 0) { c.user._readyToSend = 0; }
 }

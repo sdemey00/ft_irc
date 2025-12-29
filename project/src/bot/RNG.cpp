@@ -1,35 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Client.hpp                                         :+:      :+:    :+:   */
+/*   RNG.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/21 04:26:01 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/29 12:32:18 by mmichele         ###   ########.fr       */
+/*   Created: 2025/12/29 12:43:56 by mmichele          #+#    #+#             */
+/*   Updated: 2025/12/29 13:41:22 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#include "RNG.hpp"
 
-#include <string>	// string
+#include <cstdlib>
+#include <ctime>
 
-class Client {
-	int				fd;
-	bool			init;
-	unsigned int	port;
-	std::string		addr;
-	std::string		pwd;
-
-	std::string		name;
-
-	void	_socket();
-	void	_connect();
-	void	_read();
-	void	_send(std::string msg);
-
-public:
-	Client(char* address, char* raw_port, char* password, char* name);
-	~Client();
-	void	run();
-};
+void	RNG::seed() { srand(time(0)); }
+int		RNG::roll() { return (rand() % 6) + 1; }
+int		RNG::toss() { return (rand() % 2); }

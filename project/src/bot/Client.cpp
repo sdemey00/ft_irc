@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 04:26:20 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/22 15:24:38 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/29 13:48:49 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,13 @@
 #include <csignal>			// SIGINT
 #include <sstream>			// stringstream
 #include <cstring>			// memset, strlen
+#include <fcntl.h>			// fcntl
+#include <string>			// string
 
 #include "Errors.hpp"		// Port, Socket
 #include "sighandler.hpp"	// sighandler
 #include "utils.hpp"		// isdigit
+#include "RNG.hpp"			// roll, toss
 
 bool g_run_state = 1;
 
@@ -41,6 +44,7 @@ Client::Client(char* address, char* raw_port, char* password, char* name):
 	// Initialize network :
 	_socket();
 	_connect();
+	RNG::seed();
 }
 
 Client::~Client() {
@@ -61,6 +65,20 @@ void	Client::_connect() {
 	inet_pton(AF_INET , addr.c_str(), &serv_addr.sin_addr);
 	if (connect(fd, (struct sockaddr*)&serv_addr , sizeof(serv_addr)) < 0)
 		throw Errors::Connect();
+	if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
+		throw Errors::Fcntl();
+}
+
+void	Client::_send(std::string msg) {
+	long unsigned int n = 0;
+	do {
+		n = send(fd, msg.c_str(), msg.length(), 0);
+		msg.erase(0, n);
+	} while(msg.length() > 0);
+}
+
+void	Client::_read() {
+	
 }
 
 void	Client::run() {
@@ -68,13 +86,16 @@ void	Client::run() {
 	char				buf[100];
 
 	std::memset(buf, 0, 100);
-	msg << "PASS " << pwd << "\r\nNICK " << name << "\r\n";
-	send(fd, msg.str().c_str(), msg.str().length(), 0);
-	msg.clear();
-	read(fd, buf, 100);
-	std::cout << buf;
+	msg << "PASS " << pwd << "\r\nNICK " << name << "\r\nUSER " << name << " " << name << " " << addr << " :FT BOT\r\n";
+	_send(msg.str());
+	msg.str("");
 	while (g_run_state) {
-		//TODO
+		char c;
+		if (read(fd, &c, 1) <= 0)
+			continue ;
+		std::cout << c;
 	}
+	//msg << "PRIVMSG " << "mmichele" << " :" << RNG::roll() << "\r\n";
+	//_send(msg.str());
 }
 

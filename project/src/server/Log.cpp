@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:29:06 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/21 03:24:19 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/29 14:24:40 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <iomanip>	// setw
 #include <iostream>	// cout
 #include <ctime>	// time
+#include <cstring>	// strcmp
 
 std::ofstream	logger("server.log");
 
@@ -61,11 +62,11 @@ std::string Log::time_label() {
 }
 
 void Log::recv(bool complete, int fd, const char* str, const long unsigned int& len) {
-	
 	logger << Log::time_label() << "RECV ";
 	if (complete) {
 		logger << "complete (";
-		std::cout << Log::time_label() << CLR_ORANGE << "Received     " << CLR_RESET << std::setw(3) << fd << " : " << str << std::endl;
+		if (std::strncmp(str, "PING", 4) != 0)
+			std::cout << Log::time_label() << CLR_ORANGE << "Received     " << CLR_RESET << std::setw(3) << fd << " : " << str << std::endl;
 	}
 	else { logger << "partial  ("; }
 	logger << std::setw(3) << fd << ") :\n";
@@ -74,7 +75,8 @@ void Log::recv(bool complete, int fd, const char* str, const long unsigned int& 
 
 void Log::send(int fd, const char* str, const long unsigned int& len) {
 	logger << Log::time_label() << "SEND          (" << std::setw(3) << fd << ") : \n" << Log::print_memory(str, len) << std::flush;
-	std::cout << Log::time_label() << CLR_CYAN << "Replied      " << CLR_RESET << std::setw(3) << fd << " : " << str << std::endl;
+	if (std::strncmp(str + len - 4, "PONG", 4) != 0)
+		std::cout << Log::time_label() << CLR_CYAN << "Replied      " << CLR_RESET << std::setw(3) << fd << " : " << str << std::endl;
 }
 
 void Log::disconnected(int fd, const std::string& nick) {

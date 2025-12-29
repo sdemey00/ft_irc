@@ -6,7 +6,7 @@
 #    By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/13 10:59:54 by mmichele          #+#    #+#              #
-#    Updated: 2025/12/27 16:25:18 by mmichele         ###   ########.fr        #
+#    Updated: 2025/12/29 13:44:27 by mmichele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,17 +45,22 @@ san: FLAGS += -fsanitize=address,leak,undefined
 san: debug all
 
 # Following targets allow makefile variables PORT and PASS to be set.
-NAME	?= $(S_NAME)
 PORT	?= 6667
 PASS	?= pass
-ADDR	?=
-BOTN	?=
+ADDR	?= 127.0.0.1
+BOTN	?= ft_bot
 
 valgrind: debug
-	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all --log-file=valgrind.log ./$(NAME) $(ADDR) $(PORT) $(PASS) $(BOTN)
+	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all --log-file=valgrind-$(S_NAME).log ./$(S_NAME) $(PORT) $(PASS)
+
+valgrind-bot: debug
+	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all --log-file=valgrind-$(B_NAME).log ./$(B_NAME) $(ADDR) $(PORT) $(PASS) $(BOTN)
 
 gdb: debug
 	gdb --tui --args "$(S_NAME)" $(PORT) $(PASS)
+
+gdb-bot: debug
+	gdb --tui --args "$(B_NAME)" $(ADDR) $(PORT) $(PASS) $(BOTN)
 
 ################################################################################
 # Common files                                                                 #
