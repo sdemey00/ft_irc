@@ -44,6 +44,8 @@ class Channel {
 
 	void	setTopic(const std::string& topic);
 
+	void	broadcast(const std::string& msg, User* except) const;
+
 	private:
 		std::string		_name;
 		std::string		_topic;

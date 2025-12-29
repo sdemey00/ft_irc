@@ -64,4 +64,12 @@ const std::set<User*>&	Channel::getUsers() const { return (_users); }
 const std::set<User*>&	Channel::getOps() const { return (_operators); };
 void	Channel::setTopic(const std::string& topic) { _topic = topic; }
 
+void	Channel::broadcast(const std::string& msg, User* except) const {
+	for (std::set<User*>::const_iterator it = _users.begin(); it != _users.end(); ++it) {
+		if (*it != except) {
+			(*it)->send(msg);
+		}
+	}
+}
+
 // first user to join become operator

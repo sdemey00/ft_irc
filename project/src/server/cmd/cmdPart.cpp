@@ -31,8 +31,7 @@ void	cmdPart(IRCCore&core, User& user, const Message& msg) {
 		return ;
 	}
 	channel->removeUser(&user);
-	user.send(RPL_PART(user.getNick(), user.getUser(), user.getHost(), chanName));
-	// channel->broadcast(partMsg); ->> queue a tous les users
+	channel->broadcast(RPL_PART(user.getNick(), user.getUser(), user.getHost(), chanName), NULL);
 }
 
 //    The PART message causes the client sending the message to be removed

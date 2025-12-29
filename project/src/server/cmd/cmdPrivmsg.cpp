@@ -6,7 +6,7 @@
 /*   By: sdemey <sdemey@student.42belgium.be>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 05:57:22 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/21 05:57:23 by sdemey           ###   ########.fr       */
+/*   Updated: 2025/12/29 09:42:52 by sdemey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,7 @@ void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg) {
             user.send(ERR_CANNOTSENDTOCHAN(target));
             return ;
         }
-        const std::set<User*>& users = channel->getUsers();
-        for (std::set<User*>::const_iterator it = users.begin(); it != users.end(); ++it) {
-            if (*it != &user) {
-                (*it)->send(RPL_PRIVMSG(user.getNick(), user.getUser(), user.getHost(), target, text));
-            }
-        }
-		// OR channel->broadcast(privMsg); ->> queue a tous les users
+		channel->broadcast(RPL_PRIVMSG(user.getNick(), user.getUser(), user.getHost(), target, text), &user); //->> queue a tous les users
     }
     else {
         User* targetUser = core.getUserByNick(target);
@@ -52,9 +46,7 @@ void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg) {
             user.send(ERR_NOSUCHNICK(target));
             return ;
         }
-    	//targetUser->send(":" + user.getNick() + " PRIVMSG " + target + " :" + text + CRLF);;
 		targetUser->send(RPL_PRIVMSG(user.getNick(), user.getUser(), user.getHost(), target, text));  
-		//user.send(":" + user.getNick() + " PRIVMSG " + target + " :" + text + CRLF);
     }
 }
 
