@@ -23,9 +23,9 @@ IRCCore::IRCCore(const std::string pass) : _password(pass) {
 	_cmds["QUIT"] = &cmdQuit;
 	_cmds["PING"] = &cmdPing;
 	// operators cmd (channel):
-	// _cmds["KICK"] = &cmdKick;
+	_cmds["KICK"] = &cmdKick;
 	// _cmds["INVITE"] = &cmdInvite;
-	// _cmds["TOPIC"] = &cmdTopic;
+	_cmds["TOPIC"] = &cmdTopic;
 	// _cmds["MODE"] = &cmdMode;
 }
 
