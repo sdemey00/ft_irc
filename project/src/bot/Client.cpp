@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 04:26:20 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/30 15:52:47 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/30 19:16:33 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 #include "utils.hpp"		// isdigit
 #include "RNG.hpp"			// roll, toss
 #include "Log.hpp"			// logger
+#include "Command.hpp"		// Command
 
 bool g_run_state = 1;
 
@@ -78,17 +79,33 @@ void	Client::_send(std::string msg) {
 	long unsigned int n = 0;
 	do {
 		n = send(pfd.fd, msg.c_str(), msg.length(), 0);
+		//Log::send(pfd.fd, msg.substr(0, n).c_str(), msg.substr(0, n).length());
 		msg.erase(0, n);
 	} while(msg.length() > 0);
 }
 
+void	Client::handle_server_requests() {
+	// TODO
+}
+
+bool	Client::handle_commands() {
+	Command		cmd(read_buffer);
+
+	if (!cmd.isCmd)
+		return 0;
+	std::cout << cmd.command << " " << cmd.args << std::endl;
+	if (cmd.type != cmd.NONE)
+		cmd.commands[cmd.command](cmd);
+	else 
+		Command::unknown(cmd);
+	_send(cmd.reply.str());
+	return 1;
+}
+
 void	Client::handle_request(IRCCore* core) {
 	(void)core;
-	if (std::strstr(read_buffer.c_str(), "roll")) {
-		std::stringstream	msg;
-		msg << "PRIVMSG a :" << RNG::roll() << "\r\n";
-		_send(msg.str());
-	}
+	if (!handle_commands())
+		handle_server_requests();
 }
 
 void	Client::handle_disconnect(IRCCore* core) {

@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 04:26:01 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/30 12:54:45 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/30 17:23:55 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ class Client : public Requestable {
 	void	_socket();
 	void	_connect();
 	void	_send(std::string msg);
+
+	bool	handle_commands();
+	void	handle_server_requests();
 
 public:
 	Client(char* address, char* raw_port, char* password, char* name);
