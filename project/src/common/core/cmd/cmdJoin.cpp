@@ -17,10 +17,6 @@
 
 void cmdJoin(IRCCore& core, User& user, const Message& msg)
 {
-    // if (!user.isRegistered()) {
-    //     user.send(ERR_NOTREGISTERED(user.getNick()));
-    //     return ;
-    // }
     if (msg.params.empty()) {
         user.send(ERR_NEEDMOREPARAMS(msg.command));
         return ;
@@ -31,8 +27,17 @@ void cmdJoin(IRCCore& core, User& user, const Message& msg)
         return ;
     }
     Channel* channel = core.getOrCreateChannel(chanName);
-    if (channel->hasUser(&user))
+    if (channel->hasUser(&user)) {
         return ;
+	}
+	if (channel->isInviteOnly() && !channel->hasInvitation(&user)) {
+		user.send(ERR_INVITEONLYCHAN(chanName));
+		return ;
+	}
+	// check for user limit
+	if (channel->getUsers().empty()) {
+    	channel->addOperator(&user);
+	}
     channel->addUser(&user);
     user.send(RPL_JOIN(user.getNick(), chanName));
     std::string names;
@@ -47,6 +52,9 @@ void cmdJoin(IRCCore& core, User& user, const Message& msg)
     user.send(RPL_NAMREPLY(user.getNick(), "", chanName, names));
     user.send(RPL_ENDOFNAMES(user.getNick(), chanName));
 }
+
+// ERR_CHANNELISFULL
+// ERR_BADCHANNELKEY
 
 // The JOIN command is used by client to start listening a specific
 //    channel. Whether or not a client is allowed to join a channel is

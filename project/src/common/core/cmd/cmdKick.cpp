@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmdKick.cpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/29 17:03:26 by sdemey            #+#    #+#             */
+/*   Updated: 2025/12/30 12:44:17 by mmichele         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "core/IRCCore.hpp"
 
 // KICK <channel> <nick> [:reason]
@@ -28,6 +40,6 @@ void cmdKick(IRCCore &core, User& user, const Message& msg) {
 		user.send(ERR_NOSUCHNICK(targetName));
 		return ;
 	}
-	channel->broadcast(RPL_KICK(user.getNick(), chanName, targetName, reason), NULL);
+	channel->broadcast(RPL_KICK(user.getNick(), user.getUser(), user.getHost(), chanName, targetName, reason), NULL);
 	channel->removeUser(target);
 }

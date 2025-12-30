@@ -13,26 +13,22 @@
 #include "core/Channel.hpp"
 #include "core/User.hpp"
 
-Channel::Channel(void) : _name("") {}
-Channel::Channel(const std::string& name) : _name(name) {}
+Channel::Channel(void) : _name(""), _key(""), _userLimit(0), _i(false), _t(false), _l(false) {}
+Channel::Channel(const std::string& name) : _name(name), _key(""), _userLimit(0), _i(false), _t(false), _l(false) {}
 Channel::Channel(const Channel& other) {
 	*this = other;
 }
 Channel& Channel::operator=(const Channel& other) {
 	if (this != &other) {
 		_name = other._name;
+		_key = other._key;
+		_i = other._i;
+		_t = other._t;
+		_l = other._l;
 	}
 	return (*this);
 }
 Channel::~Channel() {}
-
-void	Channel::broadcast(User& user, std::string& msg) {
-    for (std::set<User*>::const_iterator it = _users.begin(); it != _users.end(); ++it) {
-        if (*it != &user) {
-            (*it)->send(msg);
-        }
-    }
-}
 
 // Membership
 void	Channel::addUser(User* user) {
@@ -45,8 +41,6 @@ void	Channel::removeUser(User* user) {
 bool	Channel::hasUser(User* user) const {
 	return (_users.find(user) != _users.end());
 }
-
-// first user to join become operator
 
 // Operators
 void	Channel::addOperator(User* user) {
@@ -70,14 +64,6 @@ bool	Channel::hasInvitation(User* user) const {
 	return (_invitations.find(user) != _invitations.end());
 }
 
-// Getter :
-const std::string&		Channel::getTopic() const { return (_topic); }
-const std::string&  	Channel::getName() const { return (_name); }
-const std::set<User*>&	Channel::getUsers() const { return (_users); }
-const std::set<User*>&	Channel::getOps() const { return (_operators); };
-// Setter :
-void					Channel::setTopic(const std::string& topic) { _topic = topic; }
-
 // Broadcast to all users in the channel except one (except can be null)
 void	Channel::broadcast(const std::string& msg, User* except) const {
 	for (std::set<User*>::const_iterator it = _users.begin(); it != _users.end(); ++it) {
@@ -86,3 +72,23 @@ void	Channel::broadcast(const std::string& msg, User* except) const {
 		}
 	}
 }
+
+// Getter :
+const std::string&		Channel::getTopic() const { return (_topic); }
+const std::string&  	Channel::getName() const { return (_name); }
+const std::set<User*>&	Channel::getUsers() const { return (_users); }
+const std::set<User*>&	Channel::getOps() const { return (_operators); };
+// Setter :
+void					Channel::setTopic(const std::string& topic) { _topic = topic; }
+// Mode Getter :
+bool	Channel::isInviteOnly() const { return (_i);}
+bool	Channel::isTopicRestrict() const { return (_t);}
+bool	Channel::hasKeyPass() const { return (_k);}
+bool	Channel::getUserLimit() const { return (_l);}
+// Mode Setter :
+void	Channel::setInviteOnly(bool value) { _i = value;}
+void	Channel::setTopicRestrict(bool value) { _t = value;}
+void	Channel::setKeyPass(std::string key) { _key = key; _k = true; }
+void	Channel::removeKeyPass() { _key = ""; _k = false; }
+void	Channel::setUserLimit(unsigned int	value) { _userLimit = value;}
+void	Channel::removeUserLimit() { _userLimit = 0; }

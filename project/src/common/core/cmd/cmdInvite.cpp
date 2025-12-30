@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmdInvite.cpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/29 17:03:20 by sdemey            #+#    #+#             */
+/*   Updated: 2025/12/30 12:43:57 by mmichele         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "core/IRCCore.hpp"
 
 // Command: INVITE
@@ -19,7 +31,7 @@ void	cmdInvite(IRCCore &core, User& user, const Message& msg) {
 		user.send(ERR_NOTONCHANNEL(chanName));
 		return ;
 	}
-	if (!channel->isOperator(&user)) { //seulemt si channel->isInviteOnly()
+	if (channel->isInviteOnly() && !channel->isOperator(&user)) {
 		user.send(ERR_CHANOPRIVSNEEDED(chanName));
 		return ;
 	}
