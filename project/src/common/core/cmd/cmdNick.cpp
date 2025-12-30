@@ -26,9 +26,13 @@ void cmdNick(IRCCore &core, User& user, const Message& msg)
 	}
 	std::string	newNick = msg.params[0];
 	std::string	oldNick = user.getNick();
+	if (oldNick.empty())
+		oldNick = "*";
+	if (!isValidName(newNick)) {
+		user.send(ERR_ERRONEUSNICKNAME(oldNick, newNick));
+		return ;
+	}
 	if (core.nickExists(newNick) && newNick != oldNick) {
-		if (oldNick.empty())
-			oldNick = "*";
 		user.send(ERR_NICKNAMEINUSE(oldNick, newNick));
 		newNick = "*";
 	}

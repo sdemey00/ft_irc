@@ -20,6 +20,7 @@
 #include "core/Message.hpp"
 #include "Replies.hpp"
 #include "Errors.hpp"
+#include "utils.hpp"
 
 class IRCCore;
 

@@ -36,6 +36,7 @@
 #define ERR_NOTEXTTOSEND() (std::string(":ft_irc 412 :No text to send") + std::string(CRLF))
 #define ERR_UNKNOWNCOMMAND(nickname, cmd) (":ft_irc 421 " + nickname + " " + cmd + " :Unknown command" + CRLF)
 #define ERR_NONICKNAMEGIVEN(nickname) (":ft_irc 431 " + nickname + " :No nickname given" + CRLF)
+#define ERR_ERRONEUSNICKNAME(oldnick, newnick) (":ft_irc 432 " + oldnick + " " + newnick + " :Erroneous nickname" + CRLF)
 #define ERR_NICKNAMEINUSE(oldnick, newnick) (":ft_irc 433 " + oldnick + " " + newnick + " :Nickname is already in use" + CRLF)
 #define ERR_NOTONCHANNEL(channel) (":ft_irc 442 " + channel + " :You're not on that channel" + CRLF)
 #define ERR_USERONCHANNEL(target, channel) (":ft_irc 443 " + target + " " + channel + " :is already on channel" + CRLF)
@@ -45,6 +46,8 @@
 #define	ERR_PASSWDMISMATCH(nickname) (":ft_irc 464 " + nickname + " :Password incorrect" + CRLF)
 #define ERR_INVITEONLYCHAN(channel) ("ft_irc 473 " + channel + " :Cannot join channel (+i)" + CRLF)
 #define ERR_CHANOPRIVSNEEDED(channel) (":ft_irc 482 " + channel + " :You're not channel operator" + CRLF)
+#define ERR_CHANNELISFULL(channel) (":ft_irc 471 " + channel + " :Cannot join channel (+l)" + CRLF)
+#define ERR_BADCHANMASK(nickname, channel) (":ft_irc 476 " + nickname + " " + channel + ":Bad Channel Mask" + CRLF)
 
 // :irc.example.com 433 currentNick foo :Nickname is already in use
 

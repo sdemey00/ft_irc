@@ -21,7 +21,9 @@ Channel::Channel(const Channel& other) {
 Channel& Channel::operator=(const Channel& other) {
 	if (this != &other) {
 		_name = other._name;
+		_topic = other._topic;
 		_key = other._key;
+		_userLimit = other._userLimit;
 		_i = other._i;
 		_t = other._t;
 		_l = other._l;
@@ -64,6 +66,26 @@ bool	Channel::hasInvitation(User* user) const {
 	return (_invitations.find(user) != _invitations.end());
 }
 
+// Getter :
+const std::string&		Channel::getTopic() const { return (_topic); }
+const std::string&  	Channel::getName() const { return (_name); }
+const std::set<User*>&	Channel::getUsers() const { return (_users); }
+const std::set<User*>&	Channel::getOps() const { return (_operators); };
+// Setter :
+void				Channel::setTopic(const std::string& topic) { _topic = topic; }
+// Mode Getter :
+bool				Channel::isInviteOnly() const { return (_i);}
+bool				Channel::isTopicRestrict() const { return (_t);}
+bool				Channel::hasKeyPass() const { return (_k);}
+unsigned int		Channel::getUserLimit() const { return (_userLimit);}
+// Mode Setter :
+void				Channel::setInviteOnly(bool value) { _i = value;}
+void				Channel::setTopicRestrict(bool value) { _t = value;}
+void				Channel::setKeyPass(std::string key) { _key = key; _k = true; }
+void				Channel::removeKeyPass() { _key = ""; _k = false; }
+void				Channel::setUserLimit(unsigned int	value) { _userLimit = value;}
+void				Channel::removeUserLimit() { _userLimit = 0; }
+
 // Broadcast to all users in the channel except one (except can be null)
 void	Channel::broadcast(const std::string& msg, User* except) const {
 	for (std::set<User*>::const_iterator it = _users.begin(); it != _users.end(); ++it) {
@@ -72,23 +94,3 @@ void	Channel::broadcast(const std::string& msg, User* except) const {
 		}
 	}
 }
-
-// Getter :
-const std::string&		Channel::getTopic() const { return (_topic); }
-const std::string&  	Channel::getName() const { return (_name); }
-const std::set<User*>&	Channel::getUsers() const { return (_users); }
-const std::set<User*>&	Channel::getOps() const { return (_operators); };
-// Setter :
-void					Channel::setTopic(const std::string& topic) { _topic = topic; }
-// Mode Getter :
-bool	Channel::isInviteOnly() const { return (_i);}
-bool	Channel::isTopicRestrict() const { return (_t);}
-bool	Channel::hasKeyPass() const { return (_k);}
-bool	Channel::getUserLimit() const { return (_l);}
-// Mode Setter :
-void	Channel::setInviteOnly(bool value) { _i = value;}
-void	Channel::setTopicRestrict(bool value) { _t = value;}
-void	Channel::setKeyPass(std::string key) { _key = key; _k = true; }
-void	Channel::removeKeyPass() { _key = ""; _k = false; }
-void	Channel::setUserLimit(unsigned int	value) { _userLimit = value;}
-void	Channel::removeUserLimit() { _userLimit = 0; }
