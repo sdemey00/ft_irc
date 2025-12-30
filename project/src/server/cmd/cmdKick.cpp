@@ -40,6 +40,6 @@ void cmdKick(IRCCore &core, User& user, const Message& msg) {
 		user.send(ERR_NOSUCHNICK(targetName));
 		return ;
 	}
-	channel->broadcast(RPL_KICK(user.getNick(), chanName, targetName, reason), NULL);
+	channel->broadcast(RPL_KICK(user.getNick(), user.getUser(), user.getHost(), chanName, targetName, reason), NULL);
 	channel->removeUser(target);
 }

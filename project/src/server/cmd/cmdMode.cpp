@@ -29,13 +29,11 @@ void	handleModeOperator(IRCCore &core, User &user, Channel *channel, const std::
 
 void	cmdMode(IRCCore &core, User &user, const Message &msg)
 {
-    if (msg.params.size() < 2) {
-        user.send(ERR_NEEDMOREPARAMS(msg.command));
-        return ;
-    }
+    if (msg.params.size() < 2) { return ; }
     const std::string	&chanName = msg.params[0];
     Channel 			*channel = core.getChannel(chanName);
-    if (chanName[0] != '#' || !channel) {
+	if (chanName[0] != '#') { return; }
+    if (!channel) {
         user.send(ERR_NOSUCHCHANNEL(chanName));
         return ;
     }

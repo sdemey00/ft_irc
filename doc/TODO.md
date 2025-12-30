@@ -6,9 +6,9 @@
 	Therefore messages are not shown in the client but seem the be sent ...
 
 sdemey:
-	- cmdMode + Operators
-	- Investigate while true when already used nickname
-	- What happen with cmdNick and cmdUser when bad cmdPass ?
+	- Channel key pass
+	- Channel User limit
+	- User Prefix
 
 mmichele :
 	- Investigate read_buffer and stash variables in Client class, 
