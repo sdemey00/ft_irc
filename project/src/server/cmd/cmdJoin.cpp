@@ -17,10 +17,10 @@
 
 void cmdJoin(IRCCore& core, User& user, const Message& msg)
 {
-    if (!user.isRegistered()) {
-        user.send(ERR_NOTREGISTERED(user.getNick()));
-        return ;
-    }
+    // if (!user.isRegistered()) {
+    //     user.send(ERR_NOTREGISTERED(user.getNick()));
+    //     return ;
+    // }
     if (msg.params.empty()) {
         user.send(ERR_NEEDMOREPARAMS(msg.command));
         return ;
@@ -42,7 +42,8 @@ void cmdJoin(IRCCore& core, User& user, const Message& msg)
             names += " ";
         names += (*it)->getNick();
     }
-	user.send(RPL_TOPIC(chanName, channel->getTopic()));
+	if (channel->getTopic().empty()) { user.send(RPL_NOTOPIC(chanName)); }
+	else { user.send(RPL_TOPIC(user.getNick(), chanName, channel->getTopic())); }
     user.send(RPL_NAMREPLY(user.getNick(), "", chanName, names));
     user.send(RPL_ENDOFNAMES(user.getNick(), chanName));
 }

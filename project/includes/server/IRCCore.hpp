@@ -62,3 +62,6 @@ void	cmdPart(IRCCore&core, User& user, const Message& msg);
 void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg);
 void	cmdQuit(IRCCore &core, User& user, const Message& msg);
 void	cmdPing(IRCCore &core, User& user, const Message& msg);
+void	cmdKick(IRCCore &core, User& user, const Message& msg);
+void	cmdTopic(IRCCore &core, User& user, const Message& msg);
+void	cmdInvite(IRCCore &core, User& user, const Message& msg);
