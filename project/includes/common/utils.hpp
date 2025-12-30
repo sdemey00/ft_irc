@@ -12,4 +12,7 @@
 
 #pragma once
 
-bool isdigit(char* str, const long unsigned int& len);
+#include <string>
+
+bool	isdigit(char* str, const long unsigned int& len);
+bool	isValidName(const std::string &nick);

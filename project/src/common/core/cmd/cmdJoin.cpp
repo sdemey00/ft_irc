@@ -22,10 +22,14 @@ void cmdJoin(IRCCore& core, User& user, const Message& msg)
         return ;
     }
     const std::string& chanName = msg.params[0];
-    if (chanName[0] != '#') {
-        user.send(ERR_NOSUCHCHANNEL(chanName));
-        return ;
-    }
+	if (chanName[0] != '#') {
+		user.send(ERR_NOSUCHCHANNEL(chanName));
+		return ;
+	}
+	if (!isValidName(chanName.substr(1, chanName.length()))) {
+		user.send(ERR_BADCHANMASK(user.getNick(), chanName));
+		return ;
+	}
     Channel* channel = core.getOrCreateChannel(chanName);
     if (channel->hasUser(&user)) {
         return ;
@@ -34,7 +38,10 @@ void cmdJoin(IRCCore& core, User& user, const Message& msg)
 		user.send(ERR_INVITEONLYCHAN(chanName));
 		return ;
 	}
-	// check for user limit
+	if (channel->getUserLimit() && channel->getUsers().size() >= channel->getUserLimit()) {
+		user.send(ERR_CHANNELISFULL(chanName));
+		return ;
+	}
 	if (channel->getUsers().empty()) {
     	channel->addOperator(&user);
 	}

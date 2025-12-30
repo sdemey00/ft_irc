@@ -93,7 +93,9 @@ void	handleMode(IRCCore &core, User &user, const Message &msg, Channel *channel)
 						user.send(ERR_NEEDMOREPARAMS(msg.command));
 						return;
 					}
+					// check if < 0 /!/
 					channel->setUserLimit(std::atoi(msg.params[paramIndex++].c_str()));
+					std::cout << channel->getUserLimit() << std::endl;
 				} else { channel->removeUserLimit(); }
 				break ;
 		}

@@ -7,7 +7,6 @@
 
 sdemey:
 	- Channel key pass
-	- Channel User limit
 	- User Prefix
 
 mmichele :

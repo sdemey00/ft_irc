@@ -13,6 +13,7 @@
 #include "utils.hpp"
 
 #include <cctype>	// isdigit
+#include <string>	// size_t, string
 
 bool isdigit(char* str, const long unsigned int& len) {
 	for (long unsigned int i = 0; i < len; i++) {
@@ -20,4 +21,14 @@ bool isdigit(char* str, const long unsigned int& len) {
 			return 0;
 	}
 	return 1;
+}
+
+bool	isValidName(const std::string &nick) {
+	for (size_t i = 0; i < nick.length(); i++) {
+		if ((!std::isdigit(nick[i]) && !std::isalpha(nick[i]) && nick[i] != '_')
+			|| nick[i] == '#') {
+			return (0) ;
+		}
+	}
+	return (1) ;
 }
