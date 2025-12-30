@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/29 12:14:16 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/30 12:16:23 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include <sys/socket.h>		// socket, bind, listen, accept
 #include <fcntl.h>			// fcntl
-#include <cstring>			// memset, strlen
+#include <cstring>			// memset
 #include <cstdlib>			// atoi
 #include <unistd.h>			// close
 #include <csignal>			// signal, SIGINT
@@ -132,6 +132,7 @@ Server::Server(char* raw_port, char* raw_pass) :
 	clients(0),
 	core(std::string(raw_pass))
 {
+	logger.open("server.log");
 	// Check for port input validity :
 	if (!isdigit(raw_port, std::strlen(raw_port)))
 		throw Errors::Port();
@@ -178,53 +179,7 @@ void Server::run() {
 	}
 }
 
-static unsigned int find_crlf(const char* str, const unsigned int& length) {
-	if (!length)
-		return 0;
-	for (unsigned int i = 0; i < length - 1; i++) {
-		if (str[i] == '\r' && str[i + 1] == '\n')
-			return i + 1;
-	}
-	return 0;
-}
-
-void Server::_recv(Client& c) {
-	char buf[BUFFER_SIZE + 1];
-	if (c.read_buffer.empty()) {  c.read_buffer = c.stash; }
-	ssize_t n = recv(c.pfd.fd, buf, BUFFER_SIZE, 0);
-	if (n > 0) {
-		buf[n] = 0;
-		Log::recv(0, c.pfd.fd, buf, n);
-		c.read_buffer.append(buf, n);
-		unsigned int crlf_idx = find_crlf(c.read_buffer.c_str(), c.read_buffer.length());
-		if (crlf_idx > 0) {
-			std::memcpy(c.stash, c.read_buffer.c_str() + crlf_idx + 1, n - find_crlf(buf, n));
-			c.read_buffer = c.read_buffer.substr(0, crlf_idx - 1);
-			Log::recv(1, c.pfd.fd, c.read_buffer.c_str(), c.read_buffer.length());
-			// TODO Process message here
-			Message msg = IRCCore::parse(c.read_buffer);
-			core.dispatch(c.user, msg);
-			// END Process message
-			crlf_idx = find_crlf(c.stash, std::strlen(c.stash));
-			while (crlf_idx) {
-				c.read_buffer = std::string(c.stash).substr(0, crlf_idx - 1);
-				Log::recv(1, c.pfd.fd, c.read_buffer.c_str(), c.read_buffer.length());
-				// TODO Process message here
-				Message msg = IRCCore::parse(c.read_buffer);
-				core.dispatch(c.user, msg);
-				// END Process message
-				std::memmove(c.stash, c.stash + crlf_idx + 1, std::strlen(c.stash + crlf_idx + 1) + 1);
-				crlf_idx = find_crlf(c.stash, std::strlen(c.stash));
-			}
-			c.read_buffer.clear();
-		}
-	} else if (n == 0) {
-		Log::disconnected(c.pfd.fd, c.user.getNick());
-		core.removeUser(c.user.getNick());
-		close(c.pfd.fd);
-		c.pfd.fd = -1;
-	}
-}
+void Server::_recv(Client& c) { c.read(&core); }
 
 void	Server::_send(Client& c) {
 	ssize_t n = send(c.pfd.fd, c.user._queue.front().c_str(), c.user._queue.front().size(), 0);

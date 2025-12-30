@@ -6,11 +6,11 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:34:40 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/23 14:39:23 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/30 12:42:17 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Message.hpp"
+#include "core/Message.hpp"
 
 #include <iostream>		// ostream
 

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemey <sdemey@student.42belgium.be>       +#+  +:+       +#+        */
+/*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:34:29 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/16 16:34:30 by sdemey           ###   ########.fr       */
+/*   Updated: 2025/12/30 12:42:06 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Channel.hpp"
-#include "User.hpp"
+#include "core/Channel.hpp"
+#include "core/User.hpp"
 
 Channel::Channel(void) : _name("") {}
 Channel::Channel(const std::string& name) : _name(name) {}

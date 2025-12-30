@@ -1,4 +1,4 @@
-#include "IRCCore.hpp"
+#include "core/IRCCore.hpp"
 
 void cmdMode(IRCCore &core, User& user, const Message& msg) {
 	(void)core;

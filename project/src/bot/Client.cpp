@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 04:26:20 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/29 13:48:49 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/30 12:17:28 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 #include "sighandler.hpp"	// sighandler
 #include "utils.hpp"		// isdigit
 #include "RNG.hpp"			// roll, toss
+#include "Log.hpp"			// logger
 
 bool g_run_state = 1;
 
@@ -35,7 +36,9 @@ Client::Client(char* address, char* raw_port, char* password, char* name):
 	port(std::atoi(raw_port)),
 	addr(address),
 	pwd(password),
-	name(name) {
+	name(name)
+{
+	logger.open("bot.log");
 	// Check for port input validity :
 	if (!isdigit(raw_port, std::strlen(raw_port)))
 		throw Errors::Port();

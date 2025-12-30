@@ -6,11 +6,11 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:35:01 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/29 09:42:34 by sdemey           ###   ########.fr       */
+/*   Updated: 2025/12/30 12:41:35 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "IRCCore.hpp"
+#include "core/IRCCore.hpp"
 
 // Command: NICK
 //    Parameters: <nickname> [ <hopcount> ]

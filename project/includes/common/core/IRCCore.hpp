@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   IRCCore.hpp                                        :+:      :+:    :+:   */
+/*   core/IRCCore.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -15,9 +15,9 @@
 #include <string>
 #include <sstream>
 
-#include "User.hpp"
-#include "Channel.hpp"
-#include "Message.hpp"
+#include "core/User.hpp"
+#include "core/Channel.hpp"
+#include "core/Message.hpp"
 #include "Replies.hpp"
 #include "Errors.hpp"
 

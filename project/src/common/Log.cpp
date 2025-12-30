@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:29:06 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/29 14:24:40 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/30 12:15:51 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <ctime>	// time
 #include <cstring>	// strcmp
 
-std::ofstream	logger("server.log");
+std::ofstream	logger;
 
 std::string Log::print_memory(const char* str, const unsigned int& length) {
 	const unsigned int	width = 12;

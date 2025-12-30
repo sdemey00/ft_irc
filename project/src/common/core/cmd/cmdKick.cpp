@@ -1,4 +1,4 @@
-#include "IRCCore.hpp"
+#include "core/IRCCore.hpp"
 
 // KICK <channel> <nick> [:reason]
 

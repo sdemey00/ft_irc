@@ -6,7 +6,7 @@
 #    By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/13 10:59:54 by mmichele          #+#    #+#              #
-#    Updated: 2025/12/29 13:44:27 by mmichele         ###   ########.fr        #
+#    Updated: 2025/12/30 12:40:15 by mmichele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,7 +75,7 @@ C_INCD	= $(INCD)/$(COMD)
 # Compile variables
 C_SRCS	= $(shell find $(C_SRCD) -type f -name "*.cpp")
 C_OBJS	= $(patsubst %.cpp, $(C_BLDD)/%.o, $(C_SRCS))
-C_INCS	= -I $(C_INCD)
+C_INCS	= -I $(C_INCD) #-I $(C_INCD)/core
 C_DEPS	= $(C_OBJS:.o=.d)
 
 $(C_BLDD)/%.o: %.cpp

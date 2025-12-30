@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cmdUser.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdemey <sdemey@student.42belgium.be>       +#+  +:+       +#+        */
+/*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 12:35:46 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/29 09:42:58 by sdemey           ###   ########.fr       */
+/*   Updated: 2025/12/30 12:41:35 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "IRCCore.hpp"
+#include "core/IRCCore.hpp"
 
 // Command: USER
 //    Parameters: <username> <hostname> <servername> <realname>

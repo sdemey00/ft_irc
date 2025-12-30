@@ -6,11 +6,11 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:35:13 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/23 15:04:44 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/30 12:41:35 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "IRCCore.hpp"
+#include "core/IRCCore.hpp"
 
 IRCCore::IRCCore(const std::string pass) : _password(pass) {
 	_cmds["PASS"] = &cmdPass;

@@ -6,11 +6,11 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:35:16 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/23 16:56:43 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/30 12:42:06 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "User.hpp"
+#include "core/User.hpp"
 
 User::User() :
 	_readyToSend(0),

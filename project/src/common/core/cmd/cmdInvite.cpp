@@ -1,4 +1,4 @@
-#include "IRCCore.hpp"
+#include "core/IRCCore.hpp"
 
 // Command: INVITE
 //    Parameters: <nickname> <channel>

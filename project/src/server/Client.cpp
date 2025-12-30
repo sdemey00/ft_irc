@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 23:04:22 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/23 14:46:21 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/30 12:21:31 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,16 @@
 #include <unistd.h>			// close
 #include <poll.h>			// POLLIN
 
-Client::Client() : read_buffer("") {
-	stash[0] = 0;
-	stash[BUFFER_SIZE] = 0;
+#include "Log.hpp"			// logger
+
+void Client::handle_request(IRCCore* core) {
+	Message msg = IRCCore::parse(read_buffer);
+	core->dispatch(user, msg);
+}
+
+void Client::handle_disconnect(IRCCore* core) {
+	Log::disconnected(pfd.fd, user.getNick());
+	core->removeUser(user.getNick());
+	close(pfd.fd);
 	pfd.fd = -1;
 }
