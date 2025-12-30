@@ -118,6 +118,5 @@ void	handleModeOperator(IRCCore &core, User &user, Channel *channel, const std::
 
 // TODO
 // - better replies
-// - handle mode without channel specifier, mode on user? What response ?
-// - implement every mode check in corresponding cmd (join, topic, ..)
+// - implement every mode check in corresponding cmd (join, TOPIC, ..)
 // - deep test
