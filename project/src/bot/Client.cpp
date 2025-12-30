@@ -6,11 +6,11 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 04:26:20 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/30 12:17:28 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/30 15:52:47 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Client.hpp"
+#include "../bot/Client.hpp"
 
 #include <unistd.h>			// close
 #include <cstdlib>			// atoi, isdigit
@@ -48,16 +48,18 @@ Client::Client(char* address, char* raw_port, char* password, char* name):
 	_socket();
 	_connect();
 	RNG::seed();
+	pfd.events = POLLIN | POLLOUT;
+	pfd.revents = 0;
 }
 
 Client::~Client() {
 	if (init)
-		close(fd);
+		close(pfd.fd);
 }
 	
 void	Client::_socket() {
-	fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (fd < 0) { throw Errors::Socket(); }
+	pfd.fd = socket(AF_INET, SOCK_STREAM, 0);
+	if (pfd.fd < 0) { throw Errors::Socket(); }
 	init = 1;
 }
 
@@ -66,39 +68,46 @@ void	Client::_connect() {
 	serv_addr.sin_port = htons(port);
 	serv_addr.sin_family = AF_INET;
 	inet_pton(AF_INET , addr.c_str(), &serv_addr.sin_addr);
-	if (connect(fd, (struct sockaddr*)&serv_addr , sizeof(serv_addr)) < 0)
+	if (connect(pfd.fd, (struct sockaddr*)&serv_addr , sizeof(serv_addr)) < 0)
 		throw Errors::Connect();
-	if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
+	if (fcntl(pfd.fd, F_SETFL, O_NONBLOCK) < 0)
 		throw Errors::Fcntl();
 }
 
 void	Client::_send(std::string msg) {
 	long unsigned int n = 0;
 	do {
-		n = send(fd, msg.c_str(), msg.length(), 0);
+		n = send(pfd.fd, msg.c_str(), msg.length(), 0);
 		msg.erase(0, n);
 	} while(msg.length() > 0);
 }
 
-void	Client::_read() {
-	
+void	Client::handle_request(IRCCore* core) {
+	(void)core;
+	if (std::strstr(read_buffer.c_str(), "roll")) {
+		std::stringstream	msg;
+		msg << "PRIVMSG a :" << RNG::roll() << "\r\n";
+		_send(msg.str());
+	}
+}
+
+void	Client::handle_disconnect(IRCCore* core) {
+	(void)core;
+	if (init)
+		close(pfd.fd);
+	init = 0;
+	g_run_state = 0;
 }
 
 void	Client::run() {
 	std::stringstream	msg;
-	char				buf[100];
-
-	std::memset(buf, 0, 100);
 	msg << "PASS " << pwd << "\r\nNICK " << name << "\r\nUSER " << name << " " << name << " " << addr << " :FT BOT\r\n";
 	_send(msg.str());
-	msg.str("");
 	while (g_run_state) {
-		char c;
-		if (read(fd, &c, 1) <= 0)
-			continue ;
-		std::cout << c;
+		int polled = poll(&pfd, 1, -1);
+		if (polled == 0) { continue ; }
+		else if (polled < 0) { break; }
+		else { read(0); }
 	}
-	//msg << "PRIVMSG " << "mmichele" << " :" << RNG::roll() << "\r\n";
-	//_send(msg.str());
 }
 

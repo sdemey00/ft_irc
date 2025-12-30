@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 11:07:09 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/30 12:41:35 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/30 13:42:54 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,4 @@ void Requestable::read(IRCCore* core) {
 			read_buffer.clear();
 		}
 	} else if (n == 0) { handle_disconnect(core); }
-	else { throw Errors::Recv(); }
 }

@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 23:04:22 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/30 12:21:31 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/30 13:48:11 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void Client::handle_request(IRCCore* core) {
 void Client::handle_disconnect(IRCCore* core) {
 	Log::disconnected(pfd.fd, user.getNick());
 	core->removeUser(user.getNick());
-	close(pfd.fd);
+	if (pfd.fd >= 0)
+		close(pfd.fd);
 	pfd.fd = -1;
 }
