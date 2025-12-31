@@ -16,6 +16,7 @@
 #include <queue>
 
 #include "core/IRCCore.hpp"
+#include "core/Channel.hpp"
 
 class User {
 public:
@@ -46,7 +47,11 @@ public:
 	// Operator
 	bool	isOperator() const;
 	void	setOperator(bool value);
-
+	
+	// Channels
+	void	joinChannel(Channel* channel);
+	void	leaveChannel(Channel* channel);
+	const std::set<Channel*>&	getChannels() const;
 	// Send
 	void			send(const std::string &message);	
 	std::string&	getFrontQueue();
@@ -55,12 +60,13 @@ public:
 	unsigned int			_readyToSend;
 
 private:
-	std::string	_nick;
-	std::string	_user;
-	std::string	_hostname;
-	std::string	_realname;
-	bool		_registered;
-	bool		_isOperator;
-	bool		_passwordAccepted;
+	std::string			_nick;
+	std::string			_user;
+	std::string			_hostname;
+	std::string			_realname;
+	bool				_registered;
+	bool				_isOperator;
+	bool				_passwordAccepted;
+	std::set<Channel*>	_channels;
 };
 

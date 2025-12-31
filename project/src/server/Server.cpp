@@ -121,7 +121,10 @@ Client* Server::fetch(const int& fd) {
 // Remove disconnected clients
 void Server::erase() {
 	for (std::list<Client>::iterator it = clients.begin(); it != clients.end();) {
-		if (it->pfd.fd == -1) { it = clients.erase(it); }
+		if (it->pfd.fd == -1) { 
+			core.removeUser(it->user.getNick());
+			it = clients.erase(it); 
+		}
 		else { it++; }
 	}
 }

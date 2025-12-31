@@ -32,5 +32,6 @@ void	cmdPart(IRCCore&core, User& user, const Message& msg) {
 		return ;
 	}
 	channel->broadcast(RPL_PART(user.getNick(), user.getUser(), user.getHost(), chanName), NULL);
+	user.leaveChannel(channel);
 	channel->removeUser(&user);
 }

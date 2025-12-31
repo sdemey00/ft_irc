@@ -43,5 +43,6 @@ void cmdKick(IRCCore &core, User& user, const Message& msg) {
 		return ;
 	}
 	channel->broadcast(RPL_KICK(user.getNick(), user.getUser(), user.getHost(), chanName, targetName, reason), NULL);
+	user.leaveChannel(channel);
 	channel->removeUser(target);
 }

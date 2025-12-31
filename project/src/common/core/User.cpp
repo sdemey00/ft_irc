@@ -16,7 +16,8 @@ User::User() :
 	_readyToSend(0),
 	_registered(false),
 	_isOperator(false),
-	_passwordAccepted(false) {}
+	_passwordAccepted(false),
+	_channels() {}
 
 User::User(std::string nick, std::string user, std::string realname) :
 	_readyToSend(0),
@@ -25,7 +26,8 @@ User::User(std::string nick, std::string user, std::string realname) :
 	_realname(realname),
 	_registered(false),
 	_isOperator(false),
-	_passwordAccepted(false) {}
+	_passwordAccepted(false),
+	_channels() {}
 
 User::User(const User& other) {
 	*this = other;
@@ -70,6 +72,16 @@ const std::string&	User::getUser() const { return (_user); }
 const std::string&	User::getReal() const { return (_realname); }
 bool				User::getPasswordAccepted() const { return (_passwordAccepted); }
 std::string&		User::getFrontQueue() { return _queue.front(); };
+
+// Channels
+void	User::joinChannel(Channel *channel) {
+	_channels.insert(channel);
+}
+void	User::leaveChannel(Channel *channel) {
+	_channels.erase(channel);
+}
+const std::set<Channel*>&	User::getChannels() const { return (_channels); }
+
 
 // Send
 void	User::send(const std::string& message)
