@@ -12,9 +12,6 @@
 
 #include "core/IRCCore.hpp"
 
-//	Command: PART
-//    Parameters: <channel>{,<channel>}
-
 void	cmdPart(IRCCore&core, User& user, const Message& msg) {
 	if (msg.params.empty()) {
 		user.send(ERR_NEEDMOREPARAMS(msg.command));
@@ -33,16 +30,3 @@ void	cmdPart(IRCCore&core, User& user, const Message& msg) {
 	channel->broadcast(RPL_PART(user.getNick(), user.getUser(), user.getHost(), chanName), NULL);
 	channel->removeUser(&user);
 }
-
-//    The PART message causes the client sending the message to be removed
-//    from the list of active users for all given channels listed in the
-//    parameter string.
-
-//    Numeric Replies:
-//            ERR_NEEDMOREPARAMS              ERR_NOSUCHCHANNEL
-//            ERR_NOTONCHANNEL
-
-//    Examples:
-//    PART #twilight_zone             ; leave channel "#twilight_zone"
-//    PART #oz-ops,&group5            ; leave both channels "&group5" and
-//                                    "#oz-ops".

@@ -12,9 +12,8 @@
 
 #include "core/IRCCore.hpp"
 
-//   Command: TOPIC
-//    Parameters: <channel> [<topic>]
-
+// TODO
+// check channel mode _t
 void	cmdTopic(IRCCore &core, User& user, const Message& msg) {
 	if (msg.params.empty()) {
 		user.send(ERR_NEEDMOREPARAMS(msg.command));
