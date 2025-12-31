@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 04:26:20 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/30 19:16:33 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/31 15:20:50 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 #include "utils.hpp"		// isdigit
 #include "RNG.hpp"			// roll, toss
 #include "Log.hpp"			// logger
-#include "Command.hpp"		// Command
 
 bool g_run_state = 1;
 
@@ -51,6 +50,9 @@ Client::Client(char* address, char* raw_port, char* password, char* name):
 	RNG::seed();
 	pfd.events = POLLIN | POLLOUT;
 	pfd.revents = 0;
+	// Init commands :
+	commands["!roll"] = roll;
+	commands["!toss"] = toss;
 }
 
 Client::~Client() {
@@ -75,37 +77,39 @@ void	Client::_connect() {
 		throw Errors::Fcntl();
 }
 
-void	Client::_send(std::string msg) {
+void	Client::_send(std::stringstream& raw_msg) {
+	std::string	msg = raw_msg.str();
 	long unsigned int n = 0;
+	Log::send(pfd.fd, msg.substr(0, msg.length() - 2).c_str(), msg.substr(0, msg.length() - 2).length());
 	do {
 		n = send(pfd.fd, msg.c_str(), msg.length(), 0);
-		//Log::send(pfd.fd, msg.substr(0, n).c_str(), msg.substr(0, n).length());
 		msg.erase(0, n);
 	} while(msg.length() > 0);
 }
 
-void	Client::handle_server_requests() {
-	// TODO
-}
-
-bool	Client::handle_commands() {
-	Command		cmd(read_buffer);
-
-	if (!cmd.isCmd)
-		return 0;
-	std::cout << cmd.command << " " << cmd.args << std::endl;
-	if (cmd.type != cmd.NONE)
-		cmd.commands[cmd.command](cmd);
-	else 
-		Command::unknown(cmd);
-	_send(cmd.reply.str());
-	return 1;
+static std::string parse_dest(const Message& msg) {
+	if (msg.params[0][0] == '#')
+		return msg.params[0];
+	return msg.prefix.substr(0, msg.prefix.find('!'));
 }
 
 void	Client::handle_request(IRCCore* core) {
 	(void)core;
-	if (!handle_commands())
-		handle_server_requests();
+	Message	msg = IRCCore::parse(read_buffer);
+	std::stringstream	reply;
+	if (msg.command == "PRIVMSG" && msg.trailing[0] == '!')
+	{
+		std::map<std::string, void (*)(const std::string&, std::stringstream&)>::iterator command = commands.find(msg.trailing);
+		std::string dest = parse_dest(msg);
+		if (command == commands.end())
+			unknown(dest, reply);
+		else
+			commands[msg.trailing](dest, reply);
+	}
+	else if (msg.command == "INVITE")
+		reply << "JOIN " << msg.trailing << "\r\n";
+	else { return ; }
+	_send(reply);
 }
 
 void	Client::handle_disconnect(IRCCore* core) {
@@ -117,9 +121,9 @@ void	Client::handle_disconnect(IRCCore* core) {
 }
 
 void	Client::run() {
-	std::stringstream	msg;
-	msg << "PASS " << pwd << "\r\nNICK " << name << "\r\nUSER " << name << " " << name << " " << addr << " :FT BOT\r\n";
-	_send(msg.str());
+	std::stringstream a; a << "PASS " << pwd << "\r\n"; _send(a);
+	std::stringstream b; b << "NICK " << name << "\r\n"; _send(b);
+	std::stringstream c; c << "USER " << name << " " << name << " " << addr << " :FT BOT\r\n"; _send(c);
 	while (g_run_state) {
 		int polled = poll(&pfd, 1, -1);
 		if (polled == 0) { continue ; }

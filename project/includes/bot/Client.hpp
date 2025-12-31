@@ -6,13 +6,15 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 04:26:01 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/30 17:23:55 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/31 14:59:03 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <string>			// string
+#include <map>				// map
+#include <sstream>			// stringstream
 
 #include "Requestable.hpp"	// Requestable
 
@@ -26,10 +28,12 @@ class Client : public Requestable {
 
 	void	_socket();
 	void	_connect();
-	void	_send(std::string msg);
+	void	_send(std::stringstream& raw_msg);
 
-	bool	handle_commands();
-	void	handle_server_requests();
+	std::map<std::string, void (*)(const std::string&, std::stringstream&)> commands;
+	static void		roll(const std::string &dest, std::stringstream &reply);
+	static void		toss(const std::string &dest, std::stringstream &reply);
+	static void		unknown(const std::string &dest, std::stringstream &reply);
 
 public:
 	Client(char* address, char* raw_port, char* password, char* name);
