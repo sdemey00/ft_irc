@@ -13,6 +13,10 @@
 #include "core/IRCCore.hpp"
 
 void cmdJoin(IRCCore& core, User& user, const Message& msg) {
+	if (!user.isRegistered()) {
+		user.send(ERR_NOTREGISTERED(user.getNick()));
+		return ;
+	}
     if (msg.params.empty() || msg.params.size() > 2 ) {
         user.send(ERR_NEEDMOREPARAMS(msg.command));
         return ;
