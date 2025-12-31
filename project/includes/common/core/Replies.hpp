@@ -32,7 +32,7 @@
 ///////// ERRORS ////////////////
 #define ERR_NOSUCHNICK(nickname) (":ft_irc 401 " + nickname + " :No such nick" + CRLF)
 #define ERR_NOSUCHCHANNEL(channel) (":ft_irc 403 " + channel + " :No such channel" + CRLF)
-#define ERR_CANNOTSENDTOCHAN(channel) (":ft_irc 404 " + channel + " :Cannot send to channel" + CRLF)
+#define ERR_CANNOTSENDTOCHAN(channel) (":ft_irc 404 " + channel + " :Cannot send to channel" + CRLF) 
 #define ERR_NOTEXTTOSEND() (std::string(":ft_irc 412 :No text to send") + std::string(CRLF))
 #define ERR_UNKNOWNCOMMAND(nickname, cmd) (":ft_irc 421 " + nickname + " " + cmd + " :Unknown command" + CRLF)
 #define ERR_NONICKNAMEGIVEN(nickname) (":ft_irc 431 " + nickname + " :No nickname given" + CRLF)
@@ -48,3 +48,4 @@
 #define ERR_CHANOPRIVSNEEDED(channel) (":ft_irc 482 " + channel + " :You're not channel operator" + CRLF)
 #define ERR_CHANNELISFULL(channel) (":ft_irc 471 " + channel + " :Cannot join channel (+l)" + CRLF)
 #define ERR_BADCHANMASK(nickname, channel) (":ft_irc 476 " + nickname + " " + channel + ":Bad Channel Mask" + CRLF)
+#define ERR_BADCHANNELKEY(channel) (":ft_irc 475 " + channel + ":Cannot join channel (+k)" + CRLF)

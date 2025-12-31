@@ -1,13 +1,10 @@
 - Remove wildcard in Makefile
-- In irc bot usage of inet_pton which is not explicitely permitted.
 
-- Sending private message in some cases generates a "heap use after free", but 
-	not crashing ?
-	Therefore messages are not shown in the client but seem the be sent ...
+- Test script for nc
 
 sdemey:
-	- Channel key pass
-	- User Prefix
+	- User Prefix (optional)
+	- DoubleCheck every replies to avoid weird irssi behavior
 
 mmichele :
 	- Investigate read_buffer and stash variables in Client class, 

@@ -12,8 +12,6 @@
 
 #include "core/IRCCore.hpp"
 
-// TODO
-// check channel mode _t
 void	cmdTopic(IRCCore &core, User& user, const Message& msg) {
 	if (msg.params.empty()) {
 		user.send(ERR_NEEDMOREPARAMS(msg.command));
@@ -38,7 +36,7 @@ void	cmdTopic(IRCCore &core, User& user, const Message& msg) {
 		user.send(RPL_TOPIC(user.getNick(), chanName, topic));
 		return ;
 	}
-	if (!channel->isOperator(&user)) {
+	if (channel->isTopicRestrict() && !channel->isOperator(&user)) {
         user.send(ERR_CHANOPRIVSNEEDED(chanName));
 		return ;
 	}

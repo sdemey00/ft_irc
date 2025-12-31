@@ -14,16 +14,10 @@
 
 #include "core/IRCCore.hpp"
 
-// TODO
-// - better replies
-// - implement every mode check in corresponding cmd (join, TOPIC, ..)
-// - deep test
-
 void	handleMode(IRCCore &core, User &user, const Message &msg, Channel *channel);
 void	handleModeOperator(IRCCore &core, User &user, Channel *channel, const std::string &nick, bool adding);
 
-void	cmdMode(IRCCore &core, User &user, const Message &msg)
-{
+void	cmdMode(IRCCore &core, User &user, const Message &msg) {
     if (msg.params.size() < 2) { return ; }
     const std::string	&chanName = msg.params[0];
     Channel 			*channel = core.getChannel(chanName);

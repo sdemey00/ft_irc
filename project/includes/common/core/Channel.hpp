@@ -49,7 +49,8 @@ class Channel {
 	bool				isInviteOnly() const;
 	bool				isTopicRestrict() const;
 	bool				hasKeyPass() const;
-	unsigned int	getUserLimit() const;
+	unsigned int		getUserLimit() const;
+	const std::string&	getKeyPass() const;
 	// Mode Setter
 	void	setInviteOnly(bool value);
 	void	setTopicRestrict(bool value);
@@ -64,7 +65,7 @@ class Channel {
 	private:
 		std::string		_name;
 		std::string		_topic;
-		std::string		_key; // mode +k (password)
+		std::string		_key;
 		unsigned int	_userLimit;
 		std::set<User*>	_users;
 		std::set<User*>	_operators;

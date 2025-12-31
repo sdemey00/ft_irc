@@ -13,7 +13,6 @@
 #include "core/IRCCore.hpp"
 
 void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg) {
-
     if (!user.isRegistered()) {
         user.send(ERR_NOTREGISTERED(user.getNick()));
         return ;

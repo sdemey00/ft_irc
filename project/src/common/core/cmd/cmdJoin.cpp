@@ -12,11 +12,8 @@
 
 #include "core/IRCCore.hpp"
 
-// TODO 
-// key pass to join if channel._k
-void cmdJoin(IRCCore& core, User& user, const Message& msg)
-{
-    if (msg.params.empty()) {
+void cmdJoin(IRCCore& core, User& user, const Message& msg) {
+    if (msg.params.empty() || msg.params.size() > 2 ) {
         user.send(ERR_NEEDMOREPARAMS(msg.command));
         return ;
     }
@@ -36,6 +33,16 @@ void cmdJoin(IRCCore& core, User& user, const Message& msg)
 	if (channel->isInviteOnly() && !channel->hasInvitation(&user)) {
 		user.send(ERR_INVITEONLYCHAN(chanName));
 		return ;
+	}
+	if (channel->hasKeyPass()) {
+		if (msg.params.size() != 2) {
+        	user.send(ERR_NEEDMOREPARAMS(msg.command));
+			return ;
+		}
+		if (msg.params[1] != channel->getKeyPass()) {
+			user.send(ERR_BADCHANNELKEY(chanName));
+			return ;
+		}
 	}
 	if (channel->getUserLimit() && channel->getUsers().size() >= channel->getUserLimit()) {
 		user.send(ERR_CHANNELISFULL(chanName));

@@ -12,8 +12,7 @@
 
 #include "core/IRCCore.hpp"
 
-void cmdQuit(IRCCore &core, User& user, const Message& msg)
-{
+void cmdQuit(IRCCore &core, User& user, const Message& msg) {
 	(void)core;
 	(void)user;
 	(void)msg;

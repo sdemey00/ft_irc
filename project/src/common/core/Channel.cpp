@@ -13,8 +13,8 @@
 #include "core/Channel.hpp"
 #include "core/User.hpp"
 
-Channel::Channel(void) : _name(""), _key(""), _userLimit(0), _i(false), _t(false), _l(false) {}
-Channel::Channel(const std::string& name) : _name(name), _key(""), _userLimit(0), _i(false), _t(false), _l(false) {}
+Channel::Channel(void) : _name(""), _key(""), _userLimit(0), _i(false), _t(false), _k(false), _l(false) {}
+Channel::Channel(const std::string& name) : _name(name), _key(""), _userLimit(0), _i(false), _t(false), _k(false), _l(false) {}
 Channel::Channel(const Channel& other) {
 	*this = other;
 }
@@ -26,6 +26,7 @@ Channel& Channel::operator=(const Channel& other) {
 		_userLimit = other._userLimit;
 		_i = other._i;
 		_t = other._t;
+		_k = other._k;
 		_l = other._l;
 	}
 	return (*this);
@@ -77,6 +78,7 @@ void				Channel::setTopic(const std::string& topic) { _topic = topic; }
 bool				Channel::isInviteOnly() const { return (_i);}
 bool				Channel::isTopicRestrict() const { return (_t);}
 bool				Channel::hasKeyPass() const { return (_k);}
+const std::string&	Channel::getKeyPass() const { return (_key);}
 unsigned int		Channel::getUserLimit() const { return (_userLimit);}
 // Mode Setter :
 void				Channel::setInviteOnly(bool value) { _i = value;}
