@@ -13,10 +13,6 @@
 #include "core/IRCCore.hpp"
 
 void cmdNick(IRCCore &core, User& user, const Message& msg) {
-	if (!user.isRegistered()) {
-		user.send(ERR_NOTREGISTERED(user.getNick()));
-		return ;
-	}
 	if (msg.params.empty()) {
 		user.send(ERR_NONICKNAMEGIVEN(user.getNick()));
 		return ;
