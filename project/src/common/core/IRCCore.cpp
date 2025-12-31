@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:35:13 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/30 12:41:35 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/31 15:36:47 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ Message IRCCore::parse(const std::string& line)
 			std::string rest;
 			std::getline(iss, rest);
 			msg.params.push_back(trailing + rest);
+			msg.trailing = trailing + rest;
 			break ;
 		}
 		msg.params.push_back(token);

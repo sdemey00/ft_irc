@@ -5,33 +5,31 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/30 16:17:22 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/30 19:27:21 by mmichele         ###   ########.fr       */
+/*   Created: 2025/12/30 16:52:29 by mmichele          #+#    #+#             */
+/*   Updated: 2025/12/31 15:37:46 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Command.hpp"
+#include "../bot/Client.hpp"
 
-#include <string>	// string
-#include <sstream>	// stringstream
+#include <sstream>			// stringstream
 
-#include <iostream>
+#include "RNG.hpp"			// roll, toss
+#include "core/Message.hpp"	// Message
 
-Command::Command(const std::string& cmd) : isCmd(0) {
-	commands["!roll"] = Command::roll;
-	commands["!toss"] = Command::toss;
-	long unsigned int i = 1;
-	while (cmd[i] != '!' && i < cmd.length() - 1) { sender += cmd[i]; i++;}
-	if (i >= cmd.length() - 1) { return ; }
-	while (cmd[i] != ':') { i++; }
-	i++;
-	while (i < cmd.length()) { command += cmd[i]; i++; }
-	if (command[0] != '!')
-		return ;
-	isCmd = 1;
-	while (i < cmd.length() && cmd[i] != ' ') { command += cmd[i]; i++; }
-	args = cmd.substr(i);
-	if (command == "!roll") { type = ROLL; }
-	else if (command == "!toss") { type = TOSS; }
-	else { type = NONE; }
+void	Client::roll(const std::string& dest, std::stringstream &reply) {
+	reply << "PRIVMSG " << dest << " :" << RNG::roll() << "\r\n";
+}
+
+void	Client::toss(const std::string& dest, std::stringstream &reply) {
+	reply << "PRIVMSG " << dest << " :";
+	if (RNG::toss())
+		reply << "heads";
+	else
+		reply << "tails";
+	reply << "\r\n";
+}
+
+void	Client::unknown(const std::string& dest, std::stringstream &reply) {
+	reply << "PRIVMSG " << dest << " :Unknown command\r\n";
 }

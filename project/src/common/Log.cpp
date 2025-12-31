@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:29:06 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/30 12:15:51 by mmichele         ###   ########.fr       */
+/*   Updated: 2025/12/31 14:54:15 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void Log::recv(bool complete, int fd, const char* str, const long unsigned int& 
 void Log::send(int fd, const char* str, const long unsigned int& len) {
 	logger << Log::time_label() << "SEND          (" << std::setw(3) << fd << ") : \n" << Log::print_memory(str, len) << std::flush;
 	if (std::strncmp(str + len - 4, "PONG", 4) != 0)
-		std::cout << Log::time_label() << CLR_CYAN << "Replied      " << CLR_RESET << std::setw(3) << fd << " : " << str << std::endl;
+		std::cout << Log::time_label() << CLR_CYAN << "Sent         " << CLR_RESET << std::setw(3) << fd << " : " << str << std::endl;
 }
 
 void Log::disconnected(int fd, const std::string& nick) {
