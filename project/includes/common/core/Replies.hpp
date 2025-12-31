@@ -48,15 +48,3 @@
 #define ERR_CHANOPRIVSNEEDED(channel) (":ft_irc 482 " + channel + " :You're not channel operator" + CRLF)
 #define ERR_CHANNELISFULL(channel) (":ft_irc 471 " + channel + " :Cannot join channel (+l)" + CRLF)
 #define ERR_BADCHANMASK(nickname, channel) (":ft_irc 476 " + nickname + " " + channel + ":Bad Channel Mask" + CRLF)
-
-// :irc.example.com 433 currentNick foo :Nickname is already in use
-
-// NAMREPLY symbols
-// = -> canal public
-// * -> canal privé
-// @ -> canal secret
-
-// = -> canal public
-// @Sammy -> opérateur
-// +Scooby -> voice
-// Charlie -> utilisateur normal

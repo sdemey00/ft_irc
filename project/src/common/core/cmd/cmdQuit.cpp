@@ -17,5 +17,4 @@ void cmdQuit(IRCCore &core, User& user, const Message& msg)
 	(void)core;
 	(void)user;
 	(void)msg;
-	//core.removeUser(user.getNick());
 }

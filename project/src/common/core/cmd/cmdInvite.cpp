@@ -12,9 +12,6 @@
 
 #include "core/IRCCore.hpp"
 
-// Command: INVITE
-//    Parameters: <nickname> <channel>
-
 void	cmdInvite(IRCCore &core, User& user, const Message& msg) {
 	if (msg.params.size() != 2) {
 		user.send(ERR_NEEDMOREPARAMS(msg.command));

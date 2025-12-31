@@ -14,15 +14,10 @@
 
 #include "core/IRCCore.hpp"
 
-// MODE #channel <modes> [params...]
-// MODE #chan +i
-// MODE #chan +k secret
-// MODE #chan -k
-// MODE #chan +o nick
-// MODE #chan +l 10
-// MODE #chan -l
-// MODE #chan +it
-// MODE #chan +o-o nick1 nick2
+// TODO
+// - better replies
+// - implement every mode check in corresponding cmd (join, TOPIC, ..)
+// - deep test
 
 void	handleMode(IRCCore &core, User &user, const Message &msg, Channel *channel);
 void	handleModeOperator(IRCCore &core, User &user, Channel *channel, const std::string &nick, bool adding);
@@ -114,9 +109,3 @@ void	handleModeOperator(IRCCore &core, User &user, Channel *channel, const std::
     else
         channel->removeOperator(target);
 }
-
-
-// TODO
-// - better replies
-// - implement every mode check in corresponding cmd (join, TOPIC, ..)
-// - deep test
