@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:29:06 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/31 14:54:15 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/01 16:04:25 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,20 +62,20 @@ std::string Log::time_label() {
 }
 
 void Log::recv(bool complete, int fd, const char* str, const long unsigned int& len) {
-	logger << Log::time_label() << "RECV ";
+	logger << Log::time_label() << " ";
 	if (complete) {
-		logger << "complete (";
-		if (std::strncmp(str, "PING", 4) != 0)
+		logger << "Complete      (";
+		//if (std::strncmp(str, "PING", 4) != 0)
 			std::cout << Log::time_label() << CLR_ORANGE << "Received     " << CLR_RESET << std::setw(3) << fd << " : " << str << std::endl;
 	}
-	else { logger << "partial  ("; }
+	else { logger << "RECV          ("; }
 	logger << std::setw(3) << fd << ") :\n";
 	logger << Log::print_memory(str, len) << std::flush;
 }
 
 void Log::send(int fd, const char* str, const long unsigned int& len) {
-	logger << Log::time_label() << "SEND          (" << std::setw(3) << fd << ") : \n" << Log::print_memory(str, len) << std::flush;
-	if (std::strncmp(str + len - 4, "PONG", 4) != 0)
+	logger << Log::time_label() << "SENT           (" << std::setw(3) << fd << ") : \n" << Log::print_memory(str, len) << std::flush;
+	//if (std::strncmp(str + len - 4, "PONG", 4) != 0)
 		std::cout << Log::time_label() << CLR_CYAN << "Sent         " << CLR_RESET << std::setw(3) << fd << " : " << str << std::endl;
 }
 

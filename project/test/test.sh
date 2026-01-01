@@ -1,76 +1,88 @@
-#!/usr/bin/env bash
-
 # =========================
 # IRC Server Test Script
 # =========================
-
-SERVER="127.0.0.1"
-PORT="6667"
-TIMEOUT=2
-
-PASS="PASS pass"
-NICK="NICK testuser"
-USER="USER testuser 0 * :Test User"
-CHANNEL="#testchan"
 
 RED="\033[0;31m"
 GREEN="\033[0;32m"
 NC="\033[0m"
 
+ADDR="127.0.0.1"
+PORT="6667"
+PASS="pass"
+NICK="test"
+
+LOGIN="PASS $PASS\r\nNICK $NICK\r\nUSER $NICK 0 * :$NICK"
+CHANNEL="#testChannel"
+
 fail() {
-    echo -e "${RED}[FAIL] $1${NC}"
+	echo -e "${RED}[FAIL] $1${NC}"
 }
 
 pass() {
-    echo -e "${GREEN}[PASS] $1${NC}"
+	echo -e "${GREEN}[PASS] $1${NC}"
 }
 
-run_test() {
-    NAME="$1"
-    COMMANDS="$2"
-    EXPECT="$3"
+test() {
+	NAME="$1"
+	COMMANDS="$2"
+	EXPECT="$3"
 
-    OUTPUT=$(echo -e "$COMMANDS" | nc -w $TIMEOUT $SERVER $PORT)
+	OUTPUT=$(echo -e "$COMMANDS" | nc -w 3 $ADDR $PORT)
 
-    if echo "$OUTPUT" | grep -q "$EXPECT"; then
-        pass "$NAME"
-    else
-        fail "$NAME"
-        echo "Expected: $EXPECT"
-        echo "Got:"
-        echo "$OUTPUT"
-    fi
+	if echo "$OUTPUT" | grep -q "$EXPECT"; then
+		pass "$NAME"
+	else
+		fail "$NAME"
+		echo "Expected : $EXPECT"
+		echo "Got :"
+		echo "$OUTPUT"
+	fi
 }
 
 echo "=============================="
 echo " IRC SERVER TESTS"
-echo " Server: $SERVER:$PORT"
+echo " $ADDR:$PORT"
 echo "=============================="
 
-# Register user
-run_test "User registration (NICK/USER)" \
-"$PASS\r\n$NICK\r\n$USER\r\n" \
-"001 testuser"
+test "User registration (NICK/USER)" \
+"$LOGIN\r\n" \
+"001 $NICK"
 
-# Ping / Pong
-run_test "PING / PONG" \
-"$PASS\r\n$NICK\r\n$USER\r\nPING :hello\r\n" \
+test "Unregistered try" \
+"JOIN $CHANNEL\r\n" \
+"451"
+
+test "PING / PONG" \
+"$LOGIN\r\nPING\r\n" \
 "PONG"
 
-# Join channel
-run_test "JOIN channel" \
-"$PASS\r\n$NICK\r\n$USER\r\nJOIN $CHANNEL\r\n" \
+test "JOIN channel" \
+"$LOGIN\r\nJOIN $CHANNEL\r\n" \
 "JOIN $CHANNEL"
 
-# Send PRIVMSG
-run_test "PRIVMSG in channel" \
-"$PASS\r\n$NICK\r\n$USER\r\nJOIN $CHANNEL\r\nPRIVMSG $CHANNEL :Hello world\r\n" \
-"PRIVMSG $CHANNEL"
-
-# Invalid command handling
-run_test "Unknown command error" \
-"$PASS\r\n$NICK\r\n$USER\r\nFOOBAR\r\n" \
+test "Unknown command error" \
+"$LOGIN\r\nFOOBAR\r\n" \
 "421"
+
+test "Send DM to unknown user" \
+"$LOGIN\r\nPRIVMSG idk: hello\r\n" \
+"401"
+
+./ircbot $ADDR $PORT $PASS bot 1>/dev/null &
+
+sleep 1
+
+test "Bot roll" \
+"$LOGIN\r\nPRIVMSG bot :!roll\r\n" \
+"bot PRIVMSG"
+
+test "Bot toss" \
+"$LOGIN\r\nPRIVMSG bot :!toss\r\n" \
+"bot PRIVMSG"
+
+test "Bot unknown" \
+"$LOGIN\r\nPRIVMSG bot :!hello\r\n" \
+"PRIVMSG $NICK :Unknown command"
 
 echo "=============================="
 echo " Tests completed"

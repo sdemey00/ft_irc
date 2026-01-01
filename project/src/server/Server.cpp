@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/30 12:16:23 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/01 14:47:18 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,7 @@ void Server::run() {
 	logger << "Server running ...\n";
 	while (g_run_state) {
 		update_polls();
+		logger << "Server poll()\n";
 		int polled = poll(polls.data(), polls.size(), -1);
 		if (polled == 0) { continue ; }
 		else if (polled < 0) { break ; }

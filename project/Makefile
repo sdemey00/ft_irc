@@ -6,7 +6,7 @@
 #    By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/13 10:59:54 by mmichele          #+#    #+#              #
-#    Updated: 2025/12/30 12:40:15 by mmichele         ###   ########.fr        #
+#    Updated: 2026/01/01 16:35:48 by mmichele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ FLAGS	= -Wall -Wextra -Werror -std=c++98
 BLDD	= build
 SRCD	= src
 INCD	= includes
+TSTD	= test
 
 ################################################################################
 # Overall targets                                                              #
@@ -28,10 +29,11 @@ B_NAME	= ircbot
 all: $(S_NAME) $(B_NAME)
 
 # Fake targets
-.PHONY: clean fclean re debug san valgrind gdb bonus
+.PHONY: clean fclean re debug san valgrind valgrind-bot gdb gdb-bot test
 
 clean:
 	rm -rf $(BLDD)
+	rm -rf *.log
 
 fclean: clean
 	rm -rf $(S_NAME) $(B_NAME)
@@ -48,7 +50,7 @@ san: debug all
 PORT	?= 6667
 PASS	?= pass
 ADDR	?= 127.0.0.1
-BOTN	?= ft_bot
+BOTN	?= bot
 
 valgrind: debug
 	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all --log-file=valgrind-$(S_NAME).log ./$(S_NAME) $(PORT) $(PASS)
@@ -61,6 +63,9 @@ gdb: debug
 
 gdb-bot: debug
 	gdb --tui --args "$(B_NAME)" $(ADDR) $(PORT) $(PASS) $(BOTN)
+
+test:
+	bash $(TSTD)/test.sh
 
 ################################################################################
 # Common files                                                                 #
