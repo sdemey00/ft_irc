@@ -45,7 +45,6 @@ void	IRCCore::addUser(User* user) {
 }
 
 void	IRCCore::removeUser(const std::string& nick) {
-	// TODO channel array in user to delete user from each channel before erase in in core
 	User *user = getUserByNick(nick);
 	if (!user)
 		return ;

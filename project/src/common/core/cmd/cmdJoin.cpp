@@ -22,51 +22,57 @@ void cmdJoin(IRCCore& core, User& user, const Message& msg) {
         return ;
     }
     const std::string& chanName = msg.params[0];
-	if (chanName[0] != '#') {
+	if (chanName.empty() || chanName[0] != '#') {
 		user.send(ERR_NOSUCHCHANNEL(chanName));
 		return ;
 	}
-	if (!isValidName(chanName.substr(1, chanName.length()))) {
+	if (!isValidName(chanName.substr(1))) {
 		user.send(ERR_BADCHANMASK(user.getNick(), chanName));
 		return ;
 	}
-    Channel* channel = core.getOrCreateChannel(chanName);
-    if (channel->hasUser(&user)) {
-        return ;
-	}
-	if (channel->isInviteOnly() && !channel->hasInvitation(&user)) {
-		user.send(ERR_INVITEONLYCHAN(chanName));
-		return ;
-	}
-	if (channel->hasKeyPass()) {
-		if (msg.params.size() != 2) {
-        	user.send(ERR_NEEDMOREPARAMS(msg.command));
-			return ;
-		}
-		if (msg.params[1] != channel->getKeyPass()) {
-			user.send(ERR_BADCHANNELKEY(chanName));
-			return ;
-		}
-	}
-	if (channel->getUserLimit() && channel->getUsers().size() >= channel->getUserLimit()) {
-		user.send(ERR_CHANNELISFULL(chanName));
-		return ;
-	}
-	if (channel->getUsers().empty()) {
-    	channel->addOperator(&user);
-	}
+    Channel* channel = core.getChannel(chanName);
+    if (channel) {
+        if (channel->hasUser(&user))
+            return;
+        if (channel->isInviteOnly() && !channel->hasInvitation(&user)) {
+            user.send(ERR_INVITEONLYCHAN(chanName));
+            return;
+        }
+        if (channel->hasKeyPass()) {
+            if (msg.params.size() < 2 || msg.params[1] != channel->getKeyPass()) {
+                user.send(ERR_BADCHANNELKEY(chanName));
+                return;
+            }
+        }
+        if (channel->getUserLimit() &&
+            channel->getUsers().size() >= channel->getUserLimit()) {
+            user.send(ERR_CHANNELISFULL(chanName));
+            return;
+        }
+    }
+    if (!channel)
+        channel = core.getOrCreateChannel(chanName);
+    if (channel->getUsers().empty())
+        channel->addOperator(&user);
     channel->addUser(&user);
 	user.joinChannel(channel);
-    user.send(RPL_JOIN(user.getNick(), chanName));
+    channel->removeInvitation(&user);
+    channel->broadcast(RPL_JOIN(user.getNick(), chanName), NULL); //getPrefix()
+	if (channel->getTopic().empty()) {
+		user.send(RPL_NOTOPIC(chanName));
+	}
+	else {
+		user.send(RPL_TOPIC(user.getNick(), chanName, channel->getTopic()));
+	}
     std::string names;
     const std::set<User*>& users = channel->getUsers();
     for (std::set<User*>::const_iterator it = users.begin(); it != users.end(); ++it) {
         if (!names.empty())
             names += " ";
+		if (channel->isOperator(*it))
+            names += "@";
         names += (*it)->getNick();
     }
-	if (channel->getTopic().empty()) { user.send(RPL_NOTOPIC(chanName)); }
-	else { user.send(RPL_TOPIC(user.getNick(), chanName, channel->getTopic())); }
     user.send(RPL_NAMREPLY(user.getNick(), "", chanName, names));
     user.send(RPL_ENDOFNAMES(user.getNick(), chanName));
 }

@@ -31,7 +31,8 @@ void	cmdPart(IRCCore&core, User& user, const Message& msg) {
 		user.send(ERR_NOTONCHANNEL(chanName));
 		return ;
 	}
-	channel->broadcast(RPL_PART(user.getNick(), user.getUser(), user.getHost(), chanName), NULL);
+	std::string reason = (msg.params.size() >= 2) ? msg.params[1] : "";
+	channel->broadcast(RPL_PART(user.getPrefix(), chanName, reason), NULL);
 	user.leaveChannel(channel);
 	channel->removeUser(&user);
 }

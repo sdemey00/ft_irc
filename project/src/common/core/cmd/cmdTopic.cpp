@@ -46,5 +46,5 @@ void	cmdTopic(IRCCore &core, User& user, const Message& msg) {
 	}
 	std::string newTopic = msg.params[1];
 	channel->setTopic(newTopic);
-	channel->broadcast(RPL_TOPICCHANGE(user.getNick(), user.getUser(), user.getHost(), chanName, newTopic), NULL);
+	channel->broadcast(RPL_TOPICCHANGE(user.getPrefix(), chanName, newTopic), NULL);
 }

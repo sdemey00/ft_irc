@@ -72,6 +72,10 @@ const std::string&	User::getUser() const { return (_user); }
 const std::string&	User::getReal() const { return (_realname); }
 bool				User::getPasswordAccepted() const { return (_passwordAccepted); }
 std::string&		User::getFrontQueue() { return _queue.front(); };
+const std::string	User::getPrefix() const {
+	return ( _nick + "!" + _user + "@" + _hostname);
+}
+
 
 // Channels
 void	User::joinChannel(Channel *channel) {

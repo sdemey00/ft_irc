@@ -38,11 +38,15 @@ void cmdKick(IRCCore &core, User& user, const Message& msg) {
 		return ;
 	}
 	User *target = core.getUserByNick(targetName);
-	if (!target || !channel->hasUser(target)) {
+	if (!target) {
 		user.send(ERR_NOSUCHNICK(targetName));
 		return ;
 	}
-	channel->broadcast(RPL_KICK(user.getNick(), user.getUser(), user.getHost(), chanName, targetName, reason), NULL);
-	user.leaveChannel(channel);
+	if (!channel->hasUser(target)) {
+		user.send(ERR_USERNOTINCHANNEL(target->getNick(), chanName));
+		return ;
+	}
+	channel->broadcast(RPL_KICK(user.getPrefix(), chanName, targetName, reason), NULL);
+	target->leaveChannel(channel);
 	channel->removeUser(target);
 }

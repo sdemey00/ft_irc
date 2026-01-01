@@ -38,6 +38,6 @@ void cmdNick(IRCCore &core, User& user, const Message& msg) {
 	user.setNick(newNick);
 	core.addUser(&user);
 	if (user.isRegistered()) {
-		user.send(RPL_NICK(oldNick, newNick));
+		user.send(RPL_NICK(oldNick, newNick));	//broadcast a tous les channels???
 	}
 }

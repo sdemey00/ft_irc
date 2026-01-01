@@ -31,6 +31,7 @@ public:
 	const std::string&	getHost() const;
 	const std::string&	getUser() const;
 	const std::string&	getReal() const;
+	const std::string	getPrefix() const;
 	bool				getPasswordAccepted() const;
 
 	void	setNick(const std::string& nick);
