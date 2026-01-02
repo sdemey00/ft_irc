@@ -34,7 +34,7 @@
 #define ERR_NOSUCHNICK(nick, target) (":ft_irc 401 " + nick + " " + target + " :No such nick" + CRLF)
 #define ERR_NOSUCHCHANNEL(channel) (":ft_irc 403 " + channel + " :No such channel" + CRLF)
 #define ERR_CANNOTSENDTOCHAN(channel) (":ft_irc 404 " + channel + " :Cannot send to channel" + CRLF) 
-#define ERR_NORECIPIENT(command) (":ft_irc 411 :No recipient given " + command + CRLF)
+#define ERR_NORECIPIENT(nick, command) (":ft_irc 411 " + nick + " :No recipient given " + command + CRLF)
 #define ERR_NOTEXTTOSEND() (std::string(":ft_irc 412 :No text to send") + std::string(CRLF))
 #define ERR_UNKNOWNCOMMAND(nickname, cmd) (":ft_irc 421 " + nickname + " " + cmd + " :Unknown command" + CRLF)
 #define ERR_NONICKNAMEGIVEN(nickname) (":ft_irc 431 " + nickname + " :No nickname given" + CRLF)
@@ -50,5 +50,9 @@
 #define ERR_CHANOPRIVSNEEDED(channel) (":ft_irc 482 " + channel + " :You're not channel operator" + CRLF)
 #define ERR_CHANNELISFULL(channel) (":ft_irc 471 " + channel + " :Cannot join channel (+l)" + CRLF)
 #define ERR_BADCHANMASK(nickname, channel) (":ft_irc 476 " + nickname + " " + channel + " :Bad Channel Mask" + CRLF)
-#define ERR_BADCHANNELKEY(channel) (":ft_irc 475 " + channel + ":Cannot join channel (+k)" + CRLF)
+#define ERR_BADCHANNELKEY(channel) (":ft_irc 475 " + channel + " :Cannot join channel (+k)" + CRLF)
 #define ERR_USERNOTINCHANNEL(nick, channel) (":ft_irc 441 " + nick + " " + channel + " :They aren't on that channel" + CRLF)
+
+
+
+

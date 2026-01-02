@@ -25,7 +25,7 @@ void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg) {
         return user.send(ERR_NOTEXTTOSEND());
     }
 	if (target.empty()) {
-    	return user.send(ERR_NORECIPIENT(msg.command));
+    	return user.send(ERR_NORECIPIENT(user.getNick(), msg.command));
 	}
     if (target[0] == '#') {
         Channel* channel = core.getChannel(target);
