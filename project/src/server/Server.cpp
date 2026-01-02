@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 11:21:30 by mmichele          #+#    #+#             */
-/*   Updated: 2026/01/01 14:47:18 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/02 15:11:24 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ Server::Server(char* raw_port, char* raw_pass) :
 	clients(0),
 	core(std::string(raw_pass))
 {
-	logger.open("server.log");
+	logger.open("logs/server.log");
 	// Check for port input validity :
 	if (!isdigit(raw_port, std::strlen(raw_port)))
 		throw Errors::Port();
@@ -151,11 +151,15 @@ Server::Server(char* raw_port, char* raw_pass) :
 }
 
 Server::~Server() {
-	if (pfd.fd >= 0)
-		close(pfd.fd);
 	for (std::list<Client>::iterator it = clients.begin(); it != clients.end(); it++) {
-		if (it->pfd.fd >= 0)
+		if (it->pfd.fd >= 0) {
+			Log::disconnected(it->pfd.fd, it->user.getNick());
 			close(it->pfd.fd);
+		}
+	}
+	if (pfd.fd >= 0) {
+		Log::disconnected(pfd.fd, "IRC SERVER");
+		close(pfd.fd);
 	}
 }
 

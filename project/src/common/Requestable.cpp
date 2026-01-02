@@ -6,28 +6,25 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 11:07:09 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/30 13:42:54 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/02 15:13:29 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Requestable.hpp"
 
-#include <cstring>		// memcpy, strlen, memmove
-#include <sys/socket.h>	// recv
+#include <cstring>				// memcpy, strlen, memmove
+#include <sys/socket.h>			// recv
 
-#include "Log.hpp"		// Log
-#include "core/IRCCore.hpp"	// IRCCore
-#include "Errors.hpp"	// Recv
-
-#include <stdio.h>		// perror
-#include <errno.h>		// errno
+#include "Log.hpp"				// Log
+#include "core/IRCCore.hpp"		// IRCCore
+#include "Errors.hpp"			// Recv
 
 Requestable::Requestable() :
 	read_buffer("")
 {
 	stash[0] = 0;
 	stash[BUFFER_SIZE] = 0;
-	//pfd.fd = -1;
+	pfd.fd = -1;
 }
 
 Requestable::~Requestable() {}

@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 04:26:20 by mmichele          #+#    #+#             */
-/*   Updated: 2026/01/01 14:40:38 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/02 15:11:39 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ Client::Client(char* address, char* raw_port, char* password, char* name):
 	pwd(password),
 	name(name)
 {
-	logger.open("bot.log");
+	logger.open("logs/bot.log");
 	// Check for port input validity :
 	if (!isdigit(raw_port, std::strlen(raw_port)))
 		throw Errors::Port();

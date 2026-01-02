@@ -6,14 +6,14 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 04:23:54 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/22 12:35:03 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/02 15:12:19 by mmichele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>		// cerr, endl
-#include <exception>	// exception
+#include <iostream>				// cerr, endl
+#include <exception>			// exception
 
-#include "Client.hpp"	// Client
+#include "../bot/Client.hpp"	// Client
 
 int main(int argc, char** argv) {
 	argc--; argv++;

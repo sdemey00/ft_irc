@@ -6,7 +6,7 @@
 #    By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/13 10:59:54 by mmichele          #+#    #+#              #
-#    Updated: 2026/01/01 16:35:48 by mmichele         ###   ########.fr        #
+#    Updated: 2026/01/02 15:11:45 by mmichele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,9 @@ BLDD	= build
 SRCD	= src
 INCD	= includes
 TSTD	= test
+LOGD	= logs
+
+$(shell mkdir -p $(LOGD))
 
 ################################################################################
 # Overall targets                                                              #
@@ -33,7 +36,7 @@ all: $(S_NAME) $(B_NAME)
 
 clean:
 	rm -rf $(BLDD)
-	rm -rf *.log
+	rm -rf $(LOGD)
 
 fclean: clean
 	rm -rf $(S_NAME) $(B_NAME)
@@ -53,10 +56,10 @@ ADDR	?= 127.0.0.1
 BOTN	?= bot
 
 valgrind: debug
-	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all --log-file=valgrind-$(S_NAME).log ./$(S_NAME) $(PORT) $(PASS)
+	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all --log-file=$(LOGD)/valgrind-$(S_NAME).log ./$(S_NAME) $(PORT) $(PASS)
 
 valgrind-bot: debug
-	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all --log-file=valgrind-$(B_NAME).log ./$(B_NAME) $(ADDR) $(PORT) $(PASS) $(BOTN)
+	valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all --log-file=$(LOGD)/valgrind-$(B_NAME).log ./$(B_NAME) $(ADDR) $(PORT) $(PASS) $(BOTN)
 
 gdb: debug
 	gdb --tui --args "$(S_NAME)" $(PORT) $(PASS)
