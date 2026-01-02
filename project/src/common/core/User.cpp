@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:35:16 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/30 12:42:06 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/01 12:41:16 by sdemey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,11 @@ void	User::leaveChannel(Channel *channel) {
 }
 const std::set<Channel*>&	User::getChannels() const { return (_channels); }
 
+void	User::broadcast(std::string msg) {
+	for (std::set<Channel*>::const_iterator it = this->getChannels().begin(); it != this->getChannels().end(); it++) {
+		(*it)->broadcast(msg, NULL);
+	}
+}
 
 // Send
 void	User::send(const std::string& message)

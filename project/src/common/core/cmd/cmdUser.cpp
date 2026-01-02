@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 12:35:46 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/30 12:41:35 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/01 12:40:41 by sdemey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,18 @@
 
 void	cmdUser(IRCCore &core, User& user, const Message& msg) {
 	if (msg.params.size() != 4) {
-		user.send(ERR_NEEDMOREPARAMS(msg.command));
-		return ;
+		return user.send(ERR_NEEDMOREPARAMS(msg.command));
 	}
 	if (user.isRegistered()) {
-		user.send(ERR_ALREADYREGISTRED(user.getNick()));
-		return ;
+		return user.send(ERR_ALREADYREGISTRED(user.getNick()));
 	}
 	if (!user.getPasswordAccepted() && !core.getPassword().empty()) {
-		user.send(ERR_NOTREGISTERED(user.getNick()));
-		return ;
+		return user.send(ERR_NOTREGISTERED(user.getNick()));
 	}
 	user.setUser(msg.params[0]);
 	user.setHost(msg.params[1]); 
 	user.setReal(msg.params.back());
-	if (!user.getNick().empty()) {
+	if (!user.getNick().empty() && user.getNick() != "*") {
 		user.setRegistered(true);
 		user.send(RPL_WELCOME(user.getNick()));
 	}

@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 17:03:30 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/30 12:44:24 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/01 12:40:20 by sdemey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,20 @@ void	handleModeOperator(IRCCore &core, User &user, Channel *channel, const std::
 
 void	cmdMode(IRCCore &core, User &user, const Message &msg) {
 	if (!user.isRegistered()) {
-		user.send(ERR_NOTREGISTERED(user.getNick()));
-		return ;
+		return user.send(ERR_NOTREGISTERED(user.getNick()));
 	}
     if (msg.params.size() < 2) { return ; }
     const std::string	&chanName = msg.params[0];
     Channel 			*channel = core.getChannel(chanName);
 	if (chanName[0] != '#') { return; }
     if (!channel) {
-        user.send(ERR_NOSUCHCHANNEL(chanName));
-        return ;
+        return user.send(ERR_NOSUCHCHANNEL(chanName));
     }
     if (!channel->hasUser(&user)) {
-        user.send(ERR_NOTONCHANNEL(chanName));
-        return ;
+        return user.send(ERR_NOTONCHANNEL(chanName));
     }
     if (!channel->isOperator(&user)) {
-        user.send(ERR_CHANOPRIVSNEEDED(chanName));
-        return ;
+        return user.send(ERR_CHANOPRIVSNEEDED(chanName));
     }
 	handleMode(core, user, msg, channel);
 }
@@ -67,26 +63,23 @@ void	handleMode(IRCCore &core, User &user, const Message &msg, Channel *channel)
 			case 'k':
 				if (adding) {
 					if (paramIndex >= msg.params.size()) {
-						user.send(ERR_NEEDMOREPARAMS(msg.command));
-						return ; 
+						return user.send(ERR_NEEDMOREPARAMS(msg.command)); 
 					}
 					channel->setKeyPass(msg.params[paramIndex++]);
 				} else { channel->removeKeyPass(); }
 				break ;
 			case 'o':
 				if (paramIndex >= msg.params.size()) {
-					user.send(ERR_NEEDMOREPARAMS(msg.command));
-					return ;
+					return user.send(ERR_NEEDMOREPARAMS(msg.command));
 				}
 				handleModeOperator(core, user, channel, msg.params[paramIndex++], adding);
 				break ;
 			case 'l':
 				if (adding) {
 					if (paramIndex >= msg.params.size()) {
-						user.send(ERR_NEEDMOREPARAMS(msg.command));
-						return;
+						return user.send(ERR_NEEDMOREPARAMS(msg.command));
 					}
-					// check if < 0 /!/
+					// TODO protect if ulimit < 0 /!/
 					channel->setUserLimit(std::atoi(msg.params[paramIndex++].c_str()));
 					std::cout << channel->getUserLimit() << std::endl;
 				} else { channel->removeUserLimit(); }
@@ -99,8 +92,7 @@ void	handleModeOperator(IRCCore &core, User &user, Channel *channel, const std::
 {
     User *target = core.getUserByNick(nick);
     if (!target || !channel->hasUser(target)) {
-        user.send(ERR_NOSUCHNICK(nick));
-        return;
+        return user.send(ERR_NOSUCHNICK(user.getNick(), nick));
     }
     if (adding)
         channel->addOperator(target);

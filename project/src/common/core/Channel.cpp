@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:34:29 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/30 12:42:06 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/01 12:40:58 by sdemey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void				Channel::removeUserLimit() { _userLimit = 0; }
 
 // Broadcast to all users in the channel except one (except can be null)
 void	Channel::broadcast(const std::string& msg, User* except) const {
-	for (std::set<User*>::const_iterator it = _users.begin(); it != _users.end(); ++it) {
+	for (std::set<User*>::const_iterator it = _users.begin(); it != _users.end(); it++) {
 		if (*it != except) {
 			(*it)->send(msg);
 		}

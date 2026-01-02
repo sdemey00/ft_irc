@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 12:35:44 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/30 12:41:35 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/01 12:40:25 by sdemey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,18 @@
 
 void	cmdPart(IRCCore&core, User& user, const Message& msg) {
 	if (!user.isRegistered()) {
-		user.send(ERR_NOTREGISTERED(user.getNick()));
-		return ;
+		return user.send(ERR_NOTREGISTERED(user.getNick()));
 	}
 	if (msg.params.empty()) {
-		user.send(ERR_NEEDMOREPARAMS(msg.command));
-		return ;
+		return user.send(ERR_NEEDMOREPARAMS(msg.command));
 	}
 	const std::string& chanName = msg.params[0];
 	Channel* channel = core.getChannel(chanName);
 	if (chanName[0] != '#' || !channel) {
-		user.send(ERR_NOSUCHCHANNEL(chanName));
-		return ;
+		return user.send(ERR_NOSUCHCHANNEL(chanName));
 	}
 	if (!channel->hasUser(&user)) {
-		user.send(ERR_NOTONCHANNEL(chanName));
-		return ;
+		return user.send(ERR_NOTONCHANNEL(chanName));
 	}
 	std::string reason = (msg.params.size() >= 2) ? msg.params[1] : "";
 	channel->broadcast(RPL_PART(user.getPrefix(), chanName, reason), NULL);

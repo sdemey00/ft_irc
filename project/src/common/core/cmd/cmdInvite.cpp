@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 17:03:20 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/30 12:43:57 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/01 12:40:10 by sdemey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,29 @@
 
 void	cmdInvite(IRCCore &core, User& user, const Message& msg) {
 	if (!user.isRegistered()) {
-		user.send(ERR_NOTREGISTERED(user.getNick()));
-		return ;
+		return user.send(ERR_NOTREGISTERED(user.getNick()));
 	}
 	if (msg.params.size() != 2) {
-		user.send(ERR_NEEDMOREPARAMS(msg.command));
-		return ;
+		return user.send(ERR_NEEDMOREPARAMS(msg.command));
 	}
     const std::string& targetName = msg.params[0];
 	const std::string& chanName = msg.params[1];
 	Channel* channel = core.getChannel(chanName);
 	if (chanName[0] != '#' || !channel) {
-		user.send(ERR_NOSUCHCHANNEL(chanName));
-		return ;
+		return user.send(ERR_NOSUCHCHANNEL(chanName));
 	}
 	if (!channel->hasUser(&user)) {
-		user.send(ERR_NOTONCHANNEL(chanName));
-		return ;
+		return user.send(ERR_NOTONCHANNEL(chanName));
 	}
 	if (channel->isInviteOnly() && !channel->isOperator(&user)) {
-		user.send(ERR_CHANOPRIVSNEEDED(chanName));
-		return ;
+		return user.send(ERR_CHANOPRIVSNEEDED(chanName));
 	}
 	User *target = core.getUserByNick(targetName);
 	if (!target) {
-		user.send(ERR_NOSUCHNICK(targetName));
-		return ;
+		return user.send(ERR_NOSUCHNICK(user.getNick(), targetName));
 	}
 	if (channel->hasUser(target)) {
-		user.send(ERR_USERONCHANNEL(targetName, chanName));
-		return ;
+		return user.send(ERR_USERONCHANNEL(targetName, chanName));
 	}
 	channel->addInvitation(target);
 	user.send(RPL_INVITING(user.getNick(), targetName, chanName));

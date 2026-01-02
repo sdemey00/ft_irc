@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 12:35:40 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/30 12:41:35 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/01 12:40:14 by sdemey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,32 @@
 
 void cmdJoin(IRCCore& core, User& user, const Message& msg) {
 	if (!user.isRegistered()) {
-		user.send(ERR_NOTREGISTERED(user.getNick()));
-		return ;
+		return user.send(ERR_NOTREGISTERED(user.getNick()));
 	}
     if (msg.params.empty() || msg.params.size() > 2 ) {
-        user.send(ERR_NEEDMOREPARAMS(msg.command));
-        return ;
+        return user.send(ERR_NEEDMOREPARAMS(msg.command));
     }
     const std::string& chanName = msg.params[0];
 	if (chanName.empty() || chanName[0] != '#') {
-		user.send(ERR_NOSUCHCHANNEL(chanName));
-		return ;
+		return user.send(ERR_NOSUCHCHANNEL(chanName));
 	}
 	if (!isValidName(chanName.substr(1))) {
-		user.send(ERR_BADCHANMASK(user.getNick(), chanName));
-		return ;
+		return user.send(ERR_BADCHANMASK(user.getNick(), chanName));
 	}
     Channel* channel = core.getChannel(chanName);
     if (channel) {
         if (channel->hasUser(&user))
-            return;
+            return ;
         if (channel->isInviteOnly() && !channel->hasInvitation(&user)) {
-            user.send(ERR_INVITEONLYCHAN(chanName));
-            return;
+            return user.send(ERR_INVITEONLYCHAN(chanName));
         }
         if (channel->hasKeyPass()) {
             if (msg.params.size() < 2 || msg.params[1] != channel->getKeyPass()) {
-                user.send(ERR_BADCHANNELKEY(chanName));
-                return;
+                return user.send(ERR_BADCHANNELKEY(chanName));
             }
         }
-        if (channel->getUserLimit() &&
-            channel->getUsers().size() >= channel->getUserLimit()) {
-            user.send(ERR_CHANNELISFULL(chanName));
-            return;
+        if (channel->getUserLimit() && channel->getUsers().size() >= channel->getUserLimit()) {
+            return user.send(ERR_CHANNELISFULL(chanName));
         }
     }
     if (!channel)
@@ -57,7 +49,7 @@ void cmdJoin(IRCCore& core, User& user, const Message& msg) {
     channel->addUser(&user);
 	user.joinChannel(channel);
     channel->removeInvitation(&user);
-    channel->broadcast(RPL_JOIN(user.getNick(), chanName), NULL); //getPrefix()
+    channel->broadcast(RPL_JOIN(user.getPrefix(), chanName), NULL); //getPrefix()
 	if (channel->getTopic().empty()) {
 		user.send(RPL_NOTOPIC(chanName));
 	}
@@ -66,7 +58,7 @@ void cmdJoin(IRCCore& core, User& user, const Message& msg) {
 	}
     std::string names;
     const std::set<User*>& users = channel->getUsers();
-    for (std::set<User*>::const_iterator it = users.begin(); it != users.end(); ++it) {
+    for (std::set<User*>::const_iterator it = users.begin(); it != users.end(); it++) {
         if (!names.empty())
             names += " ";
 		if (channel->isOperator(*it))

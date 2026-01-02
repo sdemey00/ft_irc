@@ -36,7 +36,8 @@ public:
 	User*   getUserByNick(const std::string& nick);
 	void    addUser(User* user);
 	void    removeUser(const std::string& nick);
-
+	std::map<std::string, User*>	getUsers() const;
+	
 	// Channels
 	Channel*    getChannel(const std::string& name);
 	Channel*    getOrCreateChannel(const std::string& name);

@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:35:13 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/31 15:36:47 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/01 12:41:10 by sdemey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ IRCCore::IRCCore(const std::string pass) : _password(pass) {
 }
 
 IRCCore::~IRCCore() {
-	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it) {
+	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
 		delete it->second;
 	}
 	_channels.clear();
@@ -59,6 +59,8 @@ User*   IRCCore::getUserByNick(const std::string& nick) {
 		return (NULL);
 	return (_users[nick]);
 }
+
+std::map<std::string, User*>	IRCCore::getUsers() const { return (_users); }
 
 // Channels
 Channel*    IRCCore::getChannel(const std::string& name) {
