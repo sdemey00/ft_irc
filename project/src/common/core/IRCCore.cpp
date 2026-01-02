@@ -28,7 +28,7 @@ IRCCore::IRCCore(const std::string pass) : _password(pass) {
 }
 
 IRCCore::~IRCCore() {
-	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it) {
+	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
 		delete it->second;
 	}
 	_channels.clear();

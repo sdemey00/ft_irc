@@ -22,7 +22,7 @@
 #define RPL_PART(prefix, channel, reason) (":" + prefix + " PART " + channel + " :" + reason + CRLF)
 #define RPL_TOPIC(nick, channel, topic) (":ft_irc 332 " + nick + " " + channel + " : " + topic + CRLF)
 #define RPL_TOPICCHANGE(prefix, channel, topic) (":" + prefix + " TOPIC " + channel + " : " + topic + CRLF)
-#define RPL_NOTOPIC(nick, channel) (":ft_irc 331 " + nick + " " + channel + " :No topic is set" + CRLF)
+#define RPL_NOTOPIC(channel) (":ft_irc 331 " + channel + " :No topic is set" + CRLF)
 #define RPL_KICK(prefix, channel, target, reason) (":" + prefix + " KICK " + channel + " " + target + " :" + reason + CRLF)
 #define RPL_INVITING(inviter, target, channel) (":ft_irc 341 " + inviter + " " + target + " " + channel + CRLF)
 #define RPL_INVITE(inviter, target, channel) (":" + inviter + " INVITE " + target + " :" + channel + CRLF)

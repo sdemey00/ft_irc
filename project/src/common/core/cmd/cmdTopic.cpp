@@ -30,7 +30,7 @@ void	cmdTopic(IRCCore &core, User& user, const Message& msg) {
 	if (msg.params.size() < 2) {
 		std::string topic = channel->getTopic();
 		if (topic.empty()) {
-			return user.send(RPL_NOTOPIC(user.getNick(), chanName));
+			return user.send(RPL_NOTOPIC(chanName));
 		}
 		return user.send(RPL_TOPIC(user.getNick(), chanName, topic));
 	}

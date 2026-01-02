@@ -90,7 +90,7 @@ void				Channel::removeUserLimit() { _userLimit = 0; }
 
 // Broadcast to all users in the channel except one (except can be null)
 void	Channel::broadcast(const std::string& msg, User* except) const {
-	for (std::set<User*>::const_iterator it = _users.begin(); it != _users.end(); ++it) {
+	for (std::set<User*>::const_iterator it = _users.begin(); it != _users.end(); it++) {
 		if (*it != except) {
 			(*it)->send(msg);
 		}

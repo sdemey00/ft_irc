@@ -51,14 +51,14 @@ void cmdJoin(IRCCore& core, User& user, const Message& msg) {
     channel->removeInvitation(&user);
     channel->broadcast(RPL_JOIN(user.getPrefix(), chanName), NULL); //getPrefix()
 	if (channel->getTopic().empty()) {
-		user.send(RPL_NOTOPIC(user.getNick(),chanName));
+		user.send(RPL_NOTOPIC(chanName));
 	}
 	else {
 		user.send(RPL_TOPIC(user.getNick(), chanName, channel->getTopic()));
 	}
     std::string names;
     const std::set<User*>& users = channel->getUsers();
-    for (std::set<User*>::const_iterator it = users.begin(); it != users.end(); ++it) {
+    for (std::set<User*>::const_iterator it = users.begin(); it != users.end(); it++) {
         if (!names.empty())
             names += " ";
 		if (channel->isOperator(*it))

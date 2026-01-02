@@ -19,7 +19,7 @@ std::ostream& operator<<(std::ostream& os, const Message& msg) {
 	os << "Prefix: " << msg.prefix << std::endl;
 	os << "Command: " << msg.command << std::endl;
 	os << "Params: ";
-	for (std::vector<std::string>::const_iterator it = msg.params.begin(); it != msg.params.end(); ++it) {
+	for (std::vector<std::string>::const_iterator it = msg.params.begin(); it != msg.params.end(); it++) {
 		os << " " << *it << " |";
 	}
 	os << std::endl;
