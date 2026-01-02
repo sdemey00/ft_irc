@@ -28,7 +28,7 @@
 #define RPL_INVITE(inviter, target, channel) (":" + inviter + " INVITE " + target + " :" + channel + CRLF)
 #define RPL_NAMREPLY(nick, symbol, channel, names) (":ft_irc 353 " + nick + " " + symbol + " " + channel + " :" + names + CRLF)
 #define RPL_ENDOFNAMES(nick, channel) (":ft_irc 366 " + nick + " " + channel + " :End of /NAMES list" + CRLF)
-#define RPL_QUIT(nick) (":ft_irc " + nick + " QUIT " + CRLF)
+#define RPL_QUIT(prefix, reason) (":" + prefix + " QUIT :" + reason + CRLF)
 
 ///////// ERRORS ////////////////
 #define ERR_NOSUCHNICK(nickname) (":ft_irc 401 " + nickname + " :No such nick" + CRLF)

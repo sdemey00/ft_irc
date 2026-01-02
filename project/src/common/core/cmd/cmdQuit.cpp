@@ -16,5 +16,9 @@ void cmdQuit(IRCCore &core, User& user, const Message& msg) {
 	(void)core;
 	(void)user;
 	(void)msg;
-	user.broadcast(RPL_QUIT(user.getNick()));
+	std::string reason = "Client exited";
+	if (msg.params.size() > 1) {
+		reason = msg.params[1];
+	}
+	user.broadcast(RPL_QUIT(user.getPrefix(), reason));
 }
