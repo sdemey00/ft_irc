@@ -40,7 +40,7 @@ void	cmdPrivmsg(IRCCore &core, User& user, const Message& msg) {
     else {
         User* targetUser = core.getUserByNick(target);
         if (!targetUser) {
-            return user.send(ERR_NOSUCHNICK(target));
+            return user.send(ERR_NOSUCHNICK(user.getNick(), target));
         }
 		targetUser->send(RPL_PRIVMSG(user.getPrefix(), target, text));  
     }

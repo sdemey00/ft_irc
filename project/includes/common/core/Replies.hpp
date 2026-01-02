@@ -15,15 +15,15 @@
 #define CRLF "\r\n"
 
 ///////// REPLIES ///////////////
-#define RPL_WELCOME(nickname) (":ft_irc 001 " + nickname + " : Welcome to the FT_IRC server!" + CRLF)
+#define RPL_WELCOME(nickname) (":ft_irc 001 " + nickname + " : Welcome to the FT_IRC server, " + nickname + " !" + CRLF)
 #define RPL_NICK(oldnick, newnick) (":" + oldnick + " NICK :" + newnick + CRLF)
-#define RPL_PRIVMSG(user, target, text) (":" + user + " PRIVMSG " + target + " :" + text + CRLF)
-#define RPL_JOIN(user, channel) (":" + user + " JOIN " + channel + CRLF)
-#define RPL_PART(user, channel, reason) (":" + user + " PART " + channel + " :" + reason + CRLF)
+#define RPL_PRIVMSG(prefix, target, text) (":" + prefix + " PRIVMSG " + target + " :" + text + CRLF)
+#define RPL_JOIN(prefix, channel) (":" + prefix + " JOIN " + channel + CRLF)
+#define RPL_PART(prefix, channel, reason) (":" + prefix + " PART " + channel + " :" + reason + CRLF)
 #define RPL_TOPIC(nick, channel, topic) (":ft_irc 332 " + nick + " " + channel + " : " + topic + CRLF)
-#define RPL_TOPICCHANGE(user, channel, topic) (":" + user + " TOPIC " + channel + " : " + topic + CRLF)
-#define RPL_NOTOPIC(channel) (":ft_irc 331 " + channel + " :No topic is set" + CRLF)
-#define RPL_KICK(user, channel, target, reason) (":" + user + " KICK " + channel + " " + target + " :" + reason + CRLF)
+#define RPL_TOPICCHANGE(prefix, channel, topic) (":" + prefix + " TOPIC " + channel + " : " + topic + CRLF)
+#define RPL_NOTOPIC(nick, channel) (":ft_irc 331 " + nick + " " + channel + " :No topic is set" + CRLF)
+#define RPL_KICK(prefix, channel, target, reason) (":" + prefix + " KICK " + channel + " " + target + " :" + reason + CRLF)
 #define RPL_INVITING(inviter, target, channel) (":ft_irc 341 " + inviter + " " + target + " " + channel + CRLF)
 #define RPL_INVITE(inviter, target, channel) (":" + inviter + " INVITE " + target + " :" + channel + CRLF)
 #define RPL_NAMREPLY(nick, symbol, channel, names) (":ft_irc 353 " + nick + " " + symbol + " " + channel + " :" + names + CRLF)
@@ -31,7 +31,7 @@
 #define RPL_QUIT(prefix, reason) (":" + prefix + " QUIT :" + reason + CRLF)
 
 ///////// ERRORS ////////////////
-#define ERR_NOSUCHNICK(nickname) (":ft_irc 401 " + nickname + " :No such nick" + CRLF)
+#define ERR_NOSUCHNICK(nick, target) (":ft_irc 401 " + nick + " " + target + " :No such nick" + CRLF)
 #define ERR_NOSUCHCHANNEL(channel) (":ft_irc 403 " + channel + " :No such channel" + CRLF)
 #define ERR_CANNOTSENDTOCHAN(channel) (":ft_irc 404 " + channel + " :Cannot send to channel" + CRLF) 
 #define ERR_NORECIPIENT(command) (":ft_irc 411 :No recipient given " + command + CRLF)

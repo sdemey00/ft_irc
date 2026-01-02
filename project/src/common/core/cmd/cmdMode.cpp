@@ -92,7 +92,7 @@ void	handleModeOperator(IRCCore &core, User &user, Channel *channel, const std::
 {
     User *target = core.getUserByNick(nick);
     if (!target || !channel->hasUser(target)) {
-        return user.send(ERR_NOSUCHNICK(nick));
+        return user.send(ERR_NOSUCHNICK(user.getNick(), nick));
     }
     if (adding)
         channel->addOperator(target);

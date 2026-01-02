@@ -33,7 +33,7 @@ void cmdKick(IRCCore &core, User& user, const Message& msg) {
 	}
 	User *target = core.getUserByNick(targetName);
 	if (!target) {
-		return user.send(ERR_NOSUCHNICK(targetName));
+		return user.send(ERR_NOSUCHNICK(user.getNick(), targetName));
 	}
 	if (!channel->hasUser(target)) {
 		return user.send(ERR_USERNOTINCHANNEL(target->getNick(), chanName));

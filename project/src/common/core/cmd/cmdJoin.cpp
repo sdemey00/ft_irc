@@ -51,7 +51,7 @@ void cmdJoin(IRCCore& core, User& user, const Message& msg) {
     channel->removeInvitation(&user);
     channel->broadcast(RPL_JOIN(user.getPrefix(), chanName), NULL); //getPrefix()
 	if (channel->getTopic().empty()) {
-		user.send(RPL_NOTOPIC(chanName));
+		user.send(RPL_NOTOPIC(user.getNick(),chanName));
 	}
 	else {
 		user.send(RPL_TOPIC(user.getNick(), chanName, channel->getTopic()));
