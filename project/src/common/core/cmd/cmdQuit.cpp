@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 19:17:27 by mmichele          #+#    #+#             */
-/*   Updated: 2025/12/30 12:41:35 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/01 12:40:36 by sdemey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,4 +16,5 @@ void cmdQuit(IRCCore &core, User& user, const Message& msg) {
 	(void)core;
 	(void)user;
 	(void)msg;
+	user.broadcast(RPL_QUIT(user.getNick()));
 }

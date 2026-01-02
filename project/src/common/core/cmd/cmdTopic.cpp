@@ -6,7 +6,7 @@
 /*   By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 17:03:45 by sdemey            #+#    #+#             */
-/*   Updated: 2025/12/30 12:44:34 by mmichele         ###   ########.fr       */
+/*   Updated: 2026/01/01 12:40:39 by sdemey           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,29 @@
 
 void	cmdTopic(IRCCore &core, User& user, const Message& msg) {
 	if (!user.isRegistered()) {
-		user.send(ERR_NOTREGISTERED(user.getNick()));
-		return ;
+		return user.send(ERR_NOTREGISTERED(user.getNick()));
 	}
 	if (msg.params.empty()) {
-		user.send(ERR_NEEDMOREPARAMS(msg.command));
-		return ;
+		return user.send(ERR_NEEDMOREPARAMS(msg.command));
 	}
 	const std::string& chanName = msg.params[0];
     Channel* channel = core.getChannel(chanName);
     if (chanName[0] != '#' || !channel) {
-        user.send(ERR_NOSUCHCHANNEL(chanName));
-        return ;
+        return user.send(ERR_NOSUCHCHANNEL(chanName));
     }
 	if (!channel->hasUser(&user)) {
-		user.send(ERR_NOTONCHANNEL(chanName));
-		return ;
+		return user.send(ERR_NOTONCHANNEL(chanName));
 	}
 	if (msg.params.size() < 2) {
 		std::string topic = channel->getTopic();
 		if (topic.empty()) {
-			user.send(RPL_NOTOPIC(chanName));
-			return ;
+			return user.send(RPL_NOTOPIC(chanName));
 		}
-		user.send(RPL_TOPIC(user.getNick(), chanName, topic));
-		return ;
+		return user.send(RPL_TOPIC(user.getNick(), chanName, topic));
 	}
 	if (channel->isTopicRestrict() && !channel->isOperator(&user)) {
-        user.send(ERR_CHANOPRIVSNEEDED(chanName));
-		return ;
+		return user.send(ERR_CHANOPRIVSNEEDED(chanName));
 	}
-	std::string newTopic = msg.params[1];
-	channel->setTopic(newTopic);
-	channel->broadcast(RPL_TOPICCHANGE(user.getPrefix(), chanName, newTopic), NULL);
+	channel->setTopic(msg.params[1]);
+	channel->broadcast(RPL_TOPICCHANGE(user.getPrefix(), chanName, msg.params[1]), NULL);
 }
