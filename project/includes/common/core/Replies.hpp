@@ -52,7 +52,5 @@
 #define ERR_BADCHANMASK(nickname, channel) (":ft_irc 476 " + nickname + " " + channel + " :Bad Channel Mask" + CRLF)
 #define ERR_BADCHANNELKEY(channel) (":ft_irc 475 " + channel + " :Cannot join channel (+k)" + CRLF)
 #define ERR_USERNOTINCHANNEL(nick, channel) (":ft_irc 441 " + nick + " " + channel + " :They aren't on that channel" + CRLF)
-
-
-
-
+#define ERR_UMODEUNKNOWNFLAG() (std::string(":ft_irc 501 :Unknown MODE flag") + std::string(CRLF))
+#define ERR_INVALIDMODEPARAM(nick, channel, mode, param) (":ft_irc 696 " + nick + " " + channel + " " + mode + " " + param + " :Invalid mode parameter" + CRLF)

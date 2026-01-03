@@ -16,3 +16,4 @@
 
 bool	isdigit(char* str, const long unsigned int& len);
 bool	isValidName(const std::string &nick);
+bool	parsePositiveInt(const std::string &s, int &out);

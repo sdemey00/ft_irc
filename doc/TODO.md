@@ -3,9 +3,6 @@
 - Test script for nc
 
 sdemey:
-	- User Prefix (optional)
-	- Channel vector in user to remove user from each channel when erased from core
-	- DoubleCheck every replies to avoid weird irssi behavior
 
 mmichele :
 	- Investigate read_buffer and stash variables in Client class, 

@@ -12,8 +12,12 @@
 
 #include "utils.hpp"
 
-#include <cctype>	// isdigit
-#include <string>	// size_t, string
+#include <cctype>		// isdigit
+#include <string>		// size_t, string
+#include <cstdlib>		// strtol
+#include <cstring>		// strlen
+#include <cerrno>		// errno
+#include <climits>		// INT_MAX
 
 bool isdigit(char* str, const long unsigned int& len) {
 	for (long unsigned int i = 0; i < len; i++) {
@@ -31,4 +35,17 @@ bool	isValidName(const std::string &nick) {
 		}
 	}
 	return (1) ;
+}
+
+bool	parsePositiveInt(const std::string &s, int &out) {
+    char *end;
+    errno = 0;
+	char *str = (char*)s.c_str();
+	if (!isdigit(str, std::strlen(str)))
+		return (false);
+    long value = std::strtol(s.c_str(), &end, 10);
+    if (*end != '\0' || errno != 0 || value < 0 || value > INT_MAX)
+        return (false);
+    out = static_cast<int>(value);
+    return (true);
 }

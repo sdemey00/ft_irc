@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cstdlib> // atoi
-
 #include "core/IRCCore.hpp"
+
+#include <cstdlib>			// atoi
 
 void	handleMode(IRCCore &core, User &user, const Message &msg, Channel *channel);
 void	handleModeOperator(IRCCore &core, User &user, Channel *channel, const std::string &nick, bool adding);
@@ -79,17 +79,21 @@ void	handleMode(IRCCore &core, User &user, const Message &msg, Channel *channel)
 					if (paramIndex >= msg.params.size()) {
 						return user.send(ERR_NEEDMOREPARAMS(msg.command));
 					}
-					// TODO protect if ulimit < 0 /!/
-					channel->setUserLimit(std::atoi(msg.params[paramIndex++].c_str()));
-					std::cout << channel->getUserLimit() << std::endl;
+					int limit;
+					if (!parsePositiveInt(msg.params[paramIndex], limit)) {
+						return user.send(ERR_INVALIDMODEPARAM(user.getNick(), channel->getName(), "l", msg.params[paramIndex]));
+					}
+					paramIndex++;
+					channel->setUserLimit(limit);
 				} else { channel->removeUserLimit(); }
 				break ;
+			default :
+				return user.send(ERR_UMODEUNKNOWNFLAG());
 		}
 	}
 }
 
-void	handleModeOperator(IRCCore &core, User &user, Channel *channel, const std::string &nick, bool adding)
-{
+void	handleModeOperator(IRCCore &core, User &user, Channel *channel, const std::string &nick, bool adding) {
     User *target = core.getUserByNick(nick);
     if (!target || !channel->hasUser(target)) {
         return user.send(ERR_NOSUCHNICK(user.getNick(), nick));
@@ -99,3 +103,4 @@ void	handleModeOperator(IRCCore &core, User &user, Channel *channel, const std::
     else
         channel->removeOperator(target);
 }
+

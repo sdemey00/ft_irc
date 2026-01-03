@@ -76,7 +76,6 @@ const std::string	User::getPrefix() const {
 	return ( _nick + "!" + _user + "@" + _hostname);
 }
 
-
 // Channels
 void	User::joinChannel(Channel *channel) {
 	_channels.insert(channel);
