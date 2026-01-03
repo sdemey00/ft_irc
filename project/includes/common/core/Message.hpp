@@ -24,15 +24,3 @@ class Message {
 };
 
 std::ostream& operator<<(std::ostream& os, const Message& msg);
-
-//	[:prefix] COMMAND param1 param2 :trailing
-// <message> ::= [':' <prefix> <SPACE> ] <command> <params> <crlf>
-// <prefix> ::= <servername> | <nick> [ '!' <user> ] [ '@' <host> ]
-// <command> ::= <letter> { <letter> } | <number> <number> <number>
-// <SPACE> ::= ' ' { ' ' }
-// <params> ::= <SPACE> [ ':' <trailing> | <middle> <params> ]
-// <middle> ::= <Any *non-empty* sequence of octets not including SPACE
-//  or NUL or CR or LF, the first of which may not be ':'>
-// <trailing> ::= <Any, possibly *empty*, sequence of octets not including
-//  NUL or CR or LF>
-// <crlf> ::= CR LF
