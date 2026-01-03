@@ -1,7 +1,5 @@
 - Remove wildcard in Makefile
 
-- Test script for nc
-
 sdemey:
 
 mmichele :

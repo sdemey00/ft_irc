@@ -5,7 +5,7 @@ https://www.rfc-editor.org/rfc/rfc1459
 3 PHASE
 - Réseau (poll, recv, send)	        Server.cpp, Client.cpp
 - État IRC (User, Channel, Core)	User, Channel, IRCCore
-- Protocole (COMMANDS, ERRORS, REPLIES)	CmdDispatch, Nick, etc.
+- Protocole (COMMANDS, ERRORS, REPLIES)
 
 poll()
  └─ recv() -> Client.read_buffer
@@ -18,13 +18,6 @@ poll()
                              └─ Client.send()
                                  └─ write_buffer
 
-NICK	    User	        change identity
-USER	    User	        set infos
-JOIN	    Channel	        state
-PART	    Channel	        state
-PRIVMSG	    Channel/User	routing
-MODE	    Channel/User	flags
-QUIT	    Core	        cleanup
 
 ":" <server> <code> <nick> <params> ":" <message> "\r\n"
 :irc.local 433 * newnick :Nickname is already in use
@@ -45,7 +38,6 @@ RFC 1459 = reference
 IRC = protocol
 
 // netcat minor tests
-
 nc localhost 6667
 NICK a
 USER a 0 * :a
