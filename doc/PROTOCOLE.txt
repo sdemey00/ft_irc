@@ -39,13 +39,9 @@ Response and code state:
 Example:
 	:server_name 433 * new_pseudo : Nickname is already in use
 
-
-MOTD = Message of the Day: at connexion to an IRC server, MOTD is sent (right after RPL_WELCOME)
+MOTD = Message of the Day: at connexion to an IRC server, MOTD is sent (RPL_WELCOME)
 PING PONG = protocol to maintain sustanable connectivity betwen server/client
 	Server send a message to test connectivity
 	PING :server_name
 	Client or Server respond to conform
-	PONG :server_name
-
-SECURE CONNEXION:
-SSL/TLS - modern IRC clients expect server to handle SSL/TLS for secure communication
+	:server_name PONG

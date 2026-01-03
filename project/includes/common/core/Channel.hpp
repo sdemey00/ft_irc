@@ -34,6 +34,7 @@ class Channel {
 	void	removeOperator(User* user);
 	bool	isOperator(User* user) const;
 
+	// Invitations
 	void	addInvitation(User *user);
 	void	removeInvitation(User* user);
 	bool	hasInvitation(User* user) const;
@@ -44,20 +45,20 @@ class Channel {
 	const std::set<User*>&	getUsers() const;
 	const std::set<User*>&	getOps() const;
 	// Setter
-	void	setTopic(const std::string& topic);
+	void					setTopic(const std::string& topic);
 	// Mode Getter
-	bool				isInviteOnly() const;
-	bool				isTopicRestrict() const;
-	bool				hasKeyPass() const;
-	unsigned int		getUserLimit() const;
-	const std::string&	getKeyPass() const;
+	bool					isInviteOnly() const;
+	bool					isTopicRestrict() const;
+	bool					hasKeyPass() const;
+	unsigned int			getUserLimit() const;
+	const std::string&		getKeyPass() const;
 	// Mode Setter
-	void	setInviteOnly(bool value);
-	void	setTopicRestrict(bool value);
-	void	setKeyPass(std::string key);
-	void	removeKeyPass();
-	void	setUserLimit(unsigned int value);
-	void	removeUserLimit();
+	void					setInviteOnly(bool value);
+	void					setTopicRestrict(bool value);
+	void					setKeyPass(std::string key);
+	void					removeKeyPass();
+	void					setUserLimit(unsigned int value);
+	void					removeUserLimit();
 
 	// Send to all users expect one (can be null)
 	void	broadcast(const std::string& msg, User* except) const;

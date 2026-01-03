@@ -52,7 +52,6 @@ private:
 	std::map<std::string, Channel*>     _channels;
 	std::map<std::string, CommandFn>    _cmds;
 	std::string							_password;
-	// servername??
 };
 
 // Cmds

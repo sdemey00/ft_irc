@@ -27,13 +27,14 @@ public:
 	~User(void);
 
 	// Identity (RFC)
+	// Getter :
 	const std::string&	getNick() const;
 	const std::string&	getHost() const;
 	const std::string&	getUser() const;
 	const std::string&	getReal() const;
 	const std::string	getPrefix() const;
 	bool				getPasswordAccepted() const;
-
+	// Setter :
 	void				setNick(const std::string& nick);
 	void				setUser(const std::string& user);
 	void				setHost(const std::string& host);
@@ -54,6 +55,7 @@ public:
 	void				leaveChannel(Channel* channel);
 	void				broadcast(std::string msg);
 	const std::set<Channel*>&	getChannels() const;
+
 	// Send
 	void				send(const std::string &message);	
 	std::string&		getFrontQueue();
