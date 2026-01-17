@@ -43,7 +43,7 @@ bool	parsePositiveInt(const std::string &s, int &out) {
 	char *str = (char*)s.c_str();
 	if (!isdigit(str, std::strlen(str)))
 		return (false);
-    long value = std::strtol(s.c_str(), &end, 10);
+    long value = std::strtol(str, &end, 10);
     if (*end != '\0' || errno != 0 || value < 0 || value > INT_MAX)
         return (false);
     out = static_cast<int>(value);

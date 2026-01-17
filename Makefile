@@ -6,7 +6,7 @@
 #    By: mmichele <mmichele@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/13 10:59:54 by mmichele          #+#    #+#              #
-#    Updated: 2026/01/02 15:11:45 by mmichele         ###   ########.fr        #
+#    Updated: 2026/01/03 14:49:11 by mmichele         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,7 +81,27 @@ C_SRCD	= $(SRCD)/$(COMD)
 C_INCD	= $(INCD)/$(COMD)
 
 # Compile variables
-C_SRCS	= $(shell find $(C_SRCD) -type f -name "*.cpp")
+C_SRCS	= src/common/Errors.cpp\
+	src/common/core/cmd/cmdInvite.cpp\
+	src/common/core/cmd/cmdJoin.cpp\
+	src/common/core/cmd/cmdKick.cpp\
+	src/common/core/cmd/cmdNick.cpp\
+	src/common/core/cmd/cmdPart.cpp\
+	src/common/core/cmd/cmdPass.cpp\
+	src/common/core/cmd/cmdPing.cpp\
+	src/common/core/cmd/cmdPrivmsg.cpp\
+	src/common/core/cmd/cmdQuit.cpp\
+	src/common/core/cmd/cmdTopic.cpp\
+	src/common/core/cmd/cmdUser.cpp\
+	src/common/core/cmd/cmdMode.cpp\
+	src/common/core/Channel.cpp\
+	src/common/core/IRCCore.cpp\
+	src/common/core/Message.cpp\
+	src/common/core/User.cpp\
+	src/common/Log.cpp\
+	src/common/Requestable.cpp\
+	src/common/sighandler.cpp\
+	src/common/utils.cpp
 C_OBJS	= $(patsubst %.cpp, $(C_BLDD)/%.o, $(C_SRCS))
 C_INCS	= -I $(C_INCD) #-I $(C_INCD)/core
 C_DEPS	= $(C_OBJS:.o=.d)
@@ -103,7 +123,9 @@ S_SRCD	= $(SRCD)/$(SERD)
 S_INCD	= $(INCD)/$(SERD)
 
 # Compile variables
-S_SRCS	= $(shell find $(S_SRCD) -type f -name "*.cpp")
+S_SRCS	= src/server/main.cpp\
+	src/server/Client.cpp\
+	src/server/Server.cpp
 S_OBJS	= $(C_OBJS) $(patsubst %.cpp, $(S_BLDD)/%.o, $(S_SRCS))
 S_INCS	= $(C_INCS) -I $(S_INCD)
 S_DEPS	= $(S_OBJS:.o=.d)
@@ -128,7 +150,10 @@ B_SRCD	= $(SRCD)/$(BOTD)
 B_INCD	= $(INCD)/$(BOTD)
 
 # Compile variables
-B_SRCS	= $(shell find $(B_SRCD) -type f -name "*.cpp")
+B_SRCS	= src/bot/RNG.cpp\
+	src/bot/Command.cpp\
+	src/bot/Client.cpp\
+	src/bot/main.cpp
 B_OBJS	= $(C_OBJS) $(patsubst %.cpp, $(B_BLDD)/%.o, $(B_SRCS))
 B_INCS	= $(C_INCS) -I $(B_INCD)
 B_DEPS	= $(B_OBJS:.o=.d)
