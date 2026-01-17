@@ -1,8 +1,0 @@
-build
-
-ircserv
-ircbot
-
-*.o
-*.d
-*.log
