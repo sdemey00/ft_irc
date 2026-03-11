@@ -8,8 +8,6 @@ IRC server in C++98, compatible with a standard IRC client.
 
 ## Table of contents
 
-## Table of contents
-
 - [Description](#description)
   - [Change channel permissions with `MODE` command](#change-channel-permissions-with-mode-command)
 - [Installing](#installing)
