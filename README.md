@@ -1,5 +1,7 @@
 *This project has been created as part of the 42 curriculum by mmichele and sdemey.*
 
+*~150h*
+
 # ft_irc
 
 IRC server in C++98, compatible with a standard IRC client.
